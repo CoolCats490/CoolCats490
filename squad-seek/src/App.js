@@ -8,7 +8,7 @@ import Welcome from "./pages/Welcome";
 import "./App.css"
 //import of router to go to different pages
 import { Redirect } from 'react-router';
-import {Route, Router, Link} from "react-router-dom";
+import {Route} from "react-router-dom";
 
 const App = () => {
   return (
