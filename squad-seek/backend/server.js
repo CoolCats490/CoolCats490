@@ -18,6 +18,15 @@ connection.once('open', ()=> {
     console.log('MongoDB database connection established successfully.')
 });
 
+
+// This is to tell server where our users and activities are saved
+const activityRouter = require('./routes/activities');
+const userRouter = require('./routes/users');
+
+// Every time user enters /users to the brower, it will show the users list
+app.use('/activites', activityRouter);
+app.use('/users', userRouter);
+
 app.listen(port, () => {
     console.log('Server is running on port: %f', port);
 });
