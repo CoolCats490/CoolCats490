@@ -1,13 +1,29 @@
 import { useState } from "react";
+//Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+///Select Stuff
+
+import CreatableSelect from "react-select/creatable";
+
+
+//Tag Select Options
+const optionsTags = [
+  {value: 'concert', label: 'Concert'},
+  {value: 'cosplay', label: 'Cosplay'},
+  {value: 'cooking', label: 'Cooking'},
+  {value: 'gaming', label: 'Gaming'},
+  {value: 'surfing', label: 'Surfing'}
+];
 
 const GroupCreate = (props) => {
   const [enteredTitle, setTitle] = useState("");
   const [enteredMType, setMType] = useState("");
   const [enteredDate, setDate] = useState("");
   const [enteredDescription, setDescription] = useState("");
+  const [enteredTag, setTag] = useState([]);
 
+  //Entry Handlers
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
@@ -20,6 +36,9 @@ const GroupCreate = (props) => {
   const descriptionHandler = (event) => {
     setDescription(event.target.value);
   };
+  const tagHandler = (event) => {
+    setTag( event );
+  }
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -28,18 +47,29 @@ const GroupCreate = (props) => {
     setMType("");
     setDate("");
     setDescription("");
+    setTag("");
 
     //Putting data into a object
     const groupData = {
       title: enteredTitle,
       mType: parseInt(enteredMType),
       date: new Date(enteredDate),
-      description: enteredDescription
+      description: enteredDescription,
+      tags: enteredTag.map(e => e.value)
     };
-    
 
     props.onSavedGroup(groupData);
+
+    console.log(groupData);
   };
+
+  const selectMenuStyle = {
+    menuList: styles => ({ ...styles, backgroundColor: 'Black' })
+  }
+
+  // const showLocation = () => {
+  //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
+  // };
 
   return (
     <div className="bg-dark">
@@ -47,6 +77,7 @@ const GroupCreate = (props) => {
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control
+            className="text-capitalize"
             type="text"
             placeholder="Title"
             onChange={titleHandler}
@@ -68,17 +99,34 @@ const GroupCreate = (props) => {
           </Form.Control>
         </Form.Group>
 
-        
+
+        <Form.Group className="mb-3" controlId="formGroupTags">
+          <Form.Label>Tags</Form.Label>
+          <CreatableSelect
+            className="text-capitalize"
+            placeholder="Select or Create Tags"
+            //Styles
+            styles={selectMenuStyle}
+            //Select multiple tags
+            isMulti
+            //Search for tags
+            isSearchable
+            onChange={tagHandler}
+            options={optionsTags}
+            //Set value of tag
+            value={enteredTag}
+          />
+        </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGroupDate">
-              <Form.Label>Date</Form.Label>
-              <Form.Control
-                type="datetime-local"
-                name="meetingDate"
-                onChange={dateHandler}
-                value={enteredDate}
-              />
-            </Form.Group>
+          <Form.Label>Date</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="meetingDate"
+            onChange={dateHandler}
+            value={enteredDate}
+          />
+        </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGroupDescription">
           <Form.Label>Group Description</Form.Label>

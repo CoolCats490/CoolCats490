@@ -1,30 +1,45 @@
 import React from "react";
+//Styling
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import Badge from "react-bootstrap/Badge";
+//Router
+import { useHistory } from "react-router-dom";
 
 const GroupList = (props) => {
   let month = props.date.toLocaleString("en-US", { month: "long" });
   let day = props.date.toLocaleString("en-US", { day: "2-digit" });
   let year = props.date.getFullYear();
+  let time = props.date.toLocaleTimeString("en-US");
+
+  let history = useHistory();
+  let num = props.id;
+
+  const cardLink = () => {
+    history.push("/groups/group-details/" + { num });
+  };
 
   return (
-    <Container variant="light">
-      
-        <Card bg="primary">
-          <Card.Body>
-            <Card.Title>Group Title: {props.title} </Card.Title>
-            <Card.Text>
-              Group Type: {props.mType ? "Online" : "In Person"}
-              <br />
-              Date: {month + " " + day + ", " + year}
-              <br />
-              Description: {props.description}
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      
+    <Container className="pb-2 pt-2">
+      <Card bg="primary" onClick={cardLink}>
+        <Card.Header className="text-center">
+          Group Title: {props.title}
+        </Card.Header>
+        <Card.Body>
+          <Card.Text>
+            Group Type: {props.mType ? "Online" : "In Person"}
+            <br />
+            Date: {month + " " + day + ", " + year + " @ " + time}
+            <br />
+            Description: {props.description}
+            <br />
+            Tags:{" "}
+            {props.tags.map((e) => (
+              <Badge className="bg-warning text-dark me-2">{e}</Badge>
+            ))}
+          </Card.Text>
+        </Card.Body>
+      </Card>
     </Container>
   );
 };
