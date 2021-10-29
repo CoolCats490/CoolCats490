@@ -10,7 +10,7 @@ import "./App.css";
 //import of router to go to different pages
 import { Redirect,Switch } from "react-router";
 import { Route } from "react-router-dom";
-import MultiForm from "./Components/MultiForm/MultiForm"
+import MultiForm from "./Components/MultiForm/MultiForm";
 
 const App = () => {
   return (
