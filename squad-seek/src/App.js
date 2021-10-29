@@ -1,6 +1,6 @@
 import React from "react";
 //Import of different pages
-import RegisterUser from "./pages/RegisterUser";
+//import RegisterUser from "./pages/RegisterUser";
 import MainHeader from "./Components/MainHeader/MainHeader";
 import Groups from "./pages/Groups";
 import Login from "./pages/Login";
@@ -10,6 +10,7 @@ import "./App.css";
 //import of router to go to different pages
 import { Redirect,Switch } from "react-router";
 import { Route } from "react-router-dom";
+import MultiForm from "./Components/MultiForm/MultiForm"
 
 const App = () => {
   return (
@@ -27,7 +28,7 @@ const App = () => {
           </Route>
           {/* route to the register page and call welcome component */}
           <Route path="/register" exact>
-            <RegisterUser />
+            <MultiForm />
           </Route>
           {/* route to the groups page and call welcome component */}
           <Route path="/groups">
