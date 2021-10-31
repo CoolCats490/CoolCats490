@@ -2,46 +2,55 @@ import React from "react";
 //Styling
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import Badge from "react-bootstrap/Badge";
-//Router
-import { useHistory } from "react-router-dom";
+import axios from 'axios'
 
-const GroupList = (props) => {
-  let month = props.date.toLocaleString("en-US", { month: "long" });
-  let day = props.date.toLocaleString("en-US", { day: "2-digit" });
-  let year = props.date.getFullYear();
-  let time = props.date.toLocaleTimeString("en-US");
+const Activity = (props) =>{
+ 
+  return(
+          <Card bg="primary">
+            <Card.Body>
+              <Card.Title>Group Title: {props.act.name} </Card.Title>
+              <Card.Text>
+                Group Type: {props.act.type ? "Online" : "In Person"}
+                <br />
+                Date: {props.act.time}
+                <br />
+                Description: {props.act.description}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+          );
+      
+      };
 
-  let history = useHistory();
-  let num = props.id;
+export default class ActivityList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {ActList: []};
+  }
 
-  const cardLink = () => {
-    history.push("/groups/group-details/" + { num });
+  componentDidMount = () => {
+    axios.get('http://localhost:5000/activities/').then(response => {
+      this.setState({ActList : response.data})
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
+
+  viewActivity = () =>{
+    return(
+     this.state.ActList.map((currentActivity) => {
+        return <Activity act = {currentActivity}/>
+    }))
+  }
+
+  
+  render() {
+    return (
+      <Container variant="light" >
+        {this.viewActivity()}
+      </Container>)
   };
 
-  return (
-    <Container className="pb-2 pt-2">
-      <Card bg="primary" onClick={cardLink}>
-        <Card.Header className="text-center">
-          Group Title: {props.title}
-        </Card.Header>
-        <Card.Body>
-          <Card.Text>
-            Group Type: {props.mType ? "Online" : "In Person"}
-            <br />
-            Date: {month + " " + day + ", " + year + " @ " + time}
-            <br />
-            Description: {props.description}
-            <br />
-            Tags:{" "}
-            {props.tags.map((e) => (
-              <Badge className="bg-warning text-dark me-2">{e}</Badge>
-            ))}
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    </Container>
-  );
-};
+}
 
-export default GroupList;

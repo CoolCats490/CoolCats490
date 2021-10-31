@@ -2,19 +2,7 @@ import { useState } from "react";
 //Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-///Select Stuff
-
-import CreatableSelect from "react-select/creatable";
-
-
-//Tag Select Options
-const optionsTags = [
-  {value: 'concert', label: 'Concert'},
-  {value: 'cosplay', label: 'Cosplay'},
-  {value: 'cooking', label: 'Cooking'},
-  {value: 'gaming', label: 'Gaming'},
-  {value: 'surfing', label: 'Surfing'}
-];
+import axios from 'axios';
 
 const GroupCreate = (props) => {
   const [enteredTitle, setTitle] = useState("");
@@ -27,12 +15,15 @@ const GroupCreate = (props) => {
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
+
   const meetingTypeHandler = (event) => {
     setMType(event.target.value);
   };
+
   const dateHandler = (event) => {
     setDate(event.target.value);
   };
+
   const descriptionHandler = (event) => {
     setDescription(event.target.value);
   };
@@ -51,16 +42,16 @@ const GroupCreate = (props) => {
 
     //Putting data into a object
     const groupData = {
-      title: enteredTitle,
-      mType: parseInt(enteredMType),
-      date: new Date(enteredDate),
-      description: enteredDescription,
-      tags: enteredTag.map(e => e.value)
+      name: enteredTitle,
+      type: parseInt(enteredMType),
+      time: new Date(enteredDate),
+      description: enteredDescription
     };
+
 
     props.onSavedGroup(groupData);
 
-    console.log(groupData);
+    axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
   };
 
   const selectMenuStyle = {
