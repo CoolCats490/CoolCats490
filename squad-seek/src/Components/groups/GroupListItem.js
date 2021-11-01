@@ -18,6 +18,7 @@ const GrouptListItem = (props) => {
     history.push("/groups/group-details/" + { num });
   };
 
+
   return (
     <Container className="pb-2 pt-2" key={props.key}>
       <Card bg="primary" >
@@ -26,7 +27,7 @@ const GrouptListItem = (props) => {
         </Card.Header>
         <Card.Body>
           <Card.Text>
-            Group Type: {props.mType ? "Online" : "In Person"}
+            Group Type: {parseInt(props.type) ? "Online" : "In Person"}
             <br />
             Date: {month + " " + day + ", " + year + " @ " + time}
             <br />
