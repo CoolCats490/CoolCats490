@@ -3,6 +3,16 @@ import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
+import CreatableSelect from "react-select/creatable";
+
+//Tag Select Options
+const optionsTags = [
+  {value: 'concert', label: 'Concert'},
+  {value: 'cosplay', label: 'Cosplay'},
+  {value: 'cooking', label: 'Cooking'},
+  {value: 'gaming', label: 'Gaming'},
+  {value: 'surfing', label: 'Surfing'}
+];
 
 const GroupCreate = (props) => {
   const [enteredTitle, setTitle] = useState("");
@@ -91,7 +101,7 @@ const GroupCreate = (props) => {
         </Form.Group>
 
 
-        <Form.Group className="mb-3" controlId="formGroupTags">
+        {/* <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
           <CreatableSelect
             className="text-capitalize"
@@ -107,7 +117,7 @@ const GroupCreate = (props) => {
             //Set value of tag
             value={enteredTag}
           />
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group className="mb-3" controlId="formGroupDate">
           <Form.Label>Date</Form.Label>

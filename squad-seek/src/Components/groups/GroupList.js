@@ -1,56 +1,44 @@
-import React from "react";
-//Styling
-import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+//
+import axios from "axios";
+import GrouptListItem from "./GroupListItem";
 
-const Activity = (props) =>{
- 
-  return(
-          <Card bg="primary">
-            <Card.Body>
-              <Card.Title>Group Title: {props.act.name} </Card.Title>
-              <Card.Text>
-                Group Type: {props.act.type ? "Online" : "In Person"}
-                <br />
-                Date: {props.act.time}
-                <br />
-                Description: {props.act.description}
-              </Card.Text>
-            </Card.Body>
-          </Card>
-          );
-      
-      };
+const GroupList = () => {
+  //groups object and setter here
+  const [groups, setGroups] = useState([]);
 
-export default class ActivityList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {ActList: []};
-  }
+  //useEffect hook will load groups from data base when component is loaded
+  useEffect(() => {
+    //async call to database
+    const fetchGroups = async () => {
+      try {
+        const response = await axios("http://localhost:5000/activities/");
+        //store groups in groups object
+        setGroups(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    //Call async function
+    fetchGroups();
+  }, []);
 
-  componentDidMount = () => {
-    axios.get('http://localhost:5000/activities/').then(response => {
-      this.setState({ActList : response.data})
-    }).catch((error) => {
-      console.log(error);
-    })
-  }
+  return (
+    <>
+      {/* map each group to a group item card */}
+      {groups.map((group) => (
+        <GrouptListItem 
+          key = {group._id}
+          title = {group.name}
+          date = {new Date(parseInt( group.time ))}
+          type = {group.type}
+          description = {group.description}
+          // tags = {group.tags}
+        />
+      ))}
+    </>
+  );
 
-  viewActivity = () =>{
-    return(
-     this.state.ActList.map((currentActivity) => {
-        return <Activity act = {currentActivity}/>
-    }))
-  }
+};
 
-  
-  render() {
-    return (
-      <Container variant="light" >
-        {this.viewActivity()}
-      </Container>)
-  };
-
-}
-
+export default GroupList;
