@@ -16,26 +16,52 @@ router.route('/').get((req,res) => {
 // First we get the information from the server, and then create a new user from that informatin and
 // then finally save it to the database as json file and print the message "User added!"
 router.route('/add').post((req, res) => {
-    const name = req.body.name;
-    const location = req.body.location;
-    const tags = req.body.tags;
-    const numberOfPeopleNeeded = Number(req.body.numberOfPeopleNeeded);
-    const time = req.body.time;
-    const type = req.body.type;
+    const name = String(req.body.name);
+    const time = Date.parse(req.body.time);
+    const type = String(req.body.type);
+    const description = String(req.body.description)
 
-    const newActivity = new User({
+    const newActivity = new Activity({
         name,
-        location,
-        tags,
-        numberOfPeopleNeeded,
         time,
-        type
+        type,
+        description
     });
 
     newActivity.save().then(()=> res.json('Activity added!')).catch(err => res.status(400).json('Error: ' + err));
 
 
 });
+
+// when used url http://localhost:5000/activities/id_of_the_activity and made get request
+// this will return the specific activity
+router.route('/:id').get((req, res) => {
+    Activity.findById(req.params.id).then(activity => res.json(activity)).catch(err => res.status(400).json('Error: ' + err));
+});
+ 
+// when used url http://localhost:5000/activities/id_of_the_activity and made a delete request
+// this will delete the specific activity
+router.route('/:id').delete((req, res) => {
+    Activity.findByIdAndDelete(req.params.id).then(activity => res.json('Exercise Deleted!')).catch(err => res.status(400).json('Error: ' + err));
+});
+
+
+// when used url http://localhost:5000/activities/update/id_of_the_activity
+// this will update the specific activity linked with that ID
+router.route('/update/:id').post((req, res) => {
+    Activity.findById(req.params.id)
+    .then(activity => {
+        activity.name = String(req.body.name);
+        activity.time = String(req.body.time);
+        activity.type = String(req.body.type);
+        activity.description = String(req.body.description);
+
+        activity.save().then(()=> res.json('Activity updated!')).catch(err => res.status(400).json('Error: ' + err));
+    }).catch(err => res.status(400).json('Error: ' + err));
+
+});
+
+
 
 // and we export the module via router
 module.exports = router;

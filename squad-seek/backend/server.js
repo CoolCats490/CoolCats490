@@ -23,8 +23,8 @@ connection.once('open', ()=> {
 const activityRouter = require('./routes/activities');
 const userRouter = require('./routes/users');
 
-// Every time user enters /users to the broswer, it will show the users list
-app.use('/activites', activityRouter);
+// Every time user enters /users to the brower, it will show the users list
+app.use('/activities', activityRouter);
 app.use('/users', userRouter);
 
 app.listen(port, () => {

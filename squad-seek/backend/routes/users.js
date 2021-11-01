@@ -19,7 +19,7 @@ router.route('/').get((req,res) => {
 router.route('/add').post((req, res) => {
     const username = String(req.body.username);
     const age = Number(req.body.age);
-    const interests = req.body.interests;
+    const interests = String(req.body.interests);
 
     const newUser = new User({
         username,
