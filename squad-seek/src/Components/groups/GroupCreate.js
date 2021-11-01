@@ -55,12 +55,13 @@ const GroupCreate = (props) => {
       name: enteredTitle,
       type: parseInt(enteredMType),
       time: new Date(enteredDate),
-      description: enteredDescription
+      description: enteredDescription,
+      tagsArray: enteredTag.map(e => e.value)
     };
 
 
-    props.onSavedGroup(groupData);
-
+    //props.onSavedGroup(groupData);
+    console.log(groupData);
     axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
   };
 
@@ -101,7 +102,7 @@ const GroupCreate = (props) => {
         </Form.Group>
 
 
-        {/* <Form.Group className="mb-3" controlId="formGroupTags">
+        { <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
           <CreatableSelect
             className="text-capitalize"
@@ -117,7 +118,7 @@ const GroupCreate = (props) => {
             //Set value of tag
             value={enteredTag}
           />
-        </Form.Group> */}
+        </Form.Group> }
 
         <Form.Group className="mb-3" controlId="formGroupDate">
           <Form.Label>Date</Form.Label>

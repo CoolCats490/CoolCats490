@@ -33,10 +33,10 @@ const GrouptListItem = (props) => {
             <br />
             Description: {props.description}
             <br />
-            {/* Tags:{" "}
+            Tags:{" "}
             {props.tags.map((e) => (
               <Badge className="bg-warning text-dark me-2">{e}</Badge>
-            ))} */}
+            ))}
           </Card.Text>
         </Card.Body>
       </Card>

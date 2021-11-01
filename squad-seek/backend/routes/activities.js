@@ -15,17 +15,24 @@ router.route('/').get((req,res) => {
 // what to do if we get '/add' request from server
 // First we get the information from the server, and then create a new user from that informatin and
 // then finally save it to the database as json file and print the message "User added!"
+
+
 router.route('/add').post((req, res) => {
     const name = String(req.body.name);
     const time = Date.parse(req.body.time);
     const type = String(req.body.type);
-    const description = String(req.body.description)
+    const description = String(req.body.description);
+    const tagsArray = (req.body.tagsArray)
+    
+    
+    
 
     const newActivity = new Activity({
         name,
         time,
         type,
-        description
+        description,
+        tagsArray
     });
 
     newActivity.save().then(()=> res.json('Activity added!')).catch(err => res.status(400).json('Error: ' + err));
@@ -55,6 +62,7 @@ router.route('/update/:id').post((req, res) => {
         activity.time = String(req.body.time);
         activity.type = String(req.body.type);
         activity.description = String(req.body.description);
+        activity.tagsArray = req.body.tagsArray;
 
         activity.save().then(()=> res.json('Activity updated!')).catch(err => res.status(400).json('Error: ' + err));
     }).catch(err => res.status(400).json('Error: ' + err));

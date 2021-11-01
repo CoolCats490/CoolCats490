@@ -33,7 +33,7 @@ const GroupList = () => {
           date = {new Date(parseInt( group.time ))}
           type = {group.type}
           description = {group.description}
-          // tags = {group.tags}
+          tags = {group.tagsArray}
         />
       ))}
     </>
