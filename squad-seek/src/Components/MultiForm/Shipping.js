@@ -5,7 +5,7 @@ export default function Shipping() {
 
   return (
     <div>
-      <h3 style={{textAlign: 'center'}}>Shipping Information</h3>
+      <h3 style={{textAlign: 'center'}}>Account Creation Information</h3>
       <Input type="text" placeholder="Enter your full name" label="Full Name" />
       
       <Input type="email" placeholder="Enter your e-mail" label="Email Address"/>

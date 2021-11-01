@@ -20,10 +20,10 @@ const MultiForm = () => {
   return (
     <Container>
       <MultiStepForm activeStep={active}>
-        <Step label='shipping'>
+        <Step label='Account Creation'>
           <Shipping />
         </Step>
-        <Step label='payment'>
+        <Step label='Personal Info'>
           <Payment />
         </Step>
         <Step label='confirmation'>
