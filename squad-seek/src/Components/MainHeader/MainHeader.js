@@ -7,9 +7,9 @@ const MainHeader = () => {
   return (
     <header>
       <Navbar bg="info" variant="light">
-        <Navbar.Brand pl-5>Squad Seek</Navbar.Brand>
+        <Navbar.Brand >Squad Seek</Navbar.Brand>
         <Nav className="me-auto">
-          <Nav.Link as={Link} to="/Welcome">
+          <Nav.Link as={Link} to="/welcome">
             Home
           </Nav.Link>
           <Nav.Link as={Link} to="/groups">
