@@ -6,7 +6,8 @@ const activitySchema = new Schema({
     name: {type: String, required: true, minlength: 3},
     time: {type: String},
     type: {type:String},
-    description: {type:String}
+    description: {type:String},
+    tagsArray: [{type: String}]
     },
     {timestamps: true});
 
