@@ -26,6 +26,14 @@ const RegisterUser = () => {
               placeholder="Password"
             />
           </div>
+          <div className="form-group mt-2">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Password"
+            />
+          </div>
           <div className="mt-4 mb-4">
             <button type="button" className="btn-primary d-block w-100">
               Continue
