@@ -6,7 +6,7 @@ import Groups from "./pages/Groups";
 import Login from "./pages/Login";
 import Welcome from "./pages/Welcome";
 //import styling
-import "./App.css";
+import styles from './App.module.css'
 //import of router to go to different pages
 import { Redirect,Switch } from "react-router";
 import { Route } from "react-router-dom";
@@ -17,7 +17,7 @@ const App = () => {
       {/* Call to the top navigation */}
       <MainHeader />
 
-      <main>
+      <div className={styles.wrapper}>
       <Switch>
           <Redirect from="/" to="/welcome" exact/>
 
@@ -30,7 +30,7 @@ const App = () => {
             <RegisterUser />
           </Route>
           {/* route to the groups page and call welcome component */}
-          <Route path="/groups">
+          <Route path="/groups" >
             <Groups />
           </Route>
           {/* route to the login page and call welcome component */}
@@ -38,7 +38,7 @@ const App = () => {
             <Login />
           </Route>
           </Switch>
-      </main>
+      </div>
     </React.Fragment>
   );
 };

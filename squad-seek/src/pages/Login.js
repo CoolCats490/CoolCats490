@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 const Login = () => {
   return (
-    <div className = "container-fluid vh-100 bg-dark text-white">
+    <div className = "container-fluid bg-dark text-white">
       <h1 className = "text-center">Login to Squad Seek</h1>
       <div className = "d-flex flex-wrap justify-content-center mt-auto">
         <form>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 //
 import axios from "axios";
 import GrouptListItem from "./GroupListItem";
+//Styling
+import { Container } from "react-bootstrap";
 
 const GroupList = () => {
   //groups object and setter here
@@ -24,7 +26,8 @@ const GroupList = () => {
   }, []);
 
   return (
-    <>
+    <Container fluid="sm">
+      
       {/* map each group to a group item card */}
       {groups.map((group) => (
         <GrouptListItem 
@@ -36,7 +39,7 @@ const GroupList = () => {
           tags = {group.tagsArray}
         />
       ))}
-    </>
+    </Container>
   );
 
 };

@@ -3,7 +3,9 @@ import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Badge from "react-bootstrap/Badge";
 //Router
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams, Route, Switch } from "react-router-dom";
+//pages
+import GroupDetails from "../../pages/GroupDetails";
 
 const GrouptListItem = (props) => {
   let month = props.date.toLocaleString("en-US", { month: "long" });
@@ -12,16 +14,16 @@ const GrouptListItem = (props) => {
   let time = props.date.toLocaleTimeString("en-US");
 
   let history = useHistory();
-  let num = props.id;
+
+  //let
 
   const cardLink = () => {
-    history.push("/groups/group-details/" + { num });
+    history.push("/groups/group-details/" + { props });
   };
 
-
   return (
-    <Container className="pb-2 pt-2" key={props.key}>
-      <Card bg="primary" >
+    <Container className="pb-2 pt-2">
+      <Card bg="primary" onClick={cardLink}>
         <Card.Header className="text-center">
           Group Title: {props.title}
         </Card.Header>
@@ -40,6 +42,11 @@ const GrouptListItem = (props) => {
           </Card.Text>
         </Card.Body>
       </Card>
+      <Switch>
+        <Route path="/groups/group-details/:groupID" exact>
+          <GroupDetails />
+        </Route>
+      </Switch>
     </Container>
   );
 };
