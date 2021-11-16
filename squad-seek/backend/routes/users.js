@@ -21,11 +21,13 @@ router.route('/add').post((req, res) => {
     const username = String(req.body.username);
     const age = Number(req.body.age);
     const interests = String(req.body.interests);
+    const password = String(req.body.password);
 
     const newUser = new User({
         username,
         age,
-        interests
+        interests,
+        password
     });
 
     newUser.save().then(()=> res.json('User added!')).catch(err => res.status(400).json('Error Testing: ' + err));
