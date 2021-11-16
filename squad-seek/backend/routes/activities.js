@@ -48,7 +48,7 @@ router.route('/:id').get((req, res) => {
  
 // when used url http://localhost:5000/activities/id_of_the_activity and made a delete request
 // this will delete the specific activity
-router.route('/:id').delete((req, res) => {
+router.route('/delete/:id').delete((req, res) => {
     Activity.findByIdAndDelete(req.params.id).then(activity => res.json('Exercise Deleted!')).catch(err => res.status(400).json('Error: ' + err));
 });
 

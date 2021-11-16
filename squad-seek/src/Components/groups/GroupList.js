@@ -30,13 +30,14 @@ const GroupList = () => {
       
       {/* map each group to a group item card */}
       {groups.map((group) => (
-        <GrouptListItem 
+        <GrouptListItem
           key = {group._id}
           title = {group.name}
           date = {new Date(parseInt( group.time ))}
           type = {group.type}
           description = {group.description}
           tags = {group.tagsArray}
+          id = {group._id}
         />
       ))}
     </Container>

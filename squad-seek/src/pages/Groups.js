@@ -13,6 +13,8 @@ const Groups = () => {
   return (
     <Container  className="wrapper bg-dark text-white fluid">
       <GroupSideBar></GroupSideBar>
+      <Switch>
+      
 
       <Route path="/groups/create">
         <GroupCreate />
@@ -22,9 +24,13 @@ const Groups = () => {
         <GroupList />
       </Route>
 
-      <Route path="/groups/group-details/:groupID" exact>
+      <Route path="/groups/:groupID" >
         <GroupDetails />
       </Route>
+      
+      </Switch>
+
+      
     </Container
 >
   );

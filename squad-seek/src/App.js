@@ -19,7 +19,9 @@ const App = () => {
 
       <div className={styles.wrapper}>
       <Switch>
+          
           <Redirect from="/" to="/welcome" exact/>
+          <Redirect from="/groups" to="/groups/create" exact/>
 
           {/* route to the welcome page and call welcome component */}
           <Route path="/welcome" exact>
@@ -30,9 +32,12 @@ const App = () => {
             <RegisterUser />
           </Route>
           {/* route to the groups page and call welcome component */}
+          
           <Route path="/groups" >
             <Groups />
           </Route>
+          
+          
           {/* route to the login page and call welcome component */}
           <Route path="/login" exact>
             <Login />

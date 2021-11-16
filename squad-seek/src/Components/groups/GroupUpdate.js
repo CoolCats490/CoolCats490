@@ -14,12 +14,19 @@ const optionsTags = [
   {value: 'surfing', label: 'Surfing'}
 ];
 
-const GroupCreate = (props) => {
-  const [enteredTitle, setTitle] = useState("");
-  const [enteredMType, setMType] = useState("");
-  const [enteredDate, setDate] = useState("");
-  const [enteredDescription, setDescription] = useState("");
+const GroupUpdate = (props) => {
+    let d = new Date(parseInt(props.date))
+    let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+    let ts = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0') + ':' + d.getSeconds().toString().padStart(2, '0');
+    console.log(datestring + "T" +  ts);
+
+  const [enteredTitle, setTitle] = useState(props.title);
+  const [enteredMType, setMType] = useState(props.type);
+  const [enteredDate, setDate] = useState(datestring + "T" +  ts);
+  const [enteredDescription, setDescription] = useState(props.description);
   const [enteredTag, setTag] = useState([]);
+
+    
 
   //Entry Handlers
   const titleHandler = (event) => {
@@ -69,12 +76,9 @@ const GroupCreate = (props) => {
     menuList: styles => ({ ...styles, backgroundColor: 'Black' })
   }
 
-  // const showLocation = () => {
-  //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
-  // };
 
   return (
-    <div className="">
+    <div className="bg-primar">
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
@@ -117,6 +121,8 @@ const GroupCreate = (props) => {
             options={optionsTags}
             //Set value of tag
             value={enteredTag}
+            //
+            defaultValue={"test"}
           />
         </Form.Group> }
 
@@ -141,12 +147,12 @@ const GroupCreate = (props) => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        {/* <Button variant="primary" type="submit">
           Submit
-        </Button>
+        </Button> */}
       </Form>
     </div>
   );
 };
 
-export default GroupCreate;
+export default GroupUpdate;
