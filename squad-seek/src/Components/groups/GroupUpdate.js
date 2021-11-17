@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 //Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
-import CreatableSelect from "react-select/creatable";
+//React Select
+import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
 //Tag Select Options
 const optionsTags = [
@@ -14,17 +16,34 @@ const optionsTags = [
   {value: 'surfing', label: 'Surfing'}
 ];
 
+//Group Type Options
+const optionsGroupType =[
+{value: 0, label: 'In Person'},
+{value: 1, label: 'Online'}
+];
+
 const GroupUpdate = (props) => {
+
+    //Translate incoming time into a format that datepicker can read
     let d = new Date(parseInt(props.date))
     let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
     let ts = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0') + ':' + d.getSeconds().toString().padStart(2, '0');
-    console.log(datestring + "T" +  ts);
 
+    //Formatting incoming tags into a format React-select can read
+    let currentTags = props.tags.map(v => ({
+        label: v,
+        value: v
+      }));
+
+    //Formatting meeting type into a for mat Reac-Select can read
+    let mTypes = [{value: props.type, label: parseInt(props.type) ? "Online" : "In Person"}];
+
+    //Creating useState for all the fields in the form
   const [enteredTitle, setTitle] = useState(props.title);
-  const [enteredMType, setMType] = useState(props.type);
+  const [enteredMType, setMType] = useState(mTypes);
   const [enteredDate, setDate] = useState(datestring + "T" +  ts);
   const [enteredDescription, setDescription] = useState(props.description);
-  const [enteredTag, setTag] = useState([]);
+  const [enteredTag, setTag] = useState(currentTags);
 
     
 
@@ -34,10 +53,11 @@ const GroupUpdate = (props) => {
   };
 
   const meetingTypeHandler = (event) => {
-    setMType(event.target.value);
+    setMType(event.value);
   };
 
   const dateHandler = (event) => {
+      console.log(event.target.value);
     setDate(event.target.value);
   };
 
@@ -46,6 +66,7 @@ const GroupUpdate = (props) => {
   };
   const tagHandler = (event) => {
     setTag( event );
+    console.log(enteredTag);
   }
   const submitHandler = (event) => {
     event.preventDefault();
@@ -69,12 +90,23 @@ const GroupUpdate = (props) => {
 
     //props.onSavedGroup(groupData);
     console.log(groupData);
-    axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
+    
+    try {//http://localhost:5000/activities/update/id_of_the_activity
+            axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+      } catch (err) {
+            console.log(err);
+      }
+
+      //Send
+      props.onGroupUpdated(groupData)
+
+      //Close Modal
+      props.onModalClose(false)
   };
 
-  const selectMenuStyle = {
-    menuList: styles => ({ ...styles, backgroundColor: 'Black' })
-  }
+  const cancelBtnHandler = useCallback( event =>{
+    props.onModalClose(false)
+  },[])
 
 
   return (
@@ -87,22 +119,20 @@ const GroupUpdate = (props) => {
             type="text"
             placeholder="Title"
             onChange={titleHandler}
-            value={enteredTitle}
+            value={enteredDate}
           />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGroupType">
           <Form.Label>Meeting Type</Form.Label>
-          <Form.Control
-            as="select"
-            className="form-select"
-            onChange={meetingTypeHandler}
-            value={enteredMType}
-          >
-            <option defaultValue>Select Type</option>
-            <option value="0">In Person</option>
-            <option value="1">Online</option>
-          </Form.Control>
+         
+          <Select
+          placeholder="Select Group Type"
+          defaultValue={0}
+          options={optionsGroupType}
+          onChange={meetingTypeHandler}
+          value={enteredMType}
+        />
         </Form.Group>
 
 
@@ -111,8 +141,6 @@ const GroupUpdate = (props) => {
           <CreatableSelect
             className="text-capitalize"
             placeholder="Select or Create Tags"
-            //Styles
-            styles={selectMenuStyle}
             //Select multiple tags
             isMulti
             //Search for tags
@@ -121,8 +149,8 @@ const GroupUpdate = (props) => {
             options={optionsTags}
             //Set value of tag
             value={enteredTag}
+            
             //
-            defaultValue={"test"}
           />
         </Form.Group> }
 
@@ -147,9 +175,12 @@ const GroupUpdate = (props) => {
           />
         </Form.Group>
 
-        {/* <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit">
           Submit
-        </Button> */}
+        </Button>{" "}
+        <Button variant="secondary" onClick={cancelBtnHandler}>
+          Cancel
+        </Button>
       </Form>
     </div>
   );

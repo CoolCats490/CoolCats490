@@ -2,8 +2,11 @@ import { useState } from "react";
 //Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+//Axios
 import axios from 'axios';
-import CreatableSelect from "react-select/creatable";
+//React Select
+import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
 //Tag Select Options
 const optionsTags = [
@@ -13,6 +16,11 @@ const optionsTags = [
   {value: 'gaming', label: 'Gaming'},
   {value: 'surfing', label: 'Surfing'}
 ];
+//Group Type Options
+const optionsGroupType =[
+  {value: 0, label: 'In Person'},
+  {value: 1, label: 'Online'}
+  ];
 
 const GroupCreate = (props) => {
   const [enteredTitle, setTitle] = useState("");
@@ -27,10 +35,11 @@ const GroupCreate = (props) => {
   };
 
   const meetingTypeHandler = (event) => {
-    setMType(event.target.value);
+    setMType(event.value);
   };
 
   const dateHandler = (event) => {
+    console.log(event.target.value);
     setDate(event.target.value);
   };
 
@@ -65,16 +74,13 @@ const GroupCreate = (props) => {
     axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
   };
 
-  const selectMenuStyle = {
-    menuList: styles => ({ ...styles, backgroundColor: 'Black' })
-  }
 
   // const showLocation = () => {
   //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
   // };
 
   return (
-    <div className="">
+    <div className="text-white">
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
@@ -89,26 +95,21 @@ const GroupCreate = (props) => {
 
         <Form.Group className="mb-3" controlId="formGroupType">
           <Form.Label>Meeting Type</Form.Label>
-          <Form.Control
-            as="select"
-            className="form-select"
-            onChange={meetingTypeHandler}
-            value={enteredMType}
-          >
-            <option defaultValue>Select Type</option>
-            <option value="0">In Person</option>
-            <option value="1">Online</option>
-          </Form.Control>
+          <Select
+          className="text-black"
+          placeholder="Select Group Type"
+          options={optionsGroupType}
+          onChange={meetingTypeHandler}
+          value={enteredMType}
+        />
         </Form.Group>
 
 
         { <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
           <CreatableSelect
-            className="text-capitalize"
+            className="text-capitalize text-black"
             placeholder="Select or Create Tags"
-            //Styles
-            styles={selectMenuStyle}
             //Select multiple tags
             isMulti
             //Search for tags

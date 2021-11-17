@@ -48,7 +48,7 @@ router.route('/:id').get((req, res) => {
  
 // when used url http://localhost:5000/activities/id_of_the_activity and made a delete request
 // this will delete the specific activity
-router.route('/delete/:id').delete((req, res) => {
+router.route('/:id').delete((req, res) => {
     Activity.findByIdAndDelete(req.params.id).then(activity => res.json('Exercise Deleted!')).catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -59,7 +59,7 @@ router.route('/update/:id').post((req, res) => {
     Activity.findById(req.params.id)
     .then(activity => {
         activity.name = String(req.body.name);
-        activity.time = String(req.body.time);
+        activity.time = Date.parse(req.body.time);;
         activity.type = String(req.body.type);
         activity.description = String(req.body.description);
         activity.tagsArray = req.body.tagsArray;

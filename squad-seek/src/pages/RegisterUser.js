@@ -1,4 +1,3 @@
-import React, { Fragment } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import RegisterForm from "../Components/Register/RegisterForm";
 
