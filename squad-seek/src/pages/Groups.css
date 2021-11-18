@@ -1,22 +1,19 @@
-.main-wrapper{
+
+.wrapper {
+    width: calc(100% - 250px);
+    
+    transition: all 0.3s;
+    position: absolute;
+    top: 56px;
+    right: 0;
+
+    padding: 40px;
+    /* min-height: calc(100vh - 3px); */
+    display: flex;
+    flex-grow: 1;
+}
+
+body{
     min-height: 100vh;
+    /* background-color: #212529; */
 }
-
-.gList{
-    flex:1 1 auto;
-}
-
-.col-bars{
-    background-color: rgb(13, 82, 82);
-    padding: 0%;
-}
-
-.row-Width{
-    margin: 0;
-}
-
-.col-Width{
-    padding: 0;
-    margin: 0;
-}
-

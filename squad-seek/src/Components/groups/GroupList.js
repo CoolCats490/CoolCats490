@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 //
 import axios from "axios";
 import GrouptListItem from "./GroupListItem";
+//Styling
+import { Container } from "react-bootstrap";
 
 const GroupList = () => {
   //groups object and setter here
@@ -23,20 +25,24 @@ const GroupList = () => {
     fetchGroups();
   }, []);
 
+  console.log(groups);
+
   return (
-    <>
+    <Container fluid="sm">
+      
       {/* map each group to a group item card */}
       {groups.map((group) => (
-        <GrouptListItem 
+        <GrouptListItem
           key = {group._id}
           title = {group.name}
           date = {new Date(parseInt( group.time ))}
           type = {group.type}
           description = {group.description}
           tags = {group.tagsArray}
+          id = {group._id}
         />
       ))}
-    </>
+    </Container>
   );
 
 };

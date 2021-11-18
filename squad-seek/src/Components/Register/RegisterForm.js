@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 const RegisterUser = () => {
   return (
-    <div className = "container-fluid vh-100 bg-dark text-white">
+    <div className = "container-fluid bg-dark text-white">
       <div className = "d-flex flex-wrap justify-content-center mt-auto">
         <form>
           <div className="form-group pt-5">
@@ -20,14 +20,6 @@ const RegisterUser = () => {
           </div>
           <div className="form-group mt-2">
             <label>Password</label>
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Password"
-            />
-          </div>
-          <div className="form-group mt-2">
-            <label>Confirm Password</label>
             <input
               type="password"
               className="form-control"

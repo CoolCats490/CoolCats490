@@ -69,7 +69,7 @@ const GroupUpdate = (props) => {
 
     props.onSavedGroup(groupData);
     console.log(groupData);
-    axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
+    axios.post('http://localhost:5000/activities/update', groupData).then(res=> console.log(res.data));
   };
 
   const selectMenuStyle = {
@@ -86,7 +86,7 @@ const GroupUpdate = (props) => {
             className="text-capitalize"
             type="text"
             placeholder="Title"
-            onChange={submitHandler}
+            onChange={titleHandler}
             value={enteredTitle}
           />
         </Form.Group>
@@ -151,6 +151,7 @@ const GroupUpdate = (props) => {
           Submit
         </Button> }
       </Form>
+    
     </div>
   );
 };
