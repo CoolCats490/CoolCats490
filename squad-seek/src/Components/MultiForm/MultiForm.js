@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import styled from 'styled-components';
 import { MultiStepForm, Step } from 'react-multi-form'
 import Shipping from './Shipping'
@@ -16,32 +16,52 @@ const Container = styled.div`
 `
 
 const MultiForm = () => {
-  const [active, setActive] = React.useState(1)
+
+  const [active, setActive] = React.useState(1);
+  //const [isLoggedIn, setLoggedIn] = useState(true);
+  const [firstPageData, setFirstPageData] = useState("");
+  const [secondPageData, setSecondPageData] = useState("");
+
+  // const submitHandler = ()=>{
+  //   //data object here
+
+  //   if (isLoggedIn){
+
+  //   }
+  //   else{
+  //     //axios post request here
+  //   }
+  // };
+
+
   return (
     <Container>
       <MultiStepForm activeStep={active}>
         <Step label='Account Creation'>
-          <Shipping />
+          <Shipping 
+            active = {active}
+            onSetActive={setActive}
+            onDataInput={setFirstPageData}
+          />
         </Step>
         <Step label='Personal Info'>
-          <Payment />
+          <Payment 
+            active = {active}
+            onSetActive={setActive}
+            onDataInput={setSecondPageData}
+          />
         </Step>
         <Step label='confirmation'>
-          <Confirmation />
+          <Confirmation 
+            active = {active}
+            onSetActive={setActive}
+            firstPageData={firstPageData}
+            secondPageData={secondPageData}
+          />
         </Step>
       </MultiStepForm>
 
-      {active !== 1 && (
-        <Button onClick={() => setActive(active - 1)}>Previous</Button>
-      )}
-      {active !== 3 && (
-        <Button
-          onClick={() => setActive(active + 1)}
-          style={{ float: 'right' }}
-        >
-          Next
-        </Button>
-      )}
+      
     </Container>
   )
 }

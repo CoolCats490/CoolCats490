@@ -98,7 +98,7 @@ const GroupUpdate = (props) => {
       }
 
       //Send
-      props.onGroupUpdated(groupData)
+      //props.onGroupUpdated(groupData)
 
       //Close Modal
       props.onModalClose(false)
