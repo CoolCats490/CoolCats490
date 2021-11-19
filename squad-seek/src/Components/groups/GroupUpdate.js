@@ -3,7 +3,9 @@ import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
+
 
 //Tag Select Options
 const optionsTags = [
@@ -18,6 +20,7 @@ const GroupUpdate = (props) => {
     let d = new Date(parseInt(props.date))
     let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
     let ts = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0') + ':' + d.getSeconds().toString().padStart(2, '0');
+    let groupID= props.id
     console.log(datestring + "T" +  ts);
 
   const [enteredTitle, setTitle] = useState(props.title);
@@ -27,6 +30,7 @@ const GroupUpdate = (props) => {
   const [enteredTag, setTag] = useState([]);
 
     
+const history = useHistory()
 
   //Entry Handlers
   const titleHandler = (event) => {
@@ -45,7 +49,7 @@ const GroupUpdate = (props) => {
     setDescription(event.target.value);
   };
   const tagHandler = (event) => {
-    setTag( event );
+    setTag( event.taret.value );
   }
   const submitHandler = (event) => {
     event.preventDefault();
@@ -69,7 +73,7 @@ const GroupUpdate = (props) => {
 
     props.onSavedGroup(groupData);
     console.log(groupData);
-    axios.post('http://localhost:5000/activities/update', groupData).then(res=> console.log(res.data));
+    axios.post('http://localhost:5000/activities/update/:id', groupData).then(res=> console.log(res.data));
   };
 
   const selectMenuStyle = {

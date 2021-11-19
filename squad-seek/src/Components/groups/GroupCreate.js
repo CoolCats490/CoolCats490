@@ -95,13 +95,16 @@ const GroupCreate = (props) => {
 
         <Form.Group className="mb-3" controlId="formGroupType">
           <Form.Label>Meeting Type</Form.Label>
-          <Select
-          className="text-black"
-          placeholder="Select Group Type"
-          options={optionsGroupType}
-          onChange={meetingTypeHandler}
-          value={enteredMType}
-        />
+          <Form.Control
+            as="select"
+            className="form-select"
+            onChange={meetingTypeHandler}
+            value={enteredMType}
+          >
+            <option defaultValue>Select Type</option>
+            <option value="0">In Person</option>
+            <option value="1">Online</option>
+          </Form.Control>
         </Form.Group>
 
 

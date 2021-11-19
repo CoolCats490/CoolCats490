@@ -52,7 +52,7 @@ const GroupDetails = (props) => {
     };
     //Call async function
     fetchGroups();
-  }, []);
+  }, [params.groupID]);
 
   //if data is not loaded will retrun a blank page saying loading
   if (isLoading) {
