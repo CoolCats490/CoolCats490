@@ -1,8 +1,8 @@
 import React,{useState} from 'react'
 import styled from 'styled-components';
 import { MultiStepForm, Step } from 'react-multi-form'
-import Shipping from './Shipping'
-import Payment from './Payment'
+import RegisterPage1 from './RegisterPage1'
+import RegisterPage2 from './RegisterPage2'
 import Confirmation from './Confirmation'
 import Button from './button'
 
@@ -20,7 +20,6 @@ const MultiForm = () => {
   const [active, setActive] = React.useState(1);
   //const [isLoggedIn, setLoggedIn] = useState(true);
   const [firstPageData, setFirstPageData] = useState("");
-  const [secondPageData, setSecondPageData] = useState("");
 
   // const submitHandler = ()=>{
   //   //data object here
@@ -38,25 +37,23 @@ const MultiForm = () => {
     <Container>
       <MultiStepForm activeStep={active}>
         <Step label='Account Creation'>
-          <Shipping 
+          <RegisterPage1 
             active = {active}
             onSetActive={setActive}
             onDataInput={setFirstPageData}
           />
         </Step>
         <Step label='Personal Info'>
-          <Payment 
+          <RegisterPage2 
             active = {active}
             onSetActive={setActive}
-            onDataInput={setSecondPageData}
+            firstPageData={firstPageData}
           />
         </Step>
         <Step label='confirmation'>
           <Confirmation 
             active = {active}
             onSetActive={setActive}
-            firstPageData={firstPageData}
-            secondPageData={secondPageData}
           />
         </Step>
       </MultiStepForm>

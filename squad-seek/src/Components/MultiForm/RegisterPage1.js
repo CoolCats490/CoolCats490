@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import Input from './input';
 import Button from './button'
 
-export default function Shipping(props) {
-  const [enteredFullName, setFullName] = useState("");
+export default function RegisterPage1(props) {
+
+  const [enteredFirstName, setFirstName] = useState("");
+  const [eteredLastName, setLastName] = useState("");
   const [enteredEmail, setEmail] = useState("");
-  const [enteredAddress, setPassword] = useState("");
-  const [enteredCity, setCity] = useState("");
-  const [enteredCountry, setCountry] = useState("");
+  const [enteredPassword, setPassword] = useState("");
 
+  const firstNameHandler = (event) =>{
+    setFirstName(event.target.value);
+  }
 
-  const nameHandler = (event) =>{
-    setFullName(event.target.value);
+  const lastNameHandler = (event) =>{
+    setLastName(event.target.value);
   }
   const emailHandler = (event) =>{
     setEmail(event.target.value);
@@ -19,28 +22,24 @@ export default function Shipping(props) {
   const passwordHandler = (event) =>{
     setPassword(event.target.value);
   }
-  const cityHandler = (event) =>{
-    setCity(event.target.value);
-  }
-  const countryHandler = (event) =>{
-    setCountry(event.target.value);
-  }
 
   const nextBtnHandler = ()=>{
     //creating group data object
     const firstPageData = {
-      name: enteredFullName,
+      fName: enteredFirstName,
+      lName: eteredLastName,
       email: enteredEmail,
-      address: enteredAddress,
-      city: enteredCity,
-      country: enteredCountry
+      password: enteredPassword,
     };
 
     console.log(firstPageData);
-    console.log("123")
     
     //move to next page
     props.onSetActive(props.active + 1)
+
+    //lift state up
+    props.onDataInput(firstPageData);
+
   };
 
 
@@ -48,16 +47,20 @@ export default function Shipping(props) {
   return (
     <div>
       <h3 style={{textAlign: 'center'}}>Account Creation Information</h3>
-      <Input type="text" placeholder="Enter your full name" label="Full Name" onChange={nameHandler} required/>
+
+      <div style={{ display: 'flex'}}>
+        <div style={{ flex: 1, paddingRight: 10}}>
+        <Input type="text" placeholder="First Name" label="First Name" style={{marginRight: 10}}  onChange={firstNameHandler}/>
+        </div>
+        <div style={{ flex: 1}}>
+
+        <Input type="text" placeholder="Last Name" label="Last Name" onChange={lastNameHandler}/>
+        </div>
+      </div>
       
       <Input type="email" placeholder="Enter your e-mail" label="Email Address" onChange={emailHandler}/>
 
       <Input type="password" placeholder="Enter a password" label="Password" onChange={passwordHandler}/>
-
-      <div>
-      <Input type="text" placeholder="Enter your country" label="Country" onChange={countryHandler}/>
-      <Input type="text" placeholder="Enter your city" label="City" onChange={cityHandler}/>
-      </div>
 
       {props.active !== 1 && (
         <Button onClick={() => props.onSetActive(props.active - 1)}>Previous</Button>

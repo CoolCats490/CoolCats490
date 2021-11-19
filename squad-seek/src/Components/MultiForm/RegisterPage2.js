@@ -5,7 +5,7 @@ import Button from './button'
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
-export default function Payment(props) {
+export default function RegisterPage2(props) {
   //Tag Select Options
   const optionsTags = [
     {value: 'concert', label: 'Concert'},
@@ -18,7 +18,7 @@ export default function Payment(props) {
   //useState stuff
   const [enteredUserName, setUserName] = useState("");
   const [enteredTag, setTag] = useState([]);
-  const [enteredDate, setDate] = useState("");
+  const [enteredAge, setAge] = useState(0);
 
 
   const userNameHandler = (event) =>{
@@ -26,17 +26,23 @@ export default function Payment(props) {
   }
 
   const tagHandler = (event) => {
-    setTag( event );
+    setTag(event);
   }
 
   const dateHandler = (event) => {
-    setDate(event.target.value);
+    
+    //get year from date selector
+    let date1 =new Date(event.target.value)
+    let givenYear = date1.getFullYear();
 
+    //get the current yyear
+    let date2 = new Date();
+    let currentYear = date2.getFullYear();
 
-    console.log(enteredDate)
-    let year = enteredDate.getFullYear()
+    //console.log(currentYear - givenYear)
+    setAge(currentYear - givenYear);
 
-    console.log(2021 - year)
+    //console.log(2021 - year)
   };
 
 
@@ -45,22 +51,34 @@ export default function Payment(props) {
     const secondPageData = {
       userName: enteredUserName,
       tags: enteredTag.map(e => e.value),
-      date: new Date(enteredDate)
+      age: enteredAge
     };
 
     //console.log(firstPageData);
-    console.log("123")
     console.log(secondPageData)
     
     //move to next page
     props.onSetActive(props.active + 1)
+
+
+    //database stuff
+    console.log(props.firstPageData);
+
+   
+    let combinedData = {
+      ...props.firstPageData,
+      ...secondPageData
+    }
+
+    console.log("combined data below")
+    console.log(combinedData);
   };
 
   return (
     <div>
       <h3 style={{textAlign: 'center'}}>Personal Information </h3>
       <Input type="text" placeholder="John Doe" label="Username" onChange={userNameHandler}/>
-      <p>tags</p>
+      <p style={{ marginBottom: '0px'}}>Interest</p>
       <CreatableSelect
             className="text-capitalize text-black"
             placeholder="Select or Create Interest"
@@ -76,12 +94,9 @@ export default function Payment(props) {
       
       <div style={{ display: 'flex'}}>
         <div style={{ flex: 1, paddingRight: 10}}>
-        <Input type="date" label="Date of Birth" style={{marginRight: 10}} onchange={dateHandler}/>
+        <Input type="date" label="Date of Birth" style={{marginRight: 10}} onChange={dateHandler}/>
         </div>
-        {/* <div style={{ flex: 1}}>
-
-        <Input type="text" placeholder="000" label="Filler"/>
-        </div> */}
+        
       </div>
       
       {props.active !== 1 && (
