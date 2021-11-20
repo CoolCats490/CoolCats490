@@ -49,7 +49,7 @@ const history = useHistory()
     setDescription(event.target.value);
   };
   const tagHandler = (event) => {
-    setTag( event.taret.value );
+    setTag( event );
   }
   const submitHandler = (event) => {
     event.preventDefault();
@@ -73,7 +73,9 @@ const history = useHistory()
 
     props.onSavedGroup(groupData);
     console.log(groupData);
-    axios.post('http://localhost:5000/activities/update/:id', groupData).then(res=> console.log(res.data));
+    axios.post(`http://localhost:5000/activities/${groupID}`,groupData)
+    .then(res =>{console.log(res)})
+    .catch(error => console.error(error));
   };
 
   const selectMenuStyle = {
