@@ -32,7 +32,7 @@ export default function RegisterPage1(props) {
       password: enteredPassword,
     };
 
-    console.log(firstPageData);
+    //console.log(firstPageData);
     
     //move to next page
     props.onSetActive(props.active + 1)

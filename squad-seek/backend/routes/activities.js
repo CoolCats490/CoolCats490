@@ -59,7 +59,7 @@ router.route('/update/:id').post((req, res) => {
     Activity.findById(req.params.id)
     .then(activity => {
         activity.name = String(req.body.name);
-        activity.time = Date.parse(req.body.time);;
+        activity.time = String(req.body.time);
         activity.type = String(req.body.type);
         activity.description = String(req.body.description);
         activity.tagsArray = req.body.tagsArray;

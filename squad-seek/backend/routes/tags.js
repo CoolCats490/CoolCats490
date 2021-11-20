@@ -2,14 +2,14 @@
 const router = require('express').Router();
 
 // we need user variable to use the user model
-let User = require('../models/user.model');
+let Tag = require('../models/tags.model');
 
 //now we need to specify that if we recieve a '/get' request from the server,
 // then what are we gonna do with the database
 
 router.route('/').get((req,res) => {
     //its gonna go to user, find users and then return json file of users
-    User.find().then(users => res.json(users)).catch(err => res.status(400).json('Error: ' + err));
+    Tag.find().then(users => res.json(tags)).catch(err => res.status(400).json('Error: ' + err));
 });
 
 
@@ -17,21 +17,13 @@ router.route('/').get((req,res) => {
 // First we get the information from the server, and then create a new user from that informatin and
 // then finally save it to the database as json file and print the message "User added!"
 router.route('/add').post((req, res) => {
-    const username = String(req.body.username);
-    const age = Number(req.body.age);
-    const interests = String(req.body.interests);
-    const password = String(req.body.password);
-    const email = String(req.body.email);
+    const tag = String(req.body.interests);
 
-    const newUser = new User({
-        username,
-        age,
-        interests,
-        password,
-        email
+    const newTag = new Tag({
+        interests
     });
 
-    newUser.save().then(()=> res.json('User added!')).catch(err => res.status(400).json('Error Testing: ' + err));
+    tag.save().then(()=> res.json('New tag added!')).catch(err => res.status(400).json('Error Testing: ' + err));
 
 
 });
