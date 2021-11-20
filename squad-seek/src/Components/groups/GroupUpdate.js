@@ -3,11 +3,19 @@ import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
-import { useHistory } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
 
 
-//Tag Select Options
+const GroupUpdate = (props) => {
+  const [enteredTitle, setTitle] = useState("");
+  const [enteredMType, setMType] = useState("");
+  const [enteredDate, setDate] = useState("");
+  const [enteredDescription, setDescription] = useState("");
+  const [enteredTag, setTag] = useState([]);
+
+
+
+  //Tag Select Options
 const optionsTags = [
   {value: 'concert', label: 'Concert'},
   {value: 'cosplay', label: 'Cosplay'},
@@ -15,23 +23,6 @@ const optionsTags = [
   {value: 'gaming', label: 'Gaming'},
   {value: 'surfing', label: 'Surfing'}
 ];
-
-const GroupUpdate = (props) => {
-    let d = new Date(parseInt(props.date))
-    let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
-    let ts = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0') + ':' + d.getSeconds().toString().padStart(2, '0');
-    let groupID= props.id
-    console.log(datestring + "T" +  ts);
-
-  const [enteredTitle, setTitle] = useState(props.title);
-  const [enteredMType, setMType] = useState(props.type);
-  const [enteredDate, setDate] = useState(datestring + "T" +  ts);
-  const [enteredDescription, setDescription] = useState(props.description);
-  const [enteredTag, setTag] = useState([]);
-
-    
-const history = useHistory()
-
   //Entry Handlers
   const titleHandler = (event) => {
     setTitle(event.target.value);
@@ -54,13 +45,7 @@ const history = useHistory()
   const submitHandler = (event) => {
     event.preventDefault();
 
-    //Clearing fields
-    setTitle("");
-    setMType("");
-    setDate("");
-    setDescription("");
-    setTag("");
-
+    const groupID = props.id;
     //Putting data into a object
     const groupData = {
       name: enteredTitle,
@@ -70,21 +55,27 @@ const history = useHistory()
       tagsArray: enteredTag.map(e => e.value)
     };
 
+ //Clearing fields
+ setTitle(enteredTitle);
+ setMType(enteredMType);
+ setDate(enteredDate);
+ setDescription(enteredDescription);
+ setTag(enteredTag);
 
-    props.onSavedGroup(groupData);
+    
+    
     console.log(groupData);
-    axios.post(`http://localhost:5000/activities/${groupID}`,groupData)
-    .then(res =>{console.log(res)})
-    .catch(error => console.error(error));
-  };
+    axios.put(`http://localhost:5000/activities/update/${groupID}`,groupData).then(res=> console.log(res.data));
+   
+  
 
-  const selectMenuStyle = {
-    menuList: styles => ({ ...styles, backgroundColor: 'Black' })
-  }
-
+};
+  // const showLocation = () => {
+  //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
+  // };
 
   return (
-    <div className="bg-primar">
+    <div className="text-white">
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
@@ -115,10 +106,8 @@ const history = useHistory()
         { <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
           <CreatableSelect
-            className="text-capitalize"
+            className="text-capitalize text-black"
             placeholder="Select or Create Tags"
-            //Styles
-            styles={selectMenuStyle}
             //Select multiple tags
             isMulti
             //Search for tags
@@ -127,8 +116,6 @@ const history = useHistory()
             options={optionsTags}
             //Set value of tag
             value={enteredTag}
-            //
-            defaultValue={"test"}
           />
         </Form.Group> }
 
@@ -153,11 +140,10 @@ const history = useHistory()
           />
         </Form.Group>
 
-        { <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit">
           Submit
-        </Button> }
+        </Button>
       </Form>
-    
     </div>
   );
 };
