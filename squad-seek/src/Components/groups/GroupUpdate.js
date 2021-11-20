@@ -44,7 +44,11 @@ const optionsTags = [
   }
   const submitHandler = (event) => {
     event.preventDefault();
-
+    setTitle(props.title);
+    setMType(props.type);
+    setDate(props.time);
+    setDescription(props.description);
+    setTag(props.tags);
     const groupID = props.id;
     //Putting data into a object
     const groupData = {
@@ -56,19 +60,13 @@ const optionsTags = [
     };
 
  //Clearing fields
- setTitle("");
- setMType("");
- setDate("");
- setDescription("");
- setTag("");
+ 
 
     
-    
+  //pushes the updated fields to the corresponding id  
     console.log(groupData);
     axios.put(`http://localhost:5000/activities/update/${groupID}`,groupData).then(res=> console.log(res.data));
-   
   
-
 };
   // const showLocation = () => {
   //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
