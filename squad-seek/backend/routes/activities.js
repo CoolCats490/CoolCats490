@@ -55,7 +55,7 @@ router.route('/:id').delete((req, res) => {
 
 // when used url http://localhost:5000/activities/update/id_of_the_activity
 // this will update the specific activity linked with that ID
-router.route('/update/:id').post((req, res) => {
+router.route('/update/:id').put((req, res) => {
     Activity.findById(req.params.id)
     .then(activity => {
         activity.name = String(req.body.name);

@@ -7,7 +7,16 @@ import axios from 'axios';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
-//Tag Select Options
+const GroupUpdate = (props) => {
+  const [enteredTitle, setTitle] = useState("");
+  const [enteredMType, setMType] = useState("");
+  const [enteredDate, setDate] = useState("");
+  const [enteredDescription, setDescription] = useState("");
+  const [enteredTag, setTag] = useState([]);
+
+
+
+  //Tag Select Options
 const optionsTags = [
   {value: 'concert', label: 'Concert'},
   {value: 'cosplay', label: 'Cosplay'},
@@ -71,13 +80,7 @@ const GroupUpdate = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    //Clearing fields
-    setTitle("");
-    setMType("");
-    setDate("");
-    setDescription("");
-    setTag("");
-
+    const groupID = props.id;
     //Putting data into a object
     const groupData = {
       name: enteredTitle,
@@ -87,6 +90,12 @@ const GroupUpdate = (props) => {
       tagsArray: enteredTag.map(e => e.value)
     };
 
+ //Clearing fields
+ setTitle(enteredTitle);
+ setMType(enteredMType);
+ setDate(enteredDate);
+ setDescription(enteredDescription);
+ setTag(enteredTag);
 
     //props.onSavedGroup(groupData);
     console.log(groupData);
@@ -108,9 +117,13 @@ const GroupUpdate = (props) => {
     props.onModalClose(false)
   },[])
 
+};
+  // const showLocation = () => {
+  //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
+  // };
 
   return (
-    <div className="bg-primar">
+    <div className="text-white">
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
@@ -139,7 +152,7 @@ const GroupUpdate = (props) => {
         { <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
           <CreatableSelect
-            className="text-capitalize"
+            className="text-capitalize text-black"
             placeholder="Select or Create Tags"
             //Select multiple tags
             isMulti

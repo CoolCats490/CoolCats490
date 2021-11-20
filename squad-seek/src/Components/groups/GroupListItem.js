@@ -6,12 +6,12 @@ import Badge from "react-bootstrap/Badge";
 import { useHistory, Link } from "react-router-dom";
 
 const GrouptListItem = (props) => {
-  let month = props.date.toLocaleString("en-US", { month: "long" });
-  let day = props.date.toLocaleString("en-US", { day: "2-digit" });
-  let year = props.date.getFullYear();
-  let time = props.date.toLocaleTimeString("en-US");
+  const month = props.date.toLocaleString("en-US", { month: "long" });
+  const day = props.date.toLocaleString("en-US", { day: "2-digit" });
+  const year = props.date.getFullYear();
+  const  time = props.date.toLocaleTimeString("en-US");
 
-  let history = useHistory();
+  const history = useHistory();
   const cardLink = () => {
     history.push("/groups/");
   };
