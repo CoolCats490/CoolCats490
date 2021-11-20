@@ -1,3 +1,4 @@
+// export default GroupUpdate;
 import { useState, useCallback } from "react";
 //Bootstrap Stuff
 import Form from "react-bootstrap/Form";
@@ -7,16 +8,7 @@ import axios from 'axios';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
-const GroupUpdate = (props) => {
-  const [enteredTitle, setTitle] = useState("");
-  const [enteredMType, setMType] = useState("");
-  const [enteredDate, setDate] = useState("");
-  const [enteredDescription, setDescription] = useState("");
-  const [enteredTag, setTag] = useState([]);
-
-
-
-  //Tag Select Options
+//Tag Select Options
 const optionsTags = [
   {value: 'concert', label: 'Concert'},
   {value: 'cosplay', label: 'Cosplay'},
@@ -80,7 +72,13 @@ const GroupUpdate = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    const groupID = props.id;
+    //Clearing fields
+    setTitle("");
+    setMType("");
+    setDate("");
+    setDescription("");
+    setTag("");
+
     //Putting data into a object
     const groupData = {
       name: enteredTitle,
@@ -90,12 +88,6 @@ const GroupUpdate = (props) => {
       tagsArray: enteredTag.map(e => e.value)
     };
 
- //Clearing fields
- setTitle(enteredTitle);
- setMType(enteredMType);
- setDate(enteredDate);
- setDescription(enteredDescription);
- setTag(enteredTag);
 
     //props.onSavedGroup(groupData);
     console.log(groupData);
@@ -117,13 +109,9 @@ const GroupUpdate = (props) => {
     props.onModalClose(false)
   },[])
 
-};
-  // const showLocation = () => {
-  //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
-  // };
 
   return (
-    <div className="text-white">
+    <div className="bg-primar">
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
@@ -152,7 +140,7 @@ const GroupUpdate = (props) => {
         { <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
           <CreatableSelect
-            className="text-capitalize text-black"
+            className="text-capitalize"
             placeholder="Select or Create Tags"
             //Select multiple tags
             isMulti
