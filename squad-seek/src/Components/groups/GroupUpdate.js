@@ -56,11 +56,11 @@ const optionsTags = [
     };
 
  //Clearing fields
- setTitle(enteredTitle);
- setMType(enteredMType);
- setDate(enteredDate);
- setDescription(enteredDescription);
- setTag(enteredTag);
+ setTitle("");
+ setMType("");
+ setDate("");
+ setDescription("");
+ setTag("");
 
     
     
