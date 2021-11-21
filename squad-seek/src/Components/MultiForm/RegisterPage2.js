@@ -53,7 +53,8 @@ export default function RegisterPage2(props) {
     const secondPageData = {
       username: enteredUserName,
       interests: enteredTag.map(e => e.value),
-      age: enteredAge
+      age: enteredAge,
+
     };
 
     //console.log(firstPageData);
@@ -72,7 +73,9 @@ export default function RegisterPage2(props) {
       age: enteredAge,
       interests: enteredTag.map(e => e.value),
       password: props.firstPageData.password,
-      email: props.firstPageData.email
+      email: props.firstPageData.email,
+      firstname: props.firstPageData.fName,
+      lastname: props.firstPageData.lName
 
     }
 

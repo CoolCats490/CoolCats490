@@ -52,13 +52,6 @@ const GroupCreate = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    //Clearing fields
-    setTitle("");
-    setMType("");
-    setDate("");
-    setDescription("");
-    setTag("");
-
     //Putting data into a object
     const groupData = {
       name: enteredTitle,
@@ -67,6 +60,13 @@ const GroupCreate = (props) => {
       description: enteredDescription,
       tagsArray: enteredTag.map(e => e.value)
     };
+
+    //Clearing fields
+    setTitle("");
+    setMType("");
+    setDate("");
+    setDescription("");
+    setTag("");
 
 
     //props.onSavedGroup(groupData);
