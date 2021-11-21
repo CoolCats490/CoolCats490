@@ -12,7 +12,7 @@ const GroupDelete = (props) => {
     (event) => {
       props.onModalClose(false);
     },
-    [props.onModalClose]
+    [props]
   );
 
   let groupID = props.id;

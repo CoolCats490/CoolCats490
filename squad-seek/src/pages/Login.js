@@ -1,15 +1,23 @@
-import React,{useState} from "react";
+import React,{useState, useContext} from "react";
 //Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.css";
 //Axios
 import axios from 'axios';
+import AuthContext from "../Store/auth-context";
+import { useHistory } from "react-router";
 
 
 const Login = () => {
   const [enteredName, setName] = useState("")
   const [enteredPass, setPass] = useState("")
+
+  //store and get JWL token
+  const authCtx = useContext(AuthContext);
+  const isLogedIn = authCtx.isLoggedIn;
+
+  let history = useHistory();
 
   const userNamerHandler = (event) =>{
     setName(event.target.value);
@@ -34,7 +42,11 @@ const Login = () => {
     //axios.post(`http://localhost:5000/user/login/${enteredName}`);
 
 
-    axios.post('http://localhost:5000/users/login', loginData).then(res=> console.log(res.data))
+    axios.post('http://localhost:5000/users/login', loginData)
+    .then(res => {
+      const expirationTime = new Date( new Date().getTime() + (+res.data.expiresIn) );
+      authCtx.login(res.data.token, expirationTime.toISOString())
+    })
     .catch(error =>{
       if (error.response) {
         // Request made and server responded
@@ -49,6 +61,11 @@ const Login = () => {
         console.log('Error', error.message);
       }
     });
+
+    if(isLogedIn){
+      
+      history.replace("/profile")
+    }
 
   }
 

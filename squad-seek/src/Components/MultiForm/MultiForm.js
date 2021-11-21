@@ -4,7 +4,6 @@ import { MultiStepForm, Step } from 'react-multi-form'
 import RegisterPage1 from './RegisterPage1'
 import RegisterPage2 from './RegisterPage2'
 import Confirmation from './Confirmation'
-import Button from './button'
 
 const Container = styled.div`
   max-width: 500px;
@@ -20,18 +19,6 @@ const MultiForm = () => {
   const [active, setActive] = React.useState(1);
   //const [isLoggedIn, setLoggedIn] = useState(true);
   const [firstPageData, setFirstPageData] = useState("");
-
-  // const submitHandler = ()=>{
-  //   //data object here
-
-  //   if (isLoggedIn){
-
-  //   }
-  //   else{
-  //     //axios post request here
-  //   }
-  // };
-
 
   return (
     <Container>

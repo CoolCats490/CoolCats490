@@ -2,7 +2,6 @@ import React,{useState} from 'react';
 import Input from './input';
 import Button from './button'
 //React Select
-import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 //axios
 import axios from 'axios';
@@ -49,25 +48,12 @@ export default function RegisterPage2(props) {
 
 
   const nextBtnHandler = ()=>{
-    //creating group data object
-    const secondPageData = {
-      username: enteredUserName,
-      interests: enteredTag.map(e => e.value),
-      age: enteredAge,
 
-    };
-
-    //console.log(firstPageData);
-    //console.log(secondPageData)
-    
     //move to next page
     props.onSetActive(props.active + 1)
 
 
     //database stuff
-    //console.log(props.firstPageData);
-
-   
     let combinedData = {
       username: enteredUserName,
       age: enteredAge,
@@ -78,8 +64,6 @@ export default function RegisterPage2(props) {
       lastname: props.firstPageData.lName
 
     }
-
-    console.log(combinedData)
 
     //send data to database
     axios.post('http://localhost:5000/users/add', combinedData).then(res=> console.log(res.data));

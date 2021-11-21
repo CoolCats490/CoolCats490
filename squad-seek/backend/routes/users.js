@@ -49,7 +49,7 @@ router.route("/add").post(async (req, res) => {
     });
 
     await newUser
-      .save();
+      .save().catch((err) => res.status(400).json("Error Testing: " + err));
       //.then(() => res.json("User added!"));
       //.catch((err) => res.status(400).json("Error Testing: " + err));
       
@@ -71,8 +71,6 @@ router.route("/add").post(async (req, res) => {
             });
         }
       );
-    //   res.json({accessTonken: accessToken})
-    //   console.log({accessTonken: accessToken})
 
   } catch{
       res.status(500).send("Server Error");
@@ -113,7 +111,8 @@ router.post("/login", async (req, res) => {
             (err, token) => {
               if (err) throw err;
               res.status(200).json({
-                token
+                "token":token,
+                "expiresIn": "600000" //aka as 10 mins
               });
             }
           );

@@ -68,7 +68,6 @@ const GroupCreate = (props) => {
     setDescription("");
     setTag("");
 
-
     //props.onSavedGroup(groupData);
     console.log(groupData);
     axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));

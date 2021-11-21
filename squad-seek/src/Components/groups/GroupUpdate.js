@@ -37,16 +37,17 @@ const GroupUpdate = (props) => {
       }));
 
     //Formatting meeting type into a for mat Reac-Select can read
-    let mTypes = [{value: props.type, label: parseInt(props.type) ? "Online" : "In Person"}];
+    let mTypes = [{value: props.type, label: parseInt(props.type)?  "Online":"In Person"}];
 
     //Creating useState for all the fields in the form
   const [enteredTitle, setTitle] = useState(props.title);
   const [enteredMType, setMType] = useState(mTypes);
+
   const [enteredDate, setDate] = useState(datestring + "T" +  ts);
   const [enteredDescription, setDescription] = useState(props.description);
   const [enteredTag, setTag] = useState(currentTags);
 
-    
+    console.log(props)
 
   //Entry Handlers
   const titleHandler = (event) => {
@@ -54,7 +55,10 @@ const GroupUpdate = (props) => {
   };
 
   const meetingTypeHandler = (event) => {
-    setMType(event.value);
+    console.log(event)
+    console.log(event.value)
+    setMType(event);
+
   };
 
   const dateHandler = (event) => {
@@ -82,7 +86,7 @@ const GroupUpdate = (props) => {
     //Putting data into a object
     const groupData = {
       name: enteredTitle,
-      type: parseInt(enteredMType),
+      type: parseInt(enteredMType.value),
       time: new Date(enteredDate),
       description: enteredDescription,
       tagsArray: enteredTag.map(e => e.value)
@@ -91,12 +95,25 @@ const GroupUpdate = (props) => {
 
     //props.onSavedGroup(groupData);
     console.log(groupData);
-    
+
+
     try {//http://localhost:5000/activities/update/id_of_the_activity
-            axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
-      } catch (err) {
-            console.log(err);
-      }
+      axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+} catch (err) {
+      console.log(err);
+}
+    
+    // try {//http://localhost:5000/activities/update/id_of_the_activity
+    //         axios.post('http://localhost:5000/activities/update/'+props.id, groupData)
+    //         .then(res=> {
+    //           console.log(res.data)
+    //           console.log(res.status)
+    //           console.log(res.statusText)
+    //           console.log(res.headers)
+    //         });
+    //   } catch (err) {
+    //         console.log(err);
+    //   }
 
       //Send
       //props.onGroupUpdated(groupData)
@@ -107,7 +124,7 @@ const GroupUpdate = (props) => {
 
   const cancelBtnHandler = useCallback( event =>{
     props.onModalClose(false)
-  },[])
+  },[props])
 
 
   return (
@@ -120,7 +137,7 @@ const GroupUpdate = (props) => {
             type="text"
             placeholder="Title"
             onChange={titleHandler}
-            value={enteredDate}
+            value={enteredTitle}
           />
         </Form.Group>
 
@@ -129,7 +146,7 @@ const GroupUpdate = (props) => {
          
           <Select
           placeholder="Select Group Type"
-          defaultValue={0}
+          //defaultValue={0}
           options={optionsGroupType}
           onChange={meetingTypeHandler}
           value={enteredMType}
