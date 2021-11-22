@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 
 const activitySchema = new Schema({
     name: {type: String, required: true, minlength: 3},
-    createdBy:{type:String},
+    createdBy:[
+        {
+            id:{type:String},
+            username:{type:String}
+        }
+    ],
     time: {type: String},
     type: {type:String},
     description: {type:String},

@@ -67,7 +67,8 @@ const GroupCreate = (props) => {
     setTitle(event.target.value);
   };
   const meetingTypeHandler = (event) => {
-    setMType(event.value);
+    console.log(event.value)
+    setMType(event);
   };
   const dateHandler = (event) => {
     console.log(event.target.value);
@@ -78,6 +79,7 @@ const GroupCreate = (props) => {
   };
   const tagHandler = (event) => {
     setTag( event );
+    console.log(enteredTag);
   }
 
   const submitHandler = (event) => {
@@ -87,11 +89,14 @@ const GroupCreate = (props) => {
       //Putting data into a object
       const groupData = {
         name: enteredTitle,
-        type: parseInt(enteredMType),
+        type: parseInt(enteredMType.value),
         time: new Date(enteredDate),
         description: enteredDescription,
         tagsArray: enteredTag.map(e => e.value),
-        createdBy: userInfo._id
+        createdBy: {
+                      id:userInfo._id,
+                      username:userInfo.username
+                    }
       };
 
       //Clearing fields

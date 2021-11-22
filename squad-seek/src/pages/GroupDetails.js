@@ -135,7 +135,7 @@ const GroupDetails = (props) => {
   let time = date.toLocaleTimeString("en-US");
 
   //console.log("group id "+groups.createdBy)
-  //console.log("uID "+userInfo._id)
+  console.log(groups)
 
   return (
     <>
@@ -153,6 +153,9 @@ const GroupDetails = (props) => {
               <h2>
                 <strong>Group Title:</strong> {groups.name}
               </h2>
+              {/* {groups.createdBy !=null &&(<p>
+                <strong>Group Started by:</strong> {groups.createdBy[0].username}
+              </p>)} */}
               <p>
                 <strong>Group Type:</strong>{" "}
                 {parseInt(groups.type) ? "Online" : "In Person"}{" "}
