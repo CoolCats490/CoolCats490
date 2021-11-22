@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 //Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import {Modal} from "react-bootstrap";
 //Axios
 import axios from 'axios';
 //React Select
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+//token
+import AuthContext from "../../Store/auth-context";
 
 //Tag Select Options
 const optionsTags = [
@@ -23,54 +26,89 @@ const optionsGroupType =[
   ];
 
 const GroupCreate = (props) => {
+  //token stuff
+  const authCtx = useContext(AuthContext);
+  const isLogedIn = authCtx.isLoggedIn;
+
   const [enteredTitle, setTitle] = useState("");
   const [enteredMType, setMType] = useState("");
   const [enteredDate, setDate] = useState("");
   const [enteredDescription, setDescription] = useState("");
   const [enteredTag, setTag] = useState([]);
+  const [userInfo, setUserInfo] = useState([]);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
+  //useEffect hook will load groups from data base when component is loaded
+  useEffect(() => {
+    //async call to database
+    const fetchUser = async () =>{
+      try{
+        const response = await axios.get
+      ("http://localhost:5000/users/me", {
+        headers: {
+          "Content-Type": "application/json",
+          token: authCtx.token,
+        },
+      });
+      //store user info in user object
+      setUserInfo(response.data)
+
+      }catch(err){
+        console.log(err);
+      }
+    }
+    //Call async function
+    if(isLogedIn)
+      fetchUser();
+  }, [isLogedIn, authCtx.token]);
 
   //Entry Handlers
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
-
   const meetingTypeHandler = (event) => {
     setMType(event.value);
   };
-
   const dateHandler = (event) => {
     console.log(event.target.value);
     setDate(event.target.value);
   };
-
   const descriptionHandler = (event) => {
     setDescription(event.target.value);
   };
   const tagHandler = (event) => {
     setTag( event );
   }
+
   const submitHandler = (event) => {
     event.preventDefault();
 
-    //Putting data into a object
-    const groupData = {
-      name: enteredTitle,
-      type: parseInt(enteredMType),
-      time: new Date(enteredDate),
-      description: enteredDescription,
-      tagsArray: enteredTag.map(e => e.value)
-    };
+    if(isLogedIn){
+      //Putting data into a object
+      const groupData = {
+        name: enteredTitle,
+        type: parseInt(enteredMType),
+        time: new Date(enteredDate),
+        description: enteredDescription,
+        tagsArray: enteredTag.map(e => e.value),
+        createdBy: userInfo._id
+      };
 
-    //Clearing fields
-    setTitle("");
-    setMType("");
-    setDate("");
-    setDescription("");
-    setTag("");
+      //Clearing fields
+      setTitle("");
+      setMType("");
+      setDate("");
+      setDescription("");
+      setTag("");
 
-    //props.onSavedGroup(groupData);
-    console.log(groupData);
-    axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
+      //props.onSavedGroup(groupData);
+      console.log(groupData);
+      axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
+    }
+    else{
+      setShowErrorModal(true)
+    }
+
   };
 
 
@@ -145,6 +183,21 @@ const GroupCreate = (props) => {
           Submit
         </Button>
       </Form>
+
+      <Modal
+        show={showErrorModal}
+        onHide={() => setShowErrorModal(false)}
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+        animation={false}
+      >
+        <Modal.Header>
+          <Modal.Title id="group-create-error-modal">Group Creation Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Please create an account before making a group</p>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

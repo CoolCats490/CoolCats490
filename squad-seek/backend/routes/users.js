@@ -78,7 +78,7 @@ router.route("/add").post(async (req, res) => {
 
 });
 
-//most code found here
+//most code and explanation found here
 //https://dev.to/dipakkr/implementing-authentication-in-nodejs-with-express-and-jwt-codelab-1-j5i
 router.post("/login", async (req, res) => {
 

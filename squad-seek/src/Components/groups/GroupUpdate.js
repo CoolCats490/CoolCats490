@@ -99,21 +99,9 @@ const GroupUpdate = (props) => {
 
     try {//http://localhost:5000/activities/update/id_of_the_activity
       axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
-} catch (err) {
-      console.log(err);
-}
-    
-    // try {//http://localhost:5000/activities/update/id_of_the_activity
-    //         axios.post('http://localhost:5000/activities/update/'+props.id, groupData)
-    //         .then(res=> {
-    //           console.log(res.data)
-    //           console.log(res.status)
-    //           console.log(res.statusText)
-    //           console.log(res.headers)
-    //         });
-    //   } catch (err) {
-    //         console.log(err);
-    //   }
+    } catch (err) {
+          console.log(err);
+    }
 
       //Send
       //props.onGroupUpdated(groupData)

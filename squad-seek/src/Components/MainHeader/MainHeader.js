@@ -45,7 +45,7 @@ const MainHeader = () => {
           </Nav.Link>
           )}
           {isLogedIn && (
-            <Button onClick={logoutoutHandler}>Logout</Button>
+            <div className="px-2"><Button onClick={logoutoutHandler} >Logout</Button></div>
           )}
         </Nav>
       </Navbar>

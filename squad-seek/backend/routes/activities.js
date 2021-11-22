@@ -22,7 +22,8 @@ router.route('/add').post((req, res) => {
     const time = Date.parse(req.body.time);
     const type = String(req.body.type);
     const description = String(req.body.description);
-    const tagsArray = (req.body.tagsArray)
+    const tagsArray = (req.body.tagsArray);
+    const createdBy = (req.body.createdBy);
     
     
     
@@ -32,7 +33,8 @@ router.route('/add').post((req, res) => {
         time,
         type,
         description,
-        tagsArray
+        tagsArray,
+        createdBy
     });
 
     newActivity.save().then(()=> res.json('Activity added!')).catch(err => res.status(400).json('Error: ' + err));
@@ -66,6 +68,18 @@ router.route('/update/:id').post((req, res) => {
         activity.tagsArray = req.body.tagsArray;
 
         activity.save().then(()=> res.json('Activity updated!')).catch(err => res.status(400).json('Error: ' + err));
+    }).catch(err => res.status(400).json('Error: ' + err));
+
+});
+
+// when used url http://localhost:5000/activities/join/id_of_the_activity
+// this will update the specific activity linked with that ID
+router.route('/join/:id').post((req, res) => {
+    Activity.findById(req.params.id)
+    .then(activity => {
+        activity.members = req.body.members;
+
+        activity.save().then(()=> res.json('Activity joined!')).catch(err => res.status(400).json('Error: ' + err));
     }).catch(err => res.status(400).json('Error: ' + err));
 
 });
