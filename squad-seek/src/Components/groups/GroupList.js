@@ -25,7 +25,6 @@ const GroupList = () => {
     fetchGroups();
   }, []);
 
-  console.log(groups);
 
   return (
     <Container fluid="sm">

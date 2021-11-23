@@ -1,21 +1,14 @@
-import { useState } from "react";
+// export default GroupUpdate;
+import { useState, useCallback } from "react";
 //Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
-import CreatableSelect from "react-select/creatable";
+//React Select
+import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
-
-const GroupUpdate = (props) => {
-  const [enteredTitle, setTitle] = useState("");
-  const [enteredMType, setMType] = useState("");
-  const [enteredDate, setDate] = useState("");
-  const [enteredDescription, setDescription] = useState("");
-  const [enteredTag, setTag] = useState([]);
-
-
-
-  //Tag Select Options
+//Tag Select Options
 const optionsTags = [
   {value: 'concert', label: 'Concert'},
   {value: 'cosplay', label: 'Cosplay'},
@@ -23,16 +16,53 @@ const optionsTags = [
   {value: 'gaming', label: 'Gaming'},
   {value: 'surfing', label: 'Surfing'}
 ];
+
+//Group Type Options
+const optionsGroupType =[
+{value: 0, label: 'In Person'},
+{value: 1, label: 'Online'}
+];
+
+const GroupUpdate = (props) => {
+
+    //Translate incoming time into a format that datepicker can read
+    let d = new Date(parseInt(props.date))
+    let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+    let ts = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0') + ':' + d.getSeconds().toString().padStart(2, '0');
+
+    //Formatting incoming tags into a format React-select can read
+    let currentTags = props.tags.map(v => ({
+        label: v,
+        value: v
+      }));
+
+    //Formatting meeting type into a for mat Reac-Select can read
+    let mTypes = [{value: props.type, label: parseInt(props.type)?  "Online":"In Person"}];
+
+    //Creating useState for all the fields in the form
+  const [enteredTitle, setTitle] = useState(props.title);
+  const [enteredMType, setMType] = useState(mTypes);
+
+  const [enteredDate, setDate] = useState(datestring + "T" +  ts);
+  const [enteredDescription, setDescription] = useState(props.description);
+  const [enteredTag, setTag] = useState(currentTags);
+
+    console.log(props)
+
   //Entry Handlers
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
 
   const meetingTypeHandler = (event) => {
-    setMType(event.target.value);
+    console.log(event)
+    console.log(event.value)
+    setMType(event);
+
   };
 
   const dateHandler = (event) => {
+      console.log(event.target.value);
     setDate(event.target.value);
   };
 
@@ -41,39 +71,52 @@ const optionsTags = [
   };
   const tagHandler = (event) => {
     setTag( event );
+    console.log(enteredTag);
   }
   const submitHandler = (event) => {
     event.preventDefault();
-    setTitle(props.title);
-    setMType(props.type);
-    setDate(props.time);
-    setDescription(props.description);
-    setTag(props.tags);
-    const groupID = props.id;
+
+    //Clearing fields
+    setTitle("");
+    setMType("");
+    setDate("");
+    setDescription("");
+    setTag("");
+
     //Putting data into a object
     const groupData = {
       name: enteredTitle,
-      type: parseInt(enteredMType),
+      type: parseInt(enteredMType.value),
       time: new Date(enteredDate),
       description: enteredDescription,
       tagsArray: enteredTag.map(e => e.value)
     };
 
- //Clearing fields
- 
 
-    
-  //pushes the updated fields to the corresponding id  
+    //props.onSavedGroup(groupData);
     console.log(groupData);
-    axios.put(`http://localhost:5000/activities/update/${groupID}`,groupData).then(res=> console.log(res.data));
-  
-};
-  // const showLocation = () => {
-  //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
-  // };
+
+
+    try {//http://localhost:5000/activities/update/id_of_the_activity
+      axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+    } catch (err) {
+          console.log(err);
+    }
+
+      //Send
+      //props.onGroupUpdated(groupData)
+
+      //Close Modal
+      props.onModalClose(false)
+  };
+
+  const cancelBtnHandler = useCallback( event =>{
+    props.onModalClose(false)
+  },[props])
+
 
   return (
-    <div className="text-white">
+    <div className="bg-primar">
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
@@ -88,23 +131,21 @@ const optionsTags = [
 
         <Form.Group className="mb-3" controlId="formGroupType">
           <Form.Label>Meeting Type</Form.Label>
-          <Form.Control
-            as="select"
-            className="form-select"
-            onChange={meetingTypeHandler}
-            value={enteredMType}
-          >
-            <option defaultValue>Select Type</option>
-            <option value="0">In Person</option>
-            <option value="1">Online</option>
-          </Form.Control>
+         
+          <Select
+          placeholder="Select Group Type"
+          //defaultValue={0}
+          options={optionsGroupType}
+          onChange={meetingTypeHandler}
+          value={enteredMType}
+        />
         </Form.Group>
 
 
         { <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
           <CreatableSelect
-            className="text-capitalize text-black"
+            className="text-capitalize"
             placeholder="Select or Create Tags"
             //Select multiple tags
             isMulti
@@ -114,6 +155,8 @@ const optionsTags = [
             options={optionsTags}
             //Set value of tag
             value={enteredTag}
+            
+            //
           />
         </Form.Group> }
 
@@ -140,6 +183,9 @@ const optionsTags = [
 
         <Button variant="primary" type="submit">
           Submit
+        </Button>{" "}
+        <Button variant="secondary" onClick={cancelBtnHandler}>
+          Cancel
         </Button>
       </Form>
     </div>
