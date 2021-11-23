@@ -5,7 +5,7 @@ import { useContext } from "react";
 import AuthContext from "../Store/auth-context";
 
 //react imports
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 //Styling
 import {
   Badge,
@@ -15,8 +15,11 @@ import {
   Container,
   Button,
   Modal,
-  ListGroup
+  ListGroup,
+  Accordion,
+  Card
 } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 //pic
 import defaultPic from "./Media/group-defualt.jpg";
 //Components
@@ -46,43 +49,53 @@ const GroupDetails = (props) => {
   //Use useState to store user info from server
   const [userInfo, setUserInfo] = useState([]);
 
+  //U
+  const [dataChanged, setDataChanged] = useState(false)
+  ///////////////////////////////////////////////////////////////
+  const loadData = useCallback( async () =>{
+    //async call to database
+      const fetchGroups = async () => {
+        try {
+          let response = await axios(
+            `http://localhost:5000/activities/${params.groupID}`
+          );
+          //store groups in groups object
+          setGroups(response.data);
+          setLoading(false);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+  
+      let fetchUser = async () =>{
+        try{
+          const response = await axios.get
+        ("http://localhost:5000/users/me", {
+          headers: {
+            "Content-Type": "application/json",
+            token: authCtx.token,
+          },
+        });
+        //store user info in user object
+        setUserInfo(response.data)
+  
+        }catch(err){
+          console.log(err);
+        }
+      }
+      //Call async function
+      fetchGroups();
+      if(isLogedIn)
+        fetchUser();
+    //set datachange back to false
+      setDataChanged(false)
+  },[dataChanged,params,authCtx.token,isLogedIn])
+
+
   //useEffect hook will load groups from data base when component is loaded
   useEffect(() => {
-    //async call to database
-    const fetchGroups = async () => {
-      try {
-        const response = await axios(
-          `http://localhost:5000/activities/${params.groupID}`
-        );
-        //store groups in groups object
-        setGroups(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    const fetchUser = async () =>{
-      try{
-        const response = await axios.get
-      ("http://localhost:5000/users/me", {
-        headers: {
-          "Content-Type": "application/json",
-          token: authCtx.token,
-        },
-      });
-      //store user info in user object
-      setUserInfo(response.data)
-
-      }catch(err){
-        console.log(err);
-      }
-    }
-    //Call async function
-    fetchGroups();
-    if(isLogedIn)
-      fetchUser();
-  }, [params, isLogedIn, authCtx.token]);
+    loadData()
+  }, [loadData]);
 
   //if data is not loaded will retrun a blank page saying loading
   if (isLoading) {
@@ -114,18 +127,12 @@ const GroupDetails = (props) => {
             console.log(err);
       }
 
+      //Update the page data again
+      setDataChanged(true)
+
     }
 
   };
-
-  // const isYourGroup = ()=>{
-  //   if(groups.createdBy != null &&groups.createdBy === userInfo._id){
-  //     return true;
-  //   }
-  //   else{
-  //     return false;
-  //   }
-  // }
 
   //Date stuff
   let date = new Date(parseInt(groups.time));
@@ -181,23 +188,45 @@ const GroupDetails = (props) => {
               {isLogedIn && groups.createdBy[0].id === userInfo._id && (<Button variant="danger" onClick={() => setShowDeleteModal(true)}>
                 Delete
               </Button>)}
-              {isLogedIn && groups.createdBy[0].id != userInfo._id && (<Button onClick={joinBtnHandler}>Join Group</Button>)}
+              {isLogedIn && groups.createdBy[0].id !== userInfo._id && (<Button onClick={joinBtnHandler}>Join Group</Button>)}
             </section>
           </Col>
         </Row>
         <Row>
         <Container fluid >
-        {groups.members && (<h4 className="pt-4">Members in group</h4>)}
-        <ListGroup className="pb-4">
+        {groups.members && (<h4 className="pt-4"></h4>)}
+        {/* <ListGroup className="pb-4">
           {
               groups.members && 
-              groups.members.map((e) =>(
-                <ListGroup.Item key={e._id}>{e.username}</ListGroup.Item>
+              groups.members.map((e,index) =>(
+                <ListGroup.Item key={e._id} key={index}>{e.username}</ListGroup.Item>
+              )
+              )
+          }
+
+        </ListGroup> */}
+        <Accordion className="text-dark pb-4 ">
+                        <Card>
+                            <Accordion.Toggle as={Card.Header} eventKey="0">
+                            <h4 className="pt-4 text-center">Click to see members in group</h4>
+                            </Accordion.Toggle>
+
+                            <Accordion.Collapse eventKey="0">
+                                <Card.Body>
+                                <ListGroup className="pb-4">
+          {
+              groups.members && 
+              groups.members.map((e,index) =>(
+                <ListGroup.Item key={e._id} key={index}>{e.username}</ListGroup.Item>
               )
               )
           }
 
         </ListGroup>
+                                </Card.Body>
+                            </Accordion.Collapse>
+                        </Card>
+                    </Accordion>
 
         </Container>
         </Row>
@@ -223,6 +252,7 @@ const GroupDetails = (props) => {
             tags={groups.tagsArray}
             id={groups._id}
             onModalClose={setShowUpdateModal}
+            onDataChanged={setDataChanged}
           />
         </Modal.Body>
       </Modal>
