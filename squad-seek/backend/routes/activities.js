@@ -24,6 +24,7 @@ router.route('/add').post((req, res) => {
     const description = String(req.body.description);
     const tagsArray = (req.body.tagsArray);
     const createdBy = (req.body.createdBy);
+    const members = (req.body.createdBy);
     
     
     
@@ -34,7 +35,8 @@ router.route('/add').post((req, res) => {
         type,
         description,
         tagsArray,
-        createdBy
+        createdBy,
+        members
     });
 
     newActivity.save().then(()=> res.json('Activity added!')).catch(err => res.status(400).json('Error: ' + err));

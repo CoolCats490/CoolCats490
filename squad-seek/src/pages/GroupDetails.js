@@ -181,7 +181,7 @@ const GroupDetails = (props) => {
               {isLogedIn && groups.createdBy[0].id === userInfo._id && (<Button variant="danger" onClick={() => setShowDeleteModal(true)}>
                 Delete
               </Button>)}
-              {isLogedIn && (<Button onClick={joinBtnHandler}>Join Group</Button>)}
+              {isLogedIn && groups.createdBy[0].id != userInfo._id && (<Button onClick={joinBtnHandler}>Join Group</Button>)}
             </section>
           </Col>
         </Row>

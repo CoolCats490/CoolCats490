@@ -67,11 +67,9 @@ const GroupCreate = (props) => {
     setTitle(event.target.value);
   };
   const meetingTypeHandler = (event) => {
-    console.log(event.value)
     setMType(event);
   };
   const dateHandler = (event) => {
-    console.log(event.target.value);
     setDate(event.target.value);
   };
   const descriptionHandler = (event) => {
@@ -79,7 +77,6 @@ const GroupCreate = (props) => {
   };
   const tagHandler = (event) => {
     setTag( event );
-    console.log(enteredTag);
   }
 
   const submitHandler = (event) => {
@@ -96,7 +93,11 @@ const GroupCreate = (props) => {
         createdBy: {
                       id:userInfo._id,
                       username:userInfo.username
-                    }
+                    },
+        members:{
+          id:userInfo._id,
+          username:userInfo.username
+        }
       };
 
       //Clearing fields
