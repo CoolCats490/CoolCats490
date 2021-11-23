@@ -118,14 +118,14 @@ const GroupDetails = (props) => {
 
   };
 
-  const isYourGroup = ()=>{
-    if(groups.createdBy != null &&groups.createdBy === userInfo._id){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
+  // const isYourGroup = ()=>{
+  //   if(groups.createdBy != null &&groups.createdBy === userInfo._id){
+  //     return true;
+  //   }
+  //   else{
+  //     return false;
+  //   }
+  // }
 
   //Date stuff
   let date = new Date(parseInt(groups.time));
@@ -135,7 +135,9 @@ const GroupDetails = (props) => {
   let time = date.toLocaleTimeString("en-US");
 
   //console.log("group id "+groups.createdBy)
-  console.log(groups)
+  //console.log(groups)
+  //console.log("User id = "+userInfo._id)
+  //console.log("Group id = "+groups.createdBy[0].id)
 
   return (
     <>
@@ -153,9 +155,9 @@ const GroupDetails = (props) => {
               <h2>
                 <strong>Group Title:</strong> {groups.name}
               </h2>
-              {/* {groups.createdBy !=null &&(<p>
+              {groups.createdBy !=null &&(<p>
                 <strong>Group Started by:</strong> {groups.createdBy[0].username}
-              </p>)} */}
+              </p>)}
               <p>
                 <strong>Group Type:</strong>{" "}
                 {parseInt(groups.type) ? "Online" : "In Person"}{" "}
@@ -175,8 +177,8 @@ const GroupDetails = (props) => {
                   </Badge>
                 ))}
               </p>
-              {isLogedIn &&  (<Button onClick={() => setShowUpdateModal(true)} className="pr-2">Update</Button>)}
-              {isLogedIn && (<Button variant="danger" onClick={() => setShowDeleteModal(true)}>
+              {groups.createdBy[0].id === userInfo._id && (<Button onClick={() => setShowUpdateModal(true)} className="pr-2">Update</Button>)}
+              {isLogedIn && groups.createdBy[0].id === userInfo._id && (<Button variant="danger" onClick={() => setShowDeleteModal(true)}>
                 Delete
               </Button>)}
               {isLogedIn && (<Button onClick={joinBtnHandler}>Join Group</Button>)}
