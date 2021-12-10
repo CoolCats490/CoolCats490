@@ -5,7 +5,7 @@
     transition: all 0.3s;
     position: absolute;
     top: 56px;
-    right: 0;
+    /* right: 200px; */
 
     padding: 40px;
     /* min-height: calc(100vh - 3px); */
@@ -16,4 +16,14 @@
 body{
     min-height: 100vh;
     /* background-color: #212529; */
+}
+
+.innerModules{
+    width: calc(100% - 250px);
+    
+
+    position: absolute;
+    left: 400px;
+    display: flex;
+    flex-grow: 1;
 }

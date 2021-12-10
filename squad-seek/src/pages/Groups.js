@@ -13,6 +13,9 @@ const Groups = () => {
   return (
     <Container  className="wrapper bg-dark text-white fluid">
       <GroupSideBar></GroupSideBar>
+
+
+      <Container className="innerModules">
       <Switch>
       
 
@@ -30,6 +33,7 @@ const Groups = () => {
       
       </Switch>
 
+      </Container>
       
     </Container
 >

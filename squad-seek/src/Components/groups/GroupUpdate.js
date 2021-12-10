@@ -47,22 +47,17 @@ const GroupUpdate = (props) => {
   const [enteredDescription, setDescription] = useState(props.description);
   const [enteredTag, setTag] = useState(currentTags);
 
-    console.log(props)
-
   //Entry Handlers
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
 
   const meetingTypeHandler = (event) => {
-    console.log(event)
-    console.log(event.value)
     setMType(event);
 
   };
 
   const dateHandler = (event) => {
-      console.log(event.target.value);
     setDate(event.target.value);
   };
 
@@ -71,7 +66,6 @@ const GroupUpdate = (props) => {
   };
   const tagHandler = (event) => {
     setTag( event );
-    console.log(enteredTag);
   }
   const submitHandler = (event) => {
     event.preventDefault();
@@ -91,11 +85,6 @@ const GroupUpdate = (props) => {
       description: enteredDescription,
       tagsArray: enteredTag.map(e => e.value)
     };
-
-
-    //props.onSavedGroup(groupData);
-    console.log(groupData);
-
 
     try {//http://localhost:5000/activities/update/id_of_the_activity
       axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));

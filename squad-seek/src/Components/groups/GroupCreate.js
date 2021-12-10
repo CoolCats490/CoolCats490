@@ -106,9 +106,6 @@ const GroupCreate = (props) => {
       setDate("");
       setDescription("");
       setTag("");
-
-      //props.onSavedGroup(groupData);
-      console.log(groupData);
       axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
     }
     else{
@@ -116,11 +113,6 @@ const GroupCreate = (props) => {
     }
 
   };
-
-
-  // const showLocation = () => {
-  //   if (enteredMType === "0") return <Button bg="light">location?</Button>;
-  // };
 
   return (
     <div className="text-white">

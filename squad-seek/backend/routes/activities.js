@@ -4,6 +4,9 @@ const router = require('express').Router();
 // we need user variable to use the user model
 let Activity = require('../models/activities.model');
 
+// we need user variable to use the user model
+let Comment = require('../models/comments.model');
+
 //now we need to specify that if we recieve a '/get' request from the server,
 // then what are we gonna do with the database
 router.route('/').get((req,res) => {
@@ -41,6 +44,13 @@ router.route('/add').post((req, res) => {
 
     newActivity.save().then(()=> res.json('Activity added!')).catch(err => res.status(400).json('Error: ' + err));
 
+    const newComment = new Comment({
+        activityID: newActivity._id,
+        activityName: newActivity.name
+    });
+
+    //Create a comment record for this activity
+    newComment.save().catch(err => res.status(400).json('Error: ' + err));
 
 });
 
@@ -53,7 +63,16 @@ router.route('/:id').get((req, res) => {
 // when used url http://localhost:5000/activities/id_of_the_activity and made a delete request
 // this will delete the specific activity
 router.route('/:id').delete((req, res) => {
+    //Detele Activity
     Activity.findByIdAndDelete(req.params.id).then(activity => res.json('Exercise Deleted!')).catch(err => res.status(400).json('Error: ' + err));
+
+    //find comment object by activity id and delete comments for that activity
+    Comment.findOneAndDelete( {activityID:req.params.id},
+        function(err, commentOBJ){
+            if(err){
+                console.log(err)
+            }
+        } )
 });
 
 

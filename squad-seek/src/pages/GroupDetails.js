@@ -7,23 +7,15 @@ import AuthContext from "../Store/auth-context";
 //react imports
 import { useState, useEffect, useCallback } from "react";
 //Styling
-import {
-  Badge,
-  Col,
-  Row,
-  Image,
-  Container,
-  Button,
-  Modal,
-  ListGroup,
-  Accordion,
-} from "react-bootstrap";
+import { Col, Row, Image, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 //pic
 import defaultPic from "./Media/group-defualt.jpg";
 //Components
-import GroupUpdate from "../Components/groups/GroupUpdate";
-import GroupDelete from "../Components/groups/GroupDelete";
+import GroupCommentPost from "../Components/groups/groupDetails/GroupCommentPost";
+import GroupCommentList from "../Components/groups/groupDetails/GroupCommentList";
+import GroupInfo from "../Components/groups/groupDetails/GroupInfo";
+import GroupMembers from "../Components/groups/groupDetails/GroupMembers";
 
 const GroupDetails = (props) => {
   //token stuff
@@ -36,22 +28,19 @@ const GroupDetails = (props) => {
   //groups object and setter here
   const [groups, setGroups] = useState([]);
 
-  //use useState to store and set if the update group modals is shown
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-
-  //use useState to store and set if the update group modals is shown
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
   //use useState to store if the data is still being fetched from the server
-  const [isLoading, setLoading] = useState(true);
+  const [doneLoading, setLoading] = useState(false);
 
   //Use useState to store user info from server
   const [userInfo, setUserInfo] = useState([]);
 
-  //U
+  //Use useState to store when data is changed
   const [dataChanged, setDataChanged] = useState(false);
-  ///////////////////////////////////////////////////////////////
 
+
+  const [userComments, setComments] = useState([]);
+
+  //Load group and user data from the database
   const loadData = useCallback(async () => {
     //async call to database
     const fetchGroups = async () => {
@@ -61,9 +50,10 @@ const GroupDetails = (props) => {
         );
         //store groups in groups object
         setGroups(response.data);
-        setLoading(false);
+        setLoading(true);
       } catch (err) {
         console.log(err);
+        setLoading(false);
       }
     };
 
@@ -77,83 +67,52 @@ const GroupDetails = (props) => {
         });
         //store user info in user object
         setUserInfo(response.data);
+        setLoading(true);
       } catch (err) {
         console.log(err);
+        setLoading(false);
+      }
+    };
+
+    let fetchComments = async ()=>{
+      try{
+        let response = await axios(
+          `http://localhost:5000/comments/get/${params.groupID}`
+        );
+        //store comments in comments object
+        setComments(response.data);
+        setLoading(true);
+      }catch (err){
+        console.log(err);
+        setLoading(false);
       }
     };
     //Call async function
     fetchGroups();
+    
     if (isLogedIn) fetchUser();
-    //set datachange back to false
-    //setDataChanged(false);
-    console.log("useCallback called")
-    //setDataChanged(dataChanged + 1)
-  }, [params, authCtx.token, isLogedIn, dataChanged]);
+
+    fetchComments();
+
+    //set loading to false
+    //setLoading(true)
+  }, [params, authCtx.token, isLogedIn ]);//dataChanged
 
   //useEffect hook will load groups from data base when component is loaded
   useEffect(() => {
     loadData();
     setDataChanged(false);
-    console.log("useEffect called")
-  }, [loadData]);
+  }, [loadData, dataChanged]);
 
   //if data is not loaded will retrun a blank page saying loading
-  if (isLoading) {
-    return <Container>Data is Loading</Container>;
-  }
+  // if (isLoading === true) {
+  //   return <Container>Data is Loading</Container>;
+  // }
 
- 
-  const joinBtnHandler = (event) => {
-    let alreadyJoined = groups.members.find((x) => x.id === userInfo._id);
-
-    if (!alreadyJoined) {
-      console.log("not in group");
-
-      //get user stuff
-      let memberInfo = {
-        id: userInfo._id,
-        username: userInfo.username,
-      };
-
-      groups.members.push(memberInfo);
-
-      const groupStuff = {
-        members: groups.members,
-      };
-
-      try {
-        //http://localhost:5000/activities/join/:id
-        axios
-          .post(
-            "http://localhost:5000/activities/join/" + groups._id,
-            groupStuff
-          )
-          .then((res) => console.log(res.data));
-      } catch (err) {
-        console.log(err);
-      }
-
-      //Update the page data again
-      setDataChanged(true);
-    }
-  };
-  
-
-  //Formatting date into a readable format
-  let date = new Date(parseInt(groups.time));
-  let month = date.toLocaleString("en-US", { month: "long" });
-  let day = date.toLocaleString("en-US", { day: "2-digit" });
-  let year = date.getFullYear();
-  let time = date.toLocaleTimeString("en-US");
-
-  //console.log("group id "+groups.createdBy)
-  //console.log(groups)
-  //console.log("User id = "+userInfo._id)
-  //console.log("Group id = "+groups.createdBy[0].id)
 
   return (
     <>
-      <Container className="text-light bg-secondary">
+      <Container className="text-light bg-secondary pb-4">
         <Row className="pt-4">
           <Col>
             <Image
@@ -163,130 +122,36 @@ const GroupDetails = (props) => {
             />
           </Col>
           <Col>
-            <section>
-              <h2>
-                <strong>Group Title:</strong> {groups.name}
-              </h2>
-              {groups.createdBy != null && (
-                <p>
-                  <strong>Group Started by:</strong>{" "}
-                  {groups.createdBy[0].username}
-                </p>
-              )}
-              <p>
-                <strong>Group Type:</strong>{" "}
-                {parseInt(groups.type) ? "Online" : "In Person"}{" "}
-              </p>
-              <p>
-                <strong>Date:</strong>{" "}
-                {month + " " + day + ", " + year + " @ " + time}
-              </p>
-              <p>
-                <strong>Description:</strong> {groups.description}
-              </p>
-              <p>
-                <strong>Tags: </strong>
-                {groups.tagsArray.map((e, index) => (
-                  <Badge className="bg-warning text-dark me-2" key={index}>
-                    {e}
-                  </Badge>
-                ))}
-              </p>
-              {groups.createdBy[0].id === userInfo._id && (
-                <Button
-                  onClick={() => setShowUpdateModal(true)}
-                  className="pr-2"
-                >
-                  Update
-                </Button>
-              )}
-              {isLogedIn && groups.createdBy[0].id === userInfo._id && (
-                <Button
-                  variant="danger"
-                  onClick={() => setShowDeleteModal(true)}
-                >
-                  Delete
-                </Button>
-              )}
-              {isLogedIn && groups.createdBy[0].id !== userInfo._id 
-              && !groups.members.find( ({id}) => id === userInfo._id) && (
-                <Button onClick={joinBtnHandler}>Join Group</Button>
-              )}
-            </section>
+            {doneLoading && <GroupInfo
+              groups={groups}
+              userInfo={userInfo}
+              onDataChanged={setDataChanged}
+            />}
           </Col>
         </Row>
         <Row>
-          <Container fluid>
-            {groups.members && <h4 className="pt-4"> </h4>}
+          <Container fluid className="pt-4">
+            
 
-            <Accordion className="text-black pb-4">
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>
-                  Members in group <pre> </pre>
-                  {groups.members && (
-                    <Badge bg="info">{groups.members.length}</Badge>
-                  )}
-                </Accordion.Header>
-                <Accordion.Body>
-                  <ListGroup className="pb-4">
-                    {groups.members &&
-                      groups.members.map((e, index) => (
-                        <ListGroup.Item key={e._id} key={index}>
-                          {e.username}
-                        </ListGroup.Item>
-                      ))}
-                  </ListGroup>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
+            <GroupMembers 
+            groups={groups} 
+            onDataChanged={setDataChanged}
+            />
+
+            {doneLoading && <GroupCommentPost
+              groupInfo={groups}
+              userInfo={userInfo}
+              userComments={userComments}
+              onDataChanged={setDataChanged}
+            />}
+            <GroupCommentList
+              userInfo = {userInfo}
+              userComments = {userComments}
+              onDataChanged={setDataChanged}
+            /> 
           </Container>
         </Row>
       </Container>
-
-      {/*Update Modal/Popup window settings start here                 */}
-      <Modal
-        show={showUpdateModal}
-        onHide={() => setShowUpdateModal(false)}
-        dialogClassName="modal-90w"
-        aria-labelledby="example-custom-modal-styling-title"
-        animation={false}
-      >
-        <Modal.Header>
-          <Modal.Title id="group-update-modal">Update Group</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <GroupUpdate
-            title={groups.name}
-            type={groups.type}
-            date={groups.time}
-            description={groups.description}
-            tags={groups.tagsArray}
-            id={groups._id}
-            onModalClose={setShowUpdateModal}
-            onDataChanged={setDataChanged}
-          />
-        </Modal.Body>
-      </Modal>
-
-      <Modal
-        show={showDeleteModal}
-        onHide={() => setShowDeleteModal(false)}
-        dialogClassName="modal-90w"
-        aria-labelledby="example-custom-modal-styling-title"
-        animation={false}
-      >
-        <Modal.Header>
-          <Modal.Title id="group-delte-modal">Delete Group</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <GroupDelete
-            title={groups.name}
-            id={groups._id}
-            onModalClose={setShowDeleteModal}
-            //onGroupUpdated={}
-          />
-        </Modal.Body>
-      </Modal>
     </>
   );
 };
