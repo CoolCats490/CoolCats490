@@ -6,6 +6,9 @@ const router = require("express").Router();
 // we need user variable to use the user model
 let User = require("../models/user.model");
 
+//We need a tag variable to use the tag model
+const Tag = require("../models/tags.model");
+
 //bcrypt js will allow us to hash our passwords
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -30,7 +33,7 @@ router.route("/add").post(async (req, res) => {
     const lastname = String(req.body.lastname);
     const username = String(req.body.username);
     const age = Number(req.body.age);
-    const interests = String(req.body.interests);
+    const interests = req.body.interests;
     const email = String(req.body.email);
 
     //make a salt and hash for passwords using bcrypt
@@ -48,10 +51,11 @@ router.route("/add").post(async (req, res) => {
       lastname
     });
 
+    //send interest to be checked/inserted into the database
+    tagHandler(newUser);
+
     await newUser
       .save().catch((err) => res.status(400).json("Error Testing: " + err));
-      //.then(() => res.json("User added!"));
-      //.catch((err) => res.status(400).json("Error Testing: " + err));
       
       
       const payload = {
@@ -144,7 +148,41 @@ router.route("/me").get(auth, async(req, res) =>{
     }
 });
 
+const tagHandler = (newUser) =>{
 
+  //Go through each tag from the user
+  newUser.interests.forEach(element => {
+    //Check tag database for duplicates and count each occurence
+    Tag.countDocuments({tagName: element}, function(err, count){
+      
+      if(count > 0){
+
+        //find tag database record
+        Tag.findOneAndUpdate(
+          {tagName:element},
+          //push the user record to the tag database record
+          {$push:{"users":{userId:newUser._id,userName:newUser.username}}},
+          function(err, tags){
+            if(err)
+              res.status(400).json('Error: ' + err);
+          }
+        )
+      }
+      else{
+
+        let newTag = new Tag({
+          tagName: element,
+          users:[{
+            userId:newUser._id,
+            userName: newUser.username
+          }]
+        })
+        //save tag to the database
+        newTag.save().catch(err => res.status(400).json('Error: ' + err));
+      }
+    })
+  });
+}
 
 
 // and we export the module via router

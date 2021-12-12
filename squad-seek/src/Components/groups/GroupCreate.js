@@ -89,7 +89,7 @@ const GroupCreate = (props) => {
         type: parseInt(enteredMType.value),
         time: new Date(enteredDate),
         description: enteredDescription,
-        tagsArray: enteredTag.map(e => e.value),
+        tagsArray: enteredTag.map(e => e.value.toLowerCase()),
         createdBy: {
                       id:userInfo._id,
                       username:userInfo.username
@@ -120,7 +120,7 @@ const GroupCreate = (props) => {
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control
-            className="text-capitalize"
+            className=""
             type="text"
             placeholder="Title"
             onChange={titleHandler}

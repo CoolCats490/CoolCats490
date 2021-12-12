@@ -7,6 +7,9 @@ let Activity = require('../models/activities.model');
 // we need user variable to use the user model
 let Comment = require('../models/comments.model');
 
+//We need a tag variable to use the tag model
+const Tag = require("../models/tags.model");
+
 //now we need to specify that if we recieve a '/get' request from the server,
 // then what are we gonna do with the database
 router.route('/').get((req,res) => {
@@ -25,7 +28,7 @@ router.route('/add').post((req, res) => {
     const time = Date.parse(req.body.time);
     const type = String(req.body.type);
     const description = String(req.body.description);
-    const tagsArray = (req.body.tagsArray);
+    const tagsArray = req.body.tagsArray;
     const createdBy = (req.body.createdBy);
     const members = (req.body.createdBy);
     
@@ -52,6 +55,10 @@ router.route('/add').post((req, res) => {
     //Create a comment record for this activity
     newComment.save().catch(err => res.status(400).json('Error: ' + err));
 
+    //send tags to be checked by the database
+    if(tagsArray)
+        newActivityTags(newActivity.tagsArray, newActivity._id, newActivity.name);
+
 });
 
 // when used url http://localhost:5000/activities/id_of_the_activity and made get request
@@ -63,16 +70,21 @@ router.route('/:id').get((req, res) => {
 // when used url http://localhost:5000/activities/id_of_the_activity and made a delete request
 // this will delete the specific activity
 router.route('/:id').delete((req, res) => {
+    let activityID = req.params.id
+
     //Detele Activity
-    Activity.findByIdAndDelete(req.params.id).then(activity => res.json('Exercise Deleted!')).catch(err => res.status(400).json('Error: ' + err));
+    Activity.findByIdAndDelete(activityID).then(activity => res.json('Exercise Deleted!')).catch(err => res.status(400).json('Error: ' + err));
 
     //find comment object by activity id and delete comments for that activity
-    Comment.findOneAndDelete( {activityID:req.params.id},
+    Comment.findOneAndDelete( {activityID:activityID},
         function(err, commentOBJ){
             if(err){
                 console.log(err)
             }
         } )
+
+    //Remove group from tag list
+    deleteActivityTag(activityID);
 });
 
 
@@ -80,7 +92,12 @@ router.route('/:id').delete((req, res) => {
 // when used url http://localhost:5000/activities/update/id_of_the_activity
 // this will update the specific activity linked with that ID
 router.route('/update/:id').post((req, res) => {
-    Activity.findById(req.params.id)
+    let activityID = req.params.id;
+    let addedTags = req.body.addedTags;
+    let removedTags = req.body.removedTags;
+    let activityName = req.body.name
+
+    Activity.findById(activityID)
     .then(activity => {
         activity.name = String(req.body.name);
         activity.time = Date.parse(req.body.time);;
@@ -90,6 +107,14 @@ router.route('/update/:id').post((req, res) => {
 
         activity.save().then(()=> res.json('Activity updated!')).catch(err => res.status(400).json('Error: ' + err));
     }).catch(err => res.status(400).json('Error: ' + err));
+
+    //Add new tags if they are any
+    if(addedTags)
+        newActivityTags(addedTags, activityID, activityName);
+
+    //Remove tags if they are any
+    if(removedTags)
+        removeActivityTag(removedTags, activityID);
 
 });
 
@@ -106,6 +131,68 @@ router.route('/join/:id').post((req, res) => {
 });
 
 
+const newActivityTags = (tagsArray, activityID, activityName) =>{
+
+    //Go through each tag from the user
+    tagsArray.forEach(element => {
+      //Check tag database for duplicates and count each occurence
+      Tag.countDocuments({tagName: element}, function(err, count){
+        
+        if(count > 0){
+  
+          //find tag database record
+          Tag.findOneAndUpdate(
+            {tagName:element},
+            //push the user record to the tag database record
+            {$push:{"groups":{groupId:activityID, groupName:activityName}}},
+            function(err, tags){
+              if(err)
+                res.status(400).json('Error: ' + err);
+            }
+          )
+        }
+        else{
+  
+          let newTag = new Tag({
+            tagName: element,
+            groups:[{
+                groupId:activityID,
+                groupName: activityName
+            }]
+          })
+          //save tag to the database
+          newTag.save().catch(err => res.status(400).json('Error: ' + err));
+        }
+      })
+    });
+  }
+
+  const deleteActivityTag = (activityID) =>{
+      Tag.updateMany(
+          {groupId: activityID},
+          {$pull:{"groups":{groupId: activityID}} },
+          function(err, tags){
+            if(err)
+              res.status(400).json('Error: ' + err);
+          }
+      )
+  }
+
+const removeActivityTag = (removedTags, activityID) => {
+    //Go through each tag
+    removedTags.forEach(element => {
+        //find the tag name in the database
+        Tag.findOneAndUpdate(
+            {tagName:element},
+            //remove the group from the tag
+            {$pull: {"groups":{groupId: activityID}}},
+            function(err, tags){
+                if(err)
+              res.status(400).json('Error: ' + err);
+            }
+        )
+    })
+}
 
 // and we export the module via router
 module.exports = router;

@@ -67,6 +67,8 @@ const GroupUpdate = (props) => {
   const tagHandler = (event) => {
     setTag( event );
   }
+
+  
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -77,14 +79,21 @@ const GroupUpdate = (props) => {
     setDescription("");
     setTag("");
 
+    //Put the old tags and new tags in a array
+    let oldTags = currentTags.map(e => e.value.toLowerCase());
+    let newTags = enteredTag.map(e => e.value.toLowerCase());
+
     //Putting data into a object
     const groupData = {
       name: enteredTitle,
       type: parseInt(enteredMType.value),
       time: new Date(enteredDate),
       description: enteredDescription,
-      tagsArray: enteredTag.map(e => e.value)
+      tagsArray: enteredTag.map(e => e.value.toLowerCase()),
+      addedTags: newTags.filter(x => !oldTags.includes(x)),
+      removedTags: oldTags.filter(x => !newTags.includes(x))
     };
+
 
     try {//http://localhost:5000/activities/update/id_of_the_activity
       axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
@@ -111,7 +120,7 @@ const GroupUpdate = (props) => {
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control
-            className="text-capitalize"
+            className=""
             type="text"
             placeholder="Title"
             onChange={titleHandler}

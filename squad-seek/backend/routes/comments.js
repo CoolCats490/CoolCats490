@@ -16,10 +16,8 @@ router.route('/add').post((req, res) => {
         userName,
         message
     };
-    //Adventure.findOne({ country: 'Croatia' }, function (err, adventure) {});
     Comment.findOneAndUpdate(
         {activityID:groupID },
-        //{$push: {"messages": {title: title, msg: msg}}},
         {$push:{"comments":newComment}},
         function(err, currentComment){
             if(err){

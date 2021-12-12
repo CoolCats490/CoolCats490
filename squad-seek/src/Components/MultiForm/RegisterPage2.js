@@ -40,10 +40,7 @@ export default function RegisterPage2(props) {
     let date2 = new Date();
     let currentYear = date2.getFullYear();
 
-    //console.log(currentYear - givenYear)
     setAge(currentYear - givenYear);
-
-    //console.log(2021 - year)
   };
 
 
@@ -52,12 +49,15 @@ export default function RegisterPage2(props) {
     //move to next page
     props.onSetActive(props.active + 1)
 
+    let tags = []
+    enteredTag.forEach(e => tags.push(e.value.toLowerCase()))
+    
 
     //database stuff
     let combinedData = {
       username: enteredUserName,
       age: enteredAge,
-      interests: enteredTag.map(e => e.value),
+      interests: tags,
       password: props.firstPageData.password,
       email: props.firstPageData.email,
       firstname: props.firstPageData.fName,
@@ -66,7 +66,7 @@ export default function RegisterPage2(props) {
     }
 
     //send data to database
-    axios.post('http://localhost:5000/users/add', combinedData).then(res=> console.log(res.data));
+    axios.post('http://localhost:5000/users/add', combinedData).catch(error => console.error(error));
   };
 
   return (
