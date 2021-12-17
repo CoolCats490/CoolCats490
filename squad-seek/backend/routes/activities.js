@@ -29,8 +29,8 @@ router.route('/add').post((req, res) => {
     const type = String(req.body.type);
     const description = String(req.body.description);
     const tagsArray = req.body.tagsArray;
-    const createdBy = (req.body.createdBy);
-    const members = (req.body.createdBy);
+    const createdBy = req.body.createdBy;
+    const members = req.body.members;
     
     
     
@@ -57,7 +57,7 @@ router.route('/add').post((req, res) => {
 
     //send tags to be checked by the database
     if(tagsArray)
-        newActivityTags(newActivity.tagsArray, newActivity._id, newActivity.name);
+        newActivityTags(newActivity._id ,newActivity);
 
 });
 
@@ -95,12 +95,21 @@ router.route('/update/:id').post((req, res) => {
     let activityID = req.params.id;
     let addedTags = req.body.addedTags;
     let removedTags = req.body.removedTags;
-    let activityName = req.body.name
+
+    let activityData = {
+        name: String(req.body.name),
+        time: Date.parse(req.body.time),
+        type: String(req.body.type),
+        description: String(req.body.description),
+        tagsArray: req.body.tagsArray,
+        createdBy: req.body.createdBy,
+        members: req.body.members
+    }
 
     Activity.findById(activityID)
     .then(activity => {
         activity.name = String(req.body.name);
-        activity.time = Date.parse(req.body.time);;
+        activity.time = Date.parse(req.body.time);
         activity.type = String(req.body.type);
         activity.description = String(req.body.description);
         activity.tagsArray = req.body.tagsArray;
@@ -110,7 +119,7 @@ router.route('/update/:id').post((req, res) => {
 
     //Add new tags if they are any
     if(addedTags)
-        newActivityTags(addedTags, activityID, activityName);
+        newActivityTags(activityID, activityData);
 
     //Remove tags if they are any
     if(removedTags)
@@ -130,11 +139,30 @@ router.route('/join/:id').post((req, res) => {
 
 });
 
+//This route will return all group info for a given array of group IDs
+router.route('/findGroups').post((req, res) => {
+    const tagGroups = req.body.tagGroups;
+    const returnedGroupInfo = [];
 
-const newActivityTags = (tagsArray, activityID, activityName) =>{
+    //Search for each group id and return their details
+    tagGroups.forEach( element =>{
+        Activity.find( {_id:element},function(err, group){
+            if(err)
+              res.status(400).json('Error: ' + err);
+            else{
+                returnedGroupInfo.push(group);
+            }
+
+        })
+    })
+    res.json(returnedGroupInfo);//.catch(err => res.status(400).json('Error: ' + err));
+});
+
+
+const newActivityTags = (activityID, activityData) =>{
 
     //Go through each tag from the user
-    tagsArray.forEach(element => {
+    activityData.tagsArray.forEach(element => {
       //Check tag database for duplicates and count each occurence
       Tag.countDocuments({tagName: element}, function(err, count){
         
@@ -144,7 +172,15 @@ const newActivityTags = (tagsArray, activityID, activityName) =>{
           Tag.findOneAndUpdate(
             {tagName:element},
             //push the user record to the tag database record
-            {$push:{"groups":{groupId:activityID, groupName:activityName}}},
+            {$push:{"groups":{
+                groupId:activityID,
+                groupName: activityData.name,
+                groupTime: activityData.time,
+                groupType: activityData.type,
+                groupDescription: activityData.description,
+                groupCreatedBy: activityData.createdBy,
+                groupMembers: activityData.members
+            }}},
             function(err, tags){
               if(err)
                 res.status(400).json('Error: ' + err);
@@ -157,7 +193,12 @@ const newActivityTags = (tagsArray, activityID, activityName) =>{
             tagName: element,
             groups:[{
                 groupId:activityID,
-                groupName: activityName
+                groupName: activityData.name,
+                groupTime: activityData.time,
+                groupType: activityData.type,
+                groupDescription: activityData.description,
+                groupCreatedBy: activityData.createdBy,
+                groupMembers: activityData.members
             }]
           })
           //save tag to the database

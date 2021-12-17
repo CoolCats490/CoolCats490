@@ -6,7 +6,21 @@ const tagSchema =  new Schema({
     tagName:{type:String},
     groups:[{
         groupId:{type: String},
-        groupName:{type: String}
+        groupName:{type: String},
+        groupTime:{type:String},
+        groupType:{type:String},
+        groupDescription:{type:String},
+        groupCreatedBy:
+        {
+            id:{type:String},
+            userName:{type:String}
+        },
+        groupMembers:[
+            {
+                id:{type:String},
+                userName:{type:String}
+            }
+        ]
 
     }],
     users:[{

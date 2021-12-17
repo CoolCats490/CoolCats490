@@ -13,6 +13,14 @@ router.route('/').get((req,res) => {
 });
 
 
+// when used url http://localhost:5000/tags/tagName and made get request
+// this will return the specific tag
+router.route('/:incomingTag').get((req, res) => {
+    let incomingTag = req.params.incomingTag
+    Tag.find({tagName:incomingTag}).then(tag => res.json(tag)).catch(err => res.status(400).json('Error: ' + err));
+});
+
+
 // // what to do if we get '/add' request from server
 // // First we get the information from the server, and then create a new user from that informatin and
 // // then finally save it to the database as json file and print the message "User added!"

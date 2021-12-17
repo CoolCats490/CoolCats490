@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
 import AuthContext from "../../../Store/auth-context";
-import { Badge, Button, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import React from "react";
 //Import other custom components
 import GroupUpdate from "../GroupUpdate";
 import GroupDelete from "../GroupDelete";
 //Database stuff
 import axios from "axios";
+import TagsBadges from "./TagsBadges";
 
 const GroupInfo = (props) => {
   //User token hook to check if a user is logged in
@@ -83,9 +84,12 @@ const GroupInfo = (props) => {
       <p>
         <strong>Tags: </strong>
         {props.groups.tagsArray && props.groups.tagsArray.map((e, index) => (
-          <Badge className="bg-warning text-dark me-2" key={index}>
-            {e}
-          </Badge>
+          
+          <TagsBadges
+            key = {index}
+            tagName = {e}
+            index = {index}
+          />
         ))}
       </p>
       {props.groups.createdBy && props.groups.createdBy[0].id === props.userInfo._id && (
@@ -124,6 +128,8 @@ const GroupInfo = (props) => {
             description={props.groups.description}
             tags={props.groups.tagsArray}
             id={props.groups._id}
+            createdBy={props.groups.createdBy}
+            members={props.groups.members}
             onModalClose={setShowUpdateModal}
             onDataChanged={props.onDataChanged}
           />

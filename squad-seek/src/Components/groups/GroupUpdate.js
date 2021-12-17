@@ -37,7 +37,10 @@ const GroupUpdate = (props) => {
       }));
 
     //Formatting meeting type into a for mat Reac-Select can read
-    let mTypes = [{value: props.type, label: parseInt(props.type)?  "Online":"In Person"}];
+    let mTypes = {
+      value: parseInt(props.type), 
+      label: parseInt(props.type)?  "Online":"In Person"
+    };
 
     //Creating useState for all the fields in the form
   const [enteredTitle, setTitle] = useState(props.title);
@@ -54,7 +57,6 @@ const GroupUpdate = (props) => {
 
   const meetingTypeHandler = (event) => {
     setMType(event);
-
   };
 
   const dateHandler = (event) => {
@@ -84,12 +86,14 @@ const GroupUpdate = (props) => {
     let newTags = enteredTag.map(e => e.value.toLowerCase());
 
     //Putting data into a object
-    const groupData = {
+    let groupData = {
       name: enteredTitle,
-      type: parseInt(enteredMType.value),
+      type: enteredMType.value,
       time: new Date(enteredDate),
       description: enteredDescription,
       tagsArray: enteredTag.map(e => e.value.toLowerCase()),
+      createdBy: props.createdBy,
+      members:props.members,
       addedTags: newTags.filter(x => !oldTags.includes(x)),
       removedTags: oldTags.filter(x => !newTags.includes(x))
     };
