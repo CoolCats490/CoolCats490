@@ -1,15 +1,12 @@
-import { useState, useContext, useEffect } from "react";
+// export default GroupUpdate;
+import { useState, useCallback } from "react";
 //Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import {Modal} from "react-bootstrap";
-//Axios
 import axios from 'axios';
 //React Select
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-//token
-import AuthContext from "../../Store/auth-context";
 
 //Tag Select Options
 const optionsTags = [
@@ -19,59 +16,53 @@ const optionsTags = [
   {value: 'gaming', label: 'Gaming'},
   {value: 'surfing', label: 'Surfing'}
 ];
+
 //Group Type Options
 const optionsGroupType =[
-  {value: 0, label: 'In Person'},
-  {value: 1, label: 'Online'}
-  ];
+{value: 0, label: 'In Person'},
+{value: 1, label: 'Online'}
+];
 
-const GroupCreate = (props) => {
-  //token stuff
-  const authCtx = useContext(AuthContext);
-  const isLogedIn = authCtx.isLoggedIn;
+const GroupUpdate = (props) => {
 
-  const [enteredTitle, setTitle] = useState("");
-  const [enteredMType, setMType] = useState("");
-  const [enteredDate, setDate] = useState("");
-  const [enteredDescription, setDescription] = useState("");
-  const [enteredTag, setTag] = useState([]);
-  const [userInfo, setUserInfo] = useState([]);
-  const [showErrorModal, setShowErrorModal] = useState(false);
+    //Translate incoming time into a format that datepicker can read
+    let d = new Date(parseInt(props.date))
+    let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+    let ts = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0') + ':' + d.getSeconds().toString().padStart(2, '0');
 
-  //useEffect hook will load groups from data base when component is loaded
-  useEffect(() => {
-    //async call to database
-    const fetchUser = async () =>{
-      try{
-        const response = await axios.get
-      ("http://localhost:5000/users/me", {
-        headers: {
-          "Content-Type": "application/json",
-          token: authCtx.token,
-        },
-      });
-      //store user info in user object
-      setUserInfo(response.data)
+    //Formatting incoming tags into a format React-select can read
+    let currentTags = props.tags.map(v => ({
+        label: v,
+        value: v
+      }));
 
-      }catch(err){
-        console.log(err);
-      }
-    }
-    //Call async function
-    if(isLogedIn)
-      fetchUser();
-  }, [isLogedIn, authCtx.token]);
+    //Formatting meeting type into a for mat Reac-Select can read
+    let mTypes = {
+      value: parseInt(props.type), 
+      label: parseInt(props.type)?  "Online":"In Person"
+    };
+
+    //Creating useState for all the fields in the form
+  const [enteredTitle, setTitle] = useState(props.title);
+  const [enteredMType, setMType] = useState(mTypes);
+
+  const [enteredDate, setDate] = useState(datestring + "T" +  ts);
+  const [enteredDescription, setDescription] = useState(props.description);
+  const [enteredTag, setTag] = useState(currentTags);
 
   //Entry Handlers
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
+
   const meetingTypeHandler = (event) => {
     setMType(event);
   };
+
   const dateHandler = (event) => {
     setDate(event.target.value);
   };
+
   const descriptionHandler = (event) => {
     setDescription(event.target.value);
   };
@@ -79,43 +70,56 @@ const GroupCreate = (props) => {
     setTag( event );
   }
 
+  
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if(isLogedIn){
-      //Putting data into a object
-      const groupData = {
-        name: enteredTitle,
-        type: parseInt(enteredMType.value),
-        time: new Date(enteredDate),
-        description: enteredDescription,
-        tagsArray: enteredTag.map(e => e.value.toLowerCase()),
-        createdBy: {
-                      id:userInfo._id,
-                      username:userInfo.username
-                    },
-        members:{
-          id:userInfo._id,
-          username:userInfo.username
-        }
-      };
+    //Clearing fields
+    setTitle("");
+    setMType("");
+    setDate("");
+    setDescription("");
+    setTag("");
 
-      //Clearing fields
-      setTitle("");
-      setMType("");
-      setDate("");
-      setDescription("");
-      setTag("");
-      axios.post('http://localhost:5000/activities/add', groupData).then(res=> console.log(res.data));
-    }
-    else{
-      setShowErrorModal(true)
+    //Put the old tags and new tags in a array
+    let oldTags = currentTags.map(e => e.value.toLowerCase());
+    let newTags = enteredTag.map(e => e.value.toLowerCase());
+
+    //Putting data into a object
+    let groupData = {
+      name: enteredTitle,
+      type: enteredMType.value,
+      time: new Date(enteredDate),
+      description: enteredDescription,
+      tagsArray: enteredTag.map(e => e.value.toLowerCase()),
+      createdBy: props.createdBy,
+      members:props.members,
+      addedTags: newTags.filter(x => !oldTags.includes(x)),
+      removedTags: oldTags.filter(x => !newTags.includes(x))
+    };
+
+
+    try {//http://localhost:5000/activities/update/id_of_the_activity
+      axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+    } catch (err) {
+          console.log(err);
     }
 
+      //Send
+      //props.onGroupUpdated(groupData)
+
+      //Close Modal
+      props.onModalClose(false);
+      props.onDataChanged(true);
   };
 
+  const cancelBtnHandler = useCallback( event =>{
+    props.onModalClose(false)
+  },[props])
+
+
   return (
-    <div className="text-white">
+    <div className="bg-primar">
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
@@ -130,9 +134,10 @@ const GroupCreate = (props) => {
 
         <Form.Group className="mb-3" controlId="formGroupType">
           <Form.Label>Meeting Type</Form.Label>
+         
           <Select
-          className="text-black"
           placeholder="Select Group Type"
+          //defaultValue={0}
           options={optionsGroupType}
           onChange={meetingTypeHandler}
           value={enteredMType}
@@ -143,7 +148,7 @@ const GroupCreate = (props) => {
         { <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
           <CreatableSelect
-            className="text-capitalize text-black"
+            className="text-capitalize"
             placeholder="Select or Create Tags"
             //Select multiple tags
             isMulti
@@ -153,6 +158,8 @@ const GroupCreate = (props) => {
             options={optionsTags}
             //Set value of tag
             value={enteredTag}
+            
+            //
           />
         </Form.Group> }
 
@@ -179,25 +186,13 @@ const GroupCreate = (props) => {
 
         <Button variant="primary" type="submit">
           Submit
+        </Button>{" "}
+        <Button variant="secondary" onClick={cancelBtnHandler}>
+          Cancel
         </Button>
       </Form>
-
-      <Modal
-        show={showErrorModal}
-        onHide={() => setShowErrorModal(false)}
-        dialogClassName="modal-90w"
-        aria-labelledby="example-custom-modal-styling-title"
-        animation={false}
-      >
-        <Modal.Header>
-          <Modal.Title id="group-create-error-modal">Group Creation Error</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Please create an account before making a group</p>
-        </Modal.Body>
-      </Modal>
     </div>
   );
 };
 
-export default GroupCreate;
+export default GroupUpdate;
