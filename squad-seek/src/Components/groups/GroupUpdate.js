@@ -98,7 +98,7 @@ const GroupUpdate = (props) => {
 
 
     try {//http://localhost:5000/activities/update/id_of_the_activity
-      axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+      axios.put('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
     } catch (err) {
           console.log(err);
     }
