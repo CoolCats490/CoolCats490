@@ -128,7 +128,16 @@ router.post("/login", async (req, res) => {
 router.route("/me").get(auth, async(req, res) =>{
     try{
         const user = await User.findById(req.user.id);
-        res.json(user);
+        res.json({
+          _id:user._id,
+          username:user.username,
+          age:user.age,
+          interests:user.interests,
+          age:user.age,
+          firstname:user.firstname,
+          lastname:user.lastname,
+          createdAt:user.createdAt
+        });
     }
     catch(error){
         res.send({message: "Error Fetching User"})
