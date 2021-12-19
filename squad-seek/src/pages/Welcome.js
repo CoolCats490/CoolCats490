@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react";
 //Styling
 import { Button, Card, Col, Container, ListGroup, ListGroupItem, Row } from "react-bootstrap";
 import "./Welcome.css";
-import "./WelcomeIcons.scss";
+import { ArrowRight, PeopleFill, Tags } from 'react-bootstrap-icons';
 //links
 import { Link } from "react-router-dom";
 //database
@@ -101,7 +101,7 @@ const Welcome = () => {
           <Row className="gx-5">
             <Col className="lg-4 mb-5 mb-lg-0">
               <div className="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-                <i className="bi bi-people-fill"></i>
+                <PeopleFill/>
               </div>
               <h2 className="h4 fw-bolder">Groups</h2>
               <p>
@@ -111,12 +111,12 @@ const Welcome = () => {
               </p>
               <Link className="text-decoration-none" to="/groups/list">
                 View Groups
-                <i className="bi bi-arrow-right"></i>
+                <ArrowRight />
               </Link>
             </Col>
             <Col className="lg-4 mb-5 mb-lg-0">
               <div className="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-                <i className="bi bi-tags"></i>
+                <Tags/>
               </div>
               <h2 className="h4 fw-bolder">Tags</h2>
               <p>
@@ -126,13 +126,12 @@ const Welcome = () => {
               </p>
               <Link className="text-decoration-none" to="/groups/tags">
                 View Tags
-                <i className="bi bi-arrow-right"></i>
+                <ArrowRight />
               </Link>
             </Col>
           </Row>
         </Container>
       </section>
-      {/* <!-- Pricing section--> */}
       <section className="bg-light py-5 border-bottom text-dark">
         <Container className="container px-5 my-5">
           <div className="text-center mb-5">
@@ -140,7 +139,6 @@ const Welcome = () => {
             <p className="lead mb-0">idk something here</p>
           </div>
           <Row className="gx-5 justify-content-center">
-            {/* <!-- Pricing card free--> */}
             <Col className="lg-6 col-xl-4">
               <Card className="card mb-5 mb-xl-0">
                 <Card.Body className="p-5">
