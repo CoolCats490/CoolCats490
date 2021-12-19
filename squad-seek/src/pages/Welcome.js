@@ -154,7 +154,7 @@ const Welcome = () => {
                   </ListGroup>
                   <div className="d-grid">
                     <Button className="">
-                        <Link to="/groups/tags" className="text-light text-decoration-none">View Tags</Link>
+                        <Link to="/groups/tags" className="text-light text-decoration-none">View Groups</Link>
                     </Button>
                   </div>
                 </Card.Body>
@@ -177,7 +177,7 @@ const Welcome = () => {
                   <div className="d-grid">
                   
                   <Button className="">
-                        <Link to="/groups/tags" className="text-light text-decoration-none">View Tags</Link>
+                        <Link to="/groups/tags" className="text-light text-decoration-none">View Groups</Link>
                     </Button>
                     
                   </div>
