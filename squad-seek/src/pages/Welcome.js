@@ -105,9 +105,9 @@ const Welcome = () => {
               </div>
               <h2 className="h4 fw-bolder">Groups</h2>
               <p>
-                Paragraph of text beneath the heading to explain the heading.
-                We'll add onto it with another sentence and probably just keep
-                going until we run out of words.
+              Socialize and have fun with new people
+               while doing your favorite activities in person
+               or online.
               </p>
               <Link className="text-decoration-none" to="/groups/list">
                 View Groups
@@ -120,9 +120,8 @@ const Welcome = () => {
               </div>
               <h2 className="h4 fw-bolder">Tags</h2>
               <p>
-                Paragraph of text beneath the heading to explain the heading.
-                We'll add onto it with another sentence and probably just keep
-                going until we run out of words.
+                Find groups with new or old friends based
+                on various tags that interests you. 
               </p>
               <Link className="text-decoration-none" to="/groups/tags">
                 View Tags

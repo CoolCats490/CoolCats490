@@ -30,7 +30,7 @@ const MultiForm = () => {
             onDataInput={setFirstPageData}
           />
         </Step>
-        <Step label='Personal Info'>
+        <Step label='Interests'>
           <RegisterPage2 
             active = {active}
             onSetActive={setActive}
