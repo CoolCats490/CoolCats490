@@ -31,9 +31,6 @@ router.route('/add').post((req, res) => {
     const tagsArray = req.body.tagsArray;
     const createdBy = req.body.createdBy;
     const members = req.body.members;
-    
-    
-    
 
     const newActivity = new Activity({
         name,
@@ -59,6 +56,18 @@ router.route('/add').post((req, res) => {
     if(tagsArray)
         newActivityTags(newActivity._id ,newActivity);
 
+});
+
+// when used url http://localhost:5000/activities/new and made get request
+// this will return the 5 newest activities
+router.route('/latest').get((req,res) => {
+    Activity.find().sort({ _id: -1 }).limit(5).then(activity => res.json(activity)).catch(err => res.status(400).json('Error: ' + err));
+});
+
+// when used url http://localhost:5000/activities/new and made get request
+// this will return the top 5 activities based on members
+router.route('/top').get((req,res) => {
+    Activity.find().sort({ "membersLength": -1 }).limit(5).then(activity => res.json(activity)).catch(err => res.status(400).json('Error: ' + err));
 });
 
 // when used url http://localhost:5000/activities/id_of_the_activity and made get request
@@ -87,7 +96,40 @@ router.route('/:id').delete((req, res) => {
     deleteActivityTag(activityID);
 });
 
+// when used url http://localhost:5000/activities/createdBy and made get request
+// this will return the activities created by the user
+router.route('/createdBy').post((req, res) => {
+    let incomingUser = req.body.userId;
+    let incomingUserName = req.body.userName
 
+    Activity.find({"createdBy.id":incomingUser}, function(err, groups){
+        if(err){
+            res.send(err)
+        }else{
+            res.json(groups)
+        }
+        
+    });
+});
+
+
+
+
+
+// when used url http://localhost:5000/activities/joinedGroups and made get request
+// this will return the activities joined by the user
+router.route('/joinedGroups').post((req, res) => {
+    let incomingUser = req.body.userId;
+
+    Activity.find({"members.id":incomingUser, "createdBy.id":{$ne: incomingUser} }, function(err, groups){
+        if(err){
+            res.send(err)
+        }else{
+            res.json(groups)
+        }
+        
+    });
+});
 
 // when used url http://localhost:5000/activities/update/id_of_the_activity
 // this will update the specific activity linked with that ID

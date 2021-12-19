@@ -140,7 +140,8 @@ router.route("/me").get(auth, async(req, res) =>{
           age:user.age,
           firstname:user.firstname,
           lastname:user.lastname,
-          createdAt:user.createdAt
+          createdAt:user.createdAt,
+          email:user.email
         });
     }
     catch(error){
