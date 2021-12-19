@@ -107,7 +107,8 @@ const GroupUpdate = (props) => {
       //props.onGroupUpdated(groupData)
 
       //Close Modal
-      props.onModalClose(false)
+      props.onModalClose(false);
+      props.onDataChanged(true);
   };
 
   const cancelBtnHandler = useCallback( event =>{
