@@ -8,17 +8,32 @@ import GroupSideBar from "../Components/groups/GroupSideBar";
 //Styling
 import "./Groups.css";
 import { Container } from "react-bootstrap";
+import TagList from "./TagList";
+import TagDetails from "./TagDetails";
 
 const Groups = () => {
   return (
     <Container  className="wrapper bg-dark text-white fluid">
       <GroupSideBar></GroupSideBar>
+
+
+      <Container className="innerModules">
       <Switch>
       
 
       <Route path="/groups/create">
         <GroupCreate />
       </Route>
+
+      <Route path="/groups/tags/:tagName" >
+        <TagDetails />
+      </Route>
+      
+      <Route path="/groups/tags" >
+        <TagList />
+      </Route>
+
+      
 
       <Route path="/groups/list">
         <GroupList />
@@ -27,9 +42,11 @@ const Groups = () => {
       <Route path="/groups/:groupID" >
         <GroupDetails />
       </Route>
+
       
       </Switch>
 
+      </Container>
       
     </Container
 >

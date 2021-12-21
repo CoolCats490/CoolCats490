@@ -37,7 +37,10 @@ const GroupUpdate = (props) => {
       }));
 
     //Formatting meeting type into a for mat Reac-Select can read
-    let mTypes = [{value: props.type, label: parseInt(props.type)?  "Online":"In Person"}];
+    let mTypes = {
+      value: parseInt(props.type), 
+      label: parseInt(props.type)?  "Online":"In Person"
+    };
 
     //Creating useState for all the fields in the form
   const [enteredTitle, setTitle] = useState(props.title);
@@ -47,22 +50,16 @@ const GroupUpdate = (props) => {
   const [enteredDescription, setDescription] = useState(props.description);
   const [enteredTag, setTag] = useState(currentTags);
 
-    console.log(props)
-
   //Entry Handlers
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
 
   const meetingTypeHandler = (event) => {
-    console.log(event)
-    console.log(event.value)
     setMType(event);
-
   };
 
   const dateHandler = (event) => {
-      console.log(event.target.value);
     setDate(event.target.value);
   };
 
@@ -71,8 +68,9 @@ const GroupUpdate = (props) => {
   };
   const tagHandler = (event) => {
     setTag( event );
-    console.log(enteredTag);
   }
+
+  
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -83,22 +81,26 @@ const GroupUpdate = (props) => {
     setDescription("");
     setTag("");
 
+    //Put the old tags and new tags in a array
+    let oldTags = currentTags.map(e => e.value.toLowerCase());
+    let newTags = enteredTag.map(e => e.value.toLowerCase());
+
     //Putting data into a object
-    const groupData = {
+    let groupData = {
       name: enteredTitle,
-      type: parseInt(enteredMType.value),
+      type: enteredMType.value,
       time: new Date(enteredDate),
       description: enteredDescription,
-      tagsArray: enteredTag.map(e => e.value)
+      tagsArray: enteredTag.map(e => e.value.toLowerCase()),
+      createdBy: props.createdBy,
+      members:props.members,
+      addedTags: newTags.filter(x => !oldTags.includes(x)),
+      removedTags: oldTags.filter(x => !newTags.includes(x))
     };
 
 
-    //props.onSavedGroup(groupData);
-    console.log(groupData);
-
-
     try {//http://localhost:5000/activities/update/id_of_the_activity
-      axios.put('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+      axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
     } catch (err) {
           console.log(err);
     }
@@ -122,7 +124,7 @@ const GroupUpdate = (props) => {
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control
-            className="text-capitalize"
+            className=""
             type="text"
             placeholder="Title"
             onChange={titleHandler}

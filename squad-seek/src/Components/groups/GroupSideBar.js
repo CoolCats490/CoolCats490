@@ -27,6 +27,12 @@ const GroupSideBar = () => {
             </Nav.Link>
           </ListGroup.Item>
 
+          <ListGroup.Item eventKey="tList">
+            <Nav.Link as={Link} to="/groups/tags" className= "link-dark">
+              Tags
+            </Nav.Link>
+          </ListGroup.Item>
+
         </ListGroup>
 
       </Nav>

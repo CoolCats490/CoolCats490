@@ -9,19 +9,22 @@ const GrouptListItem = (props) => {
   const month = props.date.toLocaleString("en-US", { month: "long" });
   const day = props.date.toLocaleString("en-US", { day: "2-digit" });
   const year = props.date.getFullYear();
-  const  time = props.date.toLocaleTimeString("en-US");
+  const time = props.date.toLocaleTimeString("en-US");
 
   const history = useHistory();
   const cardLink = () => {
-    history.push("/groups/");
+    history.push("/groups/list");
   };
 
   return (
     <Container className="pb-2 pt-2 no-underline" key={props.id}>
-
-      <Link to={{pathname: `/groups/${props.id}`}}>
-
-        <Card bg="primary" onClick={cardLink} className="text-decoration-none text-light" key={props.id}>
+      <Link to={{ pathname: `/groups/${props.id}` }}>
+        <Card
+          bg="primary"
+          onClick={cardLink}
+          className="text-decoration-none text-light"
+          key={props.id}
+        >
           <Card.Header className="text-center">
             Group Title: {props.title}
           </Card.Header>
@@ -34,19 +37,15 @@ const GrouptListItem = (props) => {
               Description: {props.description}
               <br />
               Tags:{" "}
-              {props.tags.map((e,index) => (
-                <Badge className="bg-warning text-dark me-2" key = {index}>{e}</Badge>
+              {props.tags.map((e, index) => (
+                <Badge className="bg-warning text-dark me-2" key={index}>
+                  {e}
+                </Badge>
               ))}
             </Card.Text>
           </Card.Body>
         </Card>
-
       </Link>
-      {/* <Switch>
-        <Route path="/groups/group-details/:groupID" exact>
-          <GroupDetails />
-        </Route>
-      </Switch> */}
     </Container>
   );
 };
