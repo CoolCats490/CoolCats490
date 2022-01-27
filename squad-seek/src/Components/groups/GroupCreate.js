@@ -177,7 +177,7 @@ const GroupCreate = (props) => {
           />
         </Form.Group>
 
-        <div class="text-center mt-4">
+        <div className="text-center mt-4">
           <Button variant="primary" type="submit">
               Submit
           </Button>
