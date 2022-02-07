@@ -90,7 +90,9 @@ const TagDetails = () => {
                 <div><strong>Group Type</strong>: {parseInt(element.groupType)? "In Person":"Online"}</div>
                 <div><strong>Group Date</strong>:
                     
-                    { new Date(parseInt(element.groupTime)).toLocaleDateString()}
+                    {new Date(element.groupTime).getUTCDay()}/
+                    {new Date(element.groupTime).getUTCMonth()}/
+                    {new Date(element.groupTime).getUTCFullYear()}
                    
                    </div>
                 <div><strong>Group Memebers</strong>:{(

@@ -25,7 +25,7 @@ router.route('/').get((req,res) => {
 
 router.route('/add').post((req, res) => {
     const name = String(req.body.name);
-    const time = Date.parse(req.body.time);
+    const time = req.body.time;
     const type = String(req.body.type);
     const description = String(req.body.description);
     const tagsArray = req.body.tagsArray;

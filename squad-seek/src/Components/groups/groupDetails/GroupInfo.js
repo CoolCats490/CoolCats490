@@ -53,7 +53,7 @@ const GroupInfo = (props) => {
   };
 
   //Formatting date into a readable format
-  let date = new Date(parseInt(props.groups.time));
+  let date = new Date(props.groups.time);
   let month = date.toLocaleString("en-US", { month: "long" });
   let day = date.toLocaleString("en-US", { day: "2-digit" });
   let year = date.getFullYear();

@@ -13,10 +13,11 @@
     "react-axios": "^2.0.5",
     "react-bootstrap": "^2.0.2",
     "react-bootstrap-icons": "^1.7.2",
+    "react-calendar": "^3.6.0",
     "react-dom": "^17.0.2",
     "react-multi-form": "^1.0.5",
     "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "5.0.0",
     "react-select": "^5.1.0",
     "web-vitals": "^1.1.2"
   },
