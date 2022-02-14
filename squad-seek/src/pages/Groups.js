@@ -10,6 +10,7 @@ import "./Groups.css";
 import { Container } from "react-bootstrap";
 import TagList from "./TagList";
 import TagDetails from "./TagDetails";
+import GroupCalander from "../Components/Calander/GroupCalander";
 
 const Groups = () => {
   return (
@@ -19,6 +20,10 @@ const Groups = () => {
 
       <Container className="innerModules">
       <Switch>
+
+      <Route path="/groups/calendar">
+        <GroupCalander/>
+      </Route>
       
 
       <Route path="/groups/create">

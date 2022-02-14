@@ -1,9 +1,8 @@
 import { useParams } from "react-router";
 import axios from "axios";
-//token stuff
+//User token stuff
 import { useContext } from "react";
 import AuthContext from "../Store/auth-context";
-
 //react imports
 import { useState, useEffect, useCallback } from "react";
 //Styling

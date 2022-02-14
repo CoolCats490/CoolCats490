@@ -26,7 +26,7 @@ const optionsGroupType =[
 const GroupUpdate = (props) => {
 
     //Translate incoming time into a format that datepicker can read
-    let d = new Date(parseInt(props.date))
+    let d = new Date(props.date)
     let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
     let ts = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0') + ':' + d.getSeconds().toString().padStart(2, '0');
 
@@ -89,7 +89,7 @@ const GroupUpdate = (props) => {
     let groupData = {
       name: enteredTitle,
       type: enteredMType.value,
-      time: new Date(enteredDate),
+      time: enteredDate,
       description: enteredDescription,
       tagsArray: enteredTag.map(e => e.value.toLowerCase()),
       createdBy: props.createdBy,

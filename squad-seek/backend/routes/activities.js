@@ -25,15 +25,12 @@ router.route('/').get((req,res) => {
 
 router.route('/add').post((req, res) => {
     const name = String(req.body.name);
-    const time = Date.parse(req.body.time);
+    const time = req.body.time;
     const type = String(req.body.type);
     const description = String(req.body.description);
     const tagsArray = req.body.tagsArray;
     const createdBy = req.body.createdBy;
     const members = req.body.members;
-    
-    
-    
 
     const newActivity = new Activity({
         name,
@@ -59,6 +56,18 @@ router.route('/add').post((req, res) => {
     if(tagsArray)
         newActivityTags(newActivity._id ,newActivity);
 
+});
+
+// when used url http://localhost:5000/activities/new and made get request
+// this will return the 5 newest activities
+router.route('/latest').get((req,res) => {
+    Activity.find().sort({ _id: -1 }).limit(5).then(activity => res.json(activity)).catch(err => res.status(400).json('Error: ' + err));
+});
+
+// when used url http://localhost:5000/activities/new and made get request
+// this will return the top 5 activities based on members
+router.route('/top').get((req,res) => {
+    Activity.find().sort({ "membersLength": -1 }).limit(5).then(activity => res.json(activity)).catch(err => res.status(400).json('Error: ' + err));
 });
 
 // when used url http://localhost:5000/activities/id_of_the_activity and made get request
@@ -87,7 +96,40 @@ router.route('/:id').delete((req, res) => {
     deleteActivityTag(activityID);
 });
 
+// when used url http://localhost:5000/activities/createdBy and made get request
+// this will return the activities created by the user
+router.route('/createdBy').post((req, res) => {
+    let incomingUser = req.body.userId;
+    let incomingUserName = req.body.userName
 
+    Activity.find({"createdBy.id":incomingUser}, function(err, groups){
+        if(err){
+            res.send(err)
+        }else{
+            res.json(groups)
+        }
+        
+    });
+});
+
+
+
+
+
+// when used url http://localhost:5000/activities/joinedGroups will make a post request
+// 
+router.route('/joinedGroups').post((req, res) => {
+    let incomingUser = req.body.userId;
+
+    Activity.find({"members.id":incomingUser, "createdBy.id":{$ne: incomingUser} }, function(err, groups){
+        if(err){
+            res.send(err)
+        }else{
+            res.json(groups)
+        }
+        
+    });
+});
 
 // when used url http://localhost:5000/activities/update/id_of_the_activity
 // this will update the specific activity linked with that ID
@@ -98,7 +140,7 @@ router.route('/update/:id').post((req, res) => {
 
     let activityData = {
         name: String(req.body.name),
-        time: Date.parse(req.body.time),
+        time: req.body.time,
         type: String(req.body.type),
         description: String(req.body.description),
         tagsArray: req.body.tagsArray,
@@ -109,7 +151,7 @@ router.route('/update/:id').post((req, res) => {
     Activity.findById(activityID)
     .then(activity => {
         activity.name = String(req.body.name);
-        activity.time = Date.parse(req.body.time);
+        activity.time = req.body.time;
         activity.type = String(req.body.type);
         activity.description = String(req.body.description);
         activity.tagsArray = req.body.tagsArray;
@@ -119,7 +161,7 @@ router.route('/update/:id').post((req, res) => {
 
     //Add new tags if they are any
     if(addedTags)
-        newActivityTags(activityID, activityData);
+        newActivityTags(activityID, activityData, addedTags);
 
     //Remove tags if they are any
     if(removedTags)
@@ -128,14 +170,74 @@ router.route('/update/:id').post((req, res) => {
 });
 
 // when used url http://localhost:5000/activities/join/id_of_the_activity
-// this will update the specific activity linked with that ID
+// this will add the user to specific activity and tag group
 router.route('/join/:id').post((req, res) => {
-    Activity.findById(req.params.id)
-    .then(activity => {
-        activity.members = req.body.members;
 
-        activity.save().then(()=> res.json('Activity joined!')).catch(err => res.status(400).json('Error: ' + err));
-    }).catch(err => res.status(400).json('Error: ' + err));
+    //find activity by id
+    Activity.findOneAndUpdate(
+        {_id: req.params.id},
+        //add user name and id to the activity's member array
+        {$addToSet: {"members":req.body}},
+        //if there is an error send it front end's console
+        function(err, data){
+            if(err){
+                res.status(400).json('Error: ' + err)
+            }
+            else{
+                res.json('Activity joined!')
+            }
+        }
+    )
+
+    Tag.updateMany(
+        {"groups.groupId":req.params.id},
+        {$addToSet: {"groups.$.groupMembers": req.body} },
+        function(err, result){
+            if(err){
+                console.log(err)
+            }
+            else{
+                console.log(result)
+            }
+        }
+    )
+
+});
+
+// when used url http://localhost:5000/activities/leave/:id
+// this will remove the user from the specific activity and tag group
+router.route('/leave/:id').post((req, res) => {
+
+    console.log(req.body.id)
+
+    //find activity by id
+    Activity.findOneAndUpdate(
+        {_id: req.params.id},
+        //remove the user name and id from the activity's member array
+        {$pull: { "members": {id : req.body.id} } },
+        //if there is an error send it front end's console
+        function(err, data){
+            if(err){
+                res.status(400).json('Error: ' + err)
+            }
+            else{
+                res.json('Left Activity!')
+            }
+        }
+    )
+
+    Tag.updateMany(
+        {"groups.groupId":req.params.id},
+        {$pull: {"groups.$.groupMembers": {id : req.body.id} } },
+        function(err, result){
+            if(err){
+                console.log(err)
+            }
+            else{
+                console.log(result)
+            }
+        }
+    )
 
 });
 
@@ -159,52 +261,28 @@ router.route('/findGroups').post((req, res) => {
 });
 
 
-const newActivityTags = (activityID, activityData) =>{
+const newActivityTags = (activityID, activityData, addedTags) =>{
 
     //Go through each tag from the user
-    activityData.tagsArray.forEach(element => {
-      //Check tag database for duplicates and count each occurence
-      Tag.countDocuments({tagName: element}, function(err, count){
-        
-        if(count > 0){
-  
-          //find tag database record
-          Tag.findOneAndUpdate(
-            {tagName:element},
-            //push the user record to the tag database record
-            {$push:{"groups":{
-                groupId:activityID,
-                groupName: activityData.name,
-                groupTime: activityData.time,
-                groupType: activityData.type,
-                groupDescription: activityData.description,
-                groupCreatedBy: activityData.createdBy,
-                groupMembers: activityData.members
-            }}},
-            function(err, tags){
-              if(err)
-                res.status(400).json('Error: ' + err);
-            }
-          )
-        }
-        else{
-  
-          let newTag = new Tag({
-            tagName: element,
-            groups:[{
-                groupId:activityID,
-                groupName: activityData.name,
-                groupTime: activityData.time,
-                groupType: activityData.type,
-                groupDescription: activityData.description,
-                groupCreatedBy: activityData.createdBy,
-                groupMembers: activityData.members
-            }]
-          })
-          //save tag to the database
-          newTag.save().catch(err => res.status(400).json('Error: ' + err));
-        }
-      })
+    addedTags.forEach(element => {
+        //update tag based on name, or insert if it does not exist
+      Tag.updateOne(
+        {tagName:element},
+        {$addToSet:{"groups":{
+            groupId:activityID,
+            groupName: activityData.name,
+            groupTime: activityData.time,
+            groupType: activityData.type,
+            groupDescription: activityData.description,
+            groupCreatedBy: activityData.createdBy,
+            groupMembers: activityData.members
+        }}},
+        { upsert: true },
+        function(err, tags){
+            if(err)
+              res.status(400).json('Error: ' + err);
+          }
+      )
     });
   }
 

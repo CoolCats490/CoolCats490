@@ -34,7 +34,7 @@ const GroupList = () => {
         <GrouptListItem
           key = {group._id}
           title = {group.name}
-          date = {new Date(parseInt( group.time ))}
+          date = {new Date( group.time )}
           type = {group.type}
           description = {group.description}
           tags = {group.tagsArray}
