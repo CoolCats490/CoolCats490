@@ -44,22 +44,6 @@ const TagDetails = () => {
       }
     };
 
-    // let fetchUser = async () => {
-    //   try {
-    //     const response = await axios.get("http://localhost:5000/users/me", {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         token: authCtx.token,
-    //       },
-    //     });
-    //     //store user info in user object
-    //     setUserInfo(response.data);
-    //     setLoading(true);
-    //   } catch (err) {
-    //     console.log(err);
-    //     setLoading(false);
-    //   }
-    // };
 
     fetchTags();
 
@@ -88,14 +72,13 @@ const TagDetails = () => {
               <Card.Header className="text-center">{element.groupName}</Card.Header>
               <Card.Body>
                 <div><strong>Group Type</strong>: {parseInt(element.groupType)? "In Person":"Online"}</div>
-                <div><strong>Group Date</strong>:
-                    
-                    {new Date(element.groupTime).getUTCDay()}/
-                    {new Date(element.groupTime).getUTCMonth()}/
+                <div><strong>Group Date</strong>:{" "}
+                    {new Date(element.groupTime).getMonth() + 1}/
+                    {new Date(element.groupTime).getDate()}/
                     {new Date(element.groupTime).getUTCFullYear()}
                    
                    </div>
-                <div><strong>Group Memebers</strong>:{(
+                <div><strong>Group Members</strong>:{( 
                     <Badge bg="info" key={num}>{element.groupMembers.length}</Badge>
                   )}</div>
               </Card.Body>
