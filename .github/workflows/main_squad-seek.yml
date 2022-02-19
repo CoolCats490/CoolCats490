@@ -31,7 +31,6 @@ jobs:
         working-directory: ./squad-seek/backend
         run: |
           npm install
-          npm start
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
