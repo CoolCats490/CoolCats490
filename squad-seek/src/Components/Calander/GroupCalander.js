@@ -8,7 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import axios from "axios";
 
 const GroupCalander = () =>{
-    //const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [groups, setGroups] = useState([]);
     const [calendarGroups, setCalendarGroups] = useState([]);
 
@@ -46,6 +46,7 @@ const GroupCalander = () =>{
 
         console.log(data)
         console.log( calendarGroups )
+        console.log(selectedDate);
     }
 
 
