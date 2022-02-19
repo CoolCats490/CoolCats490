@@ -27,6 +27,12 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
+          
+      - name: npm start for backend
+        working-directory: ./squad-seek/backend
+        run: |
+          npm install
+          npm start
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
