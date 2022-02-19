@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 //Styling
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Col, Container, Modal, Row } from "react-bootstrap";
+import { Container, Modal } from "react-bootstrap";
 import "./CSS/GroupCreate.css";
 //Axios
 import axios from "axios";

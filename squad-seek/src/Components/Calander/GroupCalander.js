@@ -8,7 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import axios from "axios";
 
 const GroupCalander = () =>{
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    //const [selectedDate, setSelectedDate] = useState(new Date());
     const [groups, setGroups] = useState([]);
     const [calendarGroups, setCalendarGroups] = useState([]);
 
@@ -49,10 +49,10 @@ const GroupCalander = () =>{
     }
 
 
-    const showGroupsForDay = () =>{
-        console.log(groups);
+    // const showGroupsForDay = () =>{
+    //     console.log(groups);
         
-    }
+    // }
     return(
         <Container className="bg-primary pt-4 pb-4 text-black">
             <Row>
