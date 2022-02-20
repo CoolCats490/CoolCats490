@@ -22,13 +22,12 @@ jobs:
           node-version: '16.x'
 
       - name: npm install, build, and test
-        working-directory: ./squad-seek
         run: |
           npm install
           npm run build --if-present
           
-      - name: npm start for backend
-        working-directory: ./squad-seek/backend
+      - name: npm install for backend
+        working-directory: ./backend
         run: |
           npm install
 
