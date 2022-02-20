@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require("path");
 
 require('dotenv').config();
 
@@ -26,6 +27,18 @@ const userRouter = require('./routes/users');
 const tagRouter = require('./routes/tags');
 const commentRouter = require('./routes/comments');
 const bodyParser = require('body-parser');
+
+//This enables Express to serve up the build we just created, 
+//which is how we serve up our frontend up on Azure.
+app.use(express.static('./client/build'));
+
+// Serve Static assests if in production
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build")); // change this if your dir structure is different
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    });
+  }
 
 // Every time user enters /users to the brower, it will show the users list
 app.use('/activities', activityRouter);
