@@ -9,10 +9,6 @@ on:
       - main
   workflow_dispatch:
   
-env:
-  AZURE_WEBAPP_NAME: squad-seek # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: 'build'  # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '16.x'                # set this to the node version to use
 
 jobs:
   build:
@@ -42,7 +38,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: node-app
+          name: release.zip
           path: .
 
   deploy:
@@ -56,11 +52,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: node-app
-          
-      - name: add process.json
-        run: |
-          echo '{ script: "serve", env: { PM2_SERVE_SPA: "true", PM2_SERVE_HOMEPAGE: "/index.html" } }' >> build/process.json
+          name: release.zip
           
       - name: unzip artifact for deployment
         run: unzip release.zip
