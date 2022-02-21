@@ -135,7 +135,7 @@ const Welcome = () => {
         <Container className="container px-5 my-5">
           <div className="text-center mb-5">
             <h2 className="fw-bolder">Recent Activity</h2>
-            <p className="lead mb-0">idk something here</p>
+            <p className="lead mb-0"> </p>
           </div>
           <Row className="gx-5 justify-content-center">
             <Col className="lg-6 col-xl-4">
@@ -153,7 +153,7 @@ const Welcome = () => {
                   </ListGroup>
                   <div className="d-grid">
                     <Button className="">
-                        <Link to="/groups/tags" className="text-light text-decoration-none">View Groups</Link>
+                        <Link to="/groups/list" className="text-light text-decoration-none">View Groups</Link>
                     </Button>
                   </div>
                 </Card.Body>
@@ -176,7 +176,7 @@ const Welcome = () => {
                   <div className="d-grid">
                   
                   <Button className="">
-                        <Link to="/groups/tags" className="text-light text-decoration-none">View Groups</Link>
+                        <Link to="/groups/list" className="text-light text-decoration-none">View Groups</Link>
                     </Button>
                     
                   </div>
