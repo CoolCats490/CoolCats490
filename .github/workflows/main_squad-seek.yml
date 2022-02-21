@@ -9,6 +9,10 @@ on:
       - main
   workflow_dispatch:
   
+env:
+  AZURE_WEBAPP_NAME: squad-seek # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: 'build'  # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '16.x'                # set this to the node version to use
 
 jobs:
   build:
@@ -31,14 +35,11 @@ jobs:
       - name: npm install for backend
         run: |
           npm install
-          
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: release.zip
+          name: node-app
           path: .
 
   deploy:
@@ -52,10 +53,8 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: release.zip
+          name: node-app
           
-      - name: unzip artifact for deployment
-        run: unzip release.zip
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
