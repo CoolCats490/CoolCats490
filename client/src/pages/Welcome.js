@@ -15,7 +15,7 @@ const Welcome = () => {
 
     //Sets the correct backend server address depending
     //on if in dev or production mode
-    const url = process.env.NODE_ENV === "development" ? process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+    const url = process.env.NODE_ENV === "development" ? process.env.REACT_APP_URL_DEVELOPMENT : "";
 
     //useState to store top/new groups and tags
     const [topGroups, setTopGroups] = useState(null)
