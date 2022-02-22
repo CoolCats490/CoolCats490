@@ -7,6 +7,12 @@ import CreatableSelect from 'react-select/creatable';
 import axios from 'axios';
 
 export default function RegisterPage2(props) {
+
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   //Tag Select Options
   const optionsTags = [
     {value: 'concert', label: 'Concert'},
@@ -66,7 +72,7 @@ export default function RegisterPage2(props) {
     }
 
     //send data to database
-    axios.post('http://localhost:5000/users/add', combinedData).catch(error => console.error(error));
+    axios.post( url + '/users/add', combinedData).catch(error => console.error(error));
   };
 
   return (

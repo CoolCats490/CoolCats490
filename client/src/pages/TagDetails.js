@@ -14,6 +14,12 @@ import { useHistory } from "react-router-dom";
 import Button from "@restart/ui/esm/Button";
 
 const TagDetails = () => {
+
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   //Use states
   const [tags, setTags] = useState(null);
   //const [userInfo, setUserInfo] = useState([]);
@@ -33,7 +39,7 @@ const TagDetails = () => {
     const fetchTags = async () => {
       try {
         let response = await axios(
-          `http://localhost:5000/tags/${params.tagName}`
+          `${url}/tags/${params.tagName}`
         );
         //store groups in groups object
         setTags(response.data);
@@ -48,7 +54,7 @@ const TagDetails = () => {
     fetchTags();
 
     //setLoading(false);
-  }, [params.tagName]);
+  }, [params.tagName, url]);
 
   const viewGroupsHandler = param => event => {
     //link to the group page using it's id

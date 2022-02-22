@@ -10,6 +10,11 @@ import axios from "axios";
 import TagsBadges from "./TagsBadges";
 
 const GroupInfo = (props) => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+  
   //User token hook to check if a user is logged in
   const authCtx = useContext(AuthContext);
   const isLogedIn = authCtx.isLoggedIn;
@@ -39,7 +44,7 @@ const GroupInfo = (props) => {
       try {//http://localhost:5000/activities/join/:id
         axios
           .post(
-            "http://localhost:5000/activities/join/" + props.groups._id,
+            url + "/activities/join/" + props.groups._id,
             memberInfo
           )
           .then((res) => console.log(res.data));
@@ -66,7 +71,7 @@ const GroupInfo = (props) => {
       try {//http://localhost:5000/activities/leave/:id
         axios
           .post(
-            "http://localhost:5000/activities/leave/" + props.groups._id,
+            url + "/activities/leave/" + props.groups._id,
             memberInfo
           )
           .then((res) => console.log(res.data));

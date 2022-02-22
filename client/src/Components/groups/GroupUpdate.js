@@ -25,6 +25,11 @@ const optionsGroupType =[
 
 const GroupUpdate = (props) => {
 
+    //Sets the correct backend server address depending
+    //on if in dev or production mode
+    const url = process.env.NODE_ENV === "development" ? 
+    process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+  
     //Translate incoming time into a format that datepicker can read
     let d = new Date(props.date)
     let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
@@ -99,8 +104,8 @@ const GroupUpdate = (props) => {
     };
 
 
-    try {//http://localhost:5000/activities/update/id_of_the_activity
-      axios.post('http://localhost:5000/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+    try {
+      axios.post( url + '/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
     } catch (err) {
           console.log(err);
     }

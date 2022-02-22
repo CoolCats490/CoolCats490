@@ -6,6 +6,11 @@ import GrouptListItem from "./GroupListItem";
 import { Container } from "react-bootstrap";
 
 const GroupList = () => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+  
   //groups object and setter here
   const [groups, setGroups] = useState([]);
 
@@ -14,7 +19,7 @@ const GroupList = () => {
     //async call to database
     const fetchGroups = async () => {
       try {
-        const response = await axios("http://localhost:5000/activities/");
+        const response = await axios( url + "/activities/");
         //store groups in groups object
         setGroups(response.data);
       } catch (err) {
@@ -23,7 +28,7 @@ const GroupList = () => {
     };
     //Call async function
     fetchGroups();
-  }, []);
+  }, [url]);
 
 
   return (

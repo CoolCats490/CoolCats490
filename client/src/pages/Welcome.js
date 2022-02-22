@@ -13,6 +13,10 @@ import AuthContext from "../Store/auth-context";
 
 const Welcome = () => {
 
+    //Sets the correct backend server address depending
+    //on if in dev or production mode
+    const url = process.env.NODE_ENV === "development" ? process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
     //useState to store top/new groups and tags
     const [topGroups, setTopGroups] = useState(null)
     const [latestGroups, setLatestGroups] = useState(null)
@@ -27,7 +31,7 @@ const Welcome = () => {
     //async call to database
     const fetchTopGroups = async () => {
       try {
-        const response = await axios("http://localhost:5000/activities/top");
+        const response = await axios( url + "/activities/top");
         //store groups in groups object
         setTopGroups(response.data)
       } catch (err) {
@@ -37,7 +41,7 @@ const Welcome = () => {
 
     const fetchLatestGroups = async () => {
         try {
-          const response = await axios("http://localhost:5000/activities/latest");
+          const response = await axios( url + "/activities/latest" );
           //store groups in groups object
           setLatestGroups(response.data)
         } catch (err) {
@@ -47,7 +51,7 @@ const Welcome = () => {
 
       const fetchTopTags = async () => {
         try {
-          const response = await axios("http://localhost:5000/tags/top");
+          const response = await axios(url + "/tags/top");
           //store groups in groups object
           setTopTags(response.data)
         } catch (err) {
@@ -59,7 +63,7 @@ const Welcome = () => {
     fetchTopGroups();
     fetchLatestGroups();
     fetchTopTags();
-  }, []);
+  }, [url]);
 
   return (
     <Container fluid >

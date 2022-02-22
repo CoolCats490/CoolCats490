@@ -27,6 +27,11 @@ const optionsGroupType = [
 ];
 
 const GroupCreate = (props) => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   //token stuff
   const authCtx = useContext(AuthContext);
   const isLogedIn = authCtx.isLoggedIn;
@@ -44,7 +49,7 @@ const GroupCreate = (props) => {
     //async call to database
     const fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/users/me", {
+        const response = await axios.get( url + "/users/me", {
           headers: {
             "Content-Type": "application/json",
             token: authCtx.token,
@@ -58,7 +63,7 @@ const GroupCreate = (props) => {
     };
     //Call async function
     if (isLogedIn) fetchUser();
-  }, [isLogedIn, authCtx.token]);
+  }, [isLogedIn, authCtx.token, url]);
 
   //Entry Handlers
   const titleHandler = (event) => {
@@ -105,7 +110,7 @@ const GroupCreate = (props) => {
       setDescription("");
       setTag("");
       axios
-        .post("http://localhost:5000/activities/add", groupData)
+        .post( url + "/activities/add", groupData)
         .then((res) => console.log(res.data));
     } else {
       setShowErrorModal(true);

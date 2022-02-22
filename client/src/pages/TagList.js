@@ -10,6 +10,11 @@ import AuthContext from "../Store/auth-context";
 
 const TagList = () => {
 
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   //gett user token and checking if the user is logged in
   const authCtx = useContext(AuthContext);
   const isLogedIn = authCtx.isLoggedIn;
@@ -27,7 +32,7 @@ const TagList = () => {
       //async call to database
       let fetchTags = async () => {
         try {
-          const response = await axios("http://localhost:5000/tags");
+          const response = await axios( url + "/tags");
           //store groups in groups object
           setTags(response.data);
         } catch (err) {
@@ -37,7 +42,7 @@ const TagList = () => {
   
       let fetchUser = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/users/me", {
+          const response = await axios.get(url + "/users/me", {
             headers: {
               "Content-Type": "application/json",
               token: authCtx.token,
@@ -61,7 +66,7 @@ const TagList = () => {
   
       //set loading to false
       //setLoading(true)
-    }, [authCtx.token, isLogedIn ]);//dataChanged
+    }, [authCtx.token, isLogedIn, url ]);//dataChanged
   
     //useEffect hook will load groups from data base when component is loaded
     useEffect(() => {

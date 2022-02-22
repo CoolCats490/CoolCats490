@@ -7,6 +7,11 @@ import "../CSS/GroupCommentPost.css";
 import AuthContext from "../../../Store/auth-context";
 
 const GroupCommentPost = (props) => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   const [enteredComment, setComment] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -37,7 +42,7 @@ const GroupCommentPost = (props) => {
 
     //try sending comment to the server
     try {//http://localhost:5000/comments/add/:id
-      axios.post('http://localhost:5000/comments/add', newComment)
+      axios.post( url + '/comments/add', newComment)
       .then(res=> console.log(res.data));
     } catch (err) {
           console.log(err);

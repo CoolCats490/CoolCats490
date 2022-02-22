@@ -11,6 +11,12 @@ import axios from "axios";
 import AuthContext from "../../Store/auth-context";
 
 const TagListItem = (props) => {
+
+    //Sets the correct backend server address depending
+    //on if in dev or production mode
+    const url = process.env.NODE_ENV === "development" ? 
+    process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
     //
     const history = useHistory();
 
@@ -32,10 +38,10 @@ const TagListItem = (props) => {
       console.log("test")
       console.log(tagData)
 
-      try {//http://localhost:5000/tags/followTag
+      try {
         axios
           .post(
-            "http://localhost:5000/tags/followTag",
+            url + "/tags/followTag",
             tagData
           )
           .then((res) => console.log(res));
