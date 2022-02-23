@@ -36,8 +36,9 @@ jobs:
         run: |
           npm install
 
-      -name: archive artifact
-        run: tar -zcvf release.tar.gz ./
+      - name: npm install for backend
+        run: |
+          tar -zcvf release.tar.gz ./
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -58,8 +59,9 @@ jobs:
         with:
           name: node-app
 
-      -name: unarchive artifact
-        run: tar -zxvf release.tar.gz
+      - name: npm install for backend
+        run: |
+          tar -zxvf release.tar.gz
           
 
       - name: 'Deploy to Azure Web App'
