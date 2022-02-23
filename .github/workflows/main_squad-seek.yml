@@ -36,7 +36,7 @@ jobs:
         run: |
           npm install
 
-      - name: npm install for backend
+      - name: archive artifact before upload
         run: |
           tar -zcvf release.tar.gz ./
 
@@ -59,7 +59,7 @@ jobs:
         with:
           name: node-app
 
-      - name: npm install for backend
+      - name: unarchive artifact
         run: |
           tar -zxvf release.tar.gz
           
