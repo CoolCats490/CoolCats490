@@ -14,6 +14,11 @@ import { useHistory } from "react-router-dom";
 import defaultPic from "./Media/user-default.png";
 
 const UserProfile = () => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   //token stuff
   const authCtx = useContext(AuthContext);
 
@@ -30,7 +35,7 @@ const UserProfile = () => {
     let fetchUser = async () => {
       try {
         //get user data
-        axios.get("http://localhost:5000/users/me", {
+        axios.get( url + "/users/me", {
           headers: {
             "Content-Type": "application/json",
             token: authCtx.token,
@@ -45,12 +50,12 @@ const UserProfile = () => {
             userName: response.data.userName,
           };
 
-          axios.post("http://localhost:5000/activities/createdBy",userData)
+          axios.post( url + "/activities/createdBy",userData)
           .then(response =>{
             setCreatedGroups(response.data);
           }).catch(err=>{console.log(err)})
 
-          axios.post("http://localhost:5000/activities/joinedGroups",userData)
+          axios.post( url + "/activities/joinedGroups",userData)
           .then(response =>{
             setJoinedGroups(response.data);
           }).catch(err=>{console.log(err)})
@@ -66,7 +71,7 @@ const UserProfile = () => {
     
     fetchUser();
 
-  }, [authCtx.token]);
+  }, [authCtx.token, url]);
 
   
 

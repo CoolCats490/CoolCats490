@@ -10,10 +10,7 @@ import "./Groups.css";
 import { Container } from "react-bootstrap";
 import TagList from "./TagList";
 import TagDetails from "./TagDetails";
-<<<<<<< HEAD:squad-seek/src/pages/Groups.js
-=======
 import GroupCalander from "../Components/Calander/GroupCalander";
->>>>>>> main:client/src/pages/Groups.js
 
 const Groups = () => {
   return (

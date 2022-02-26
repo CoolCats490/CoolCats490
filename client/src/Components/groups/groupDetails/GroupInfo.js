@@ -10,6 +10,11 @@ import axios from "axios";
 import TagsBadges from "./TagsBadges";
 
 const GroupInfo = (props) => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+  
   //User token hook to check if a user is logged in
   const authCtx = useContext(AuthContext);
   const isLogedIn = authCtx.isLoggedIn;
@@ -22,25 +27,52 @@ const GroupInfo = (props) => {
     let alreadyJoined = props.groups.members.find((x) => x.id === props.userInfo._id);
 
     if (!alreadyJoined) {
-      console.log("not in group");
 
       //get user stuff
-      let memberInfo = {
+      const memberInfo = {
         id: props.userInfo._id,
         username: props.userInfo.username,
+        userName: props.userInfo.username
       };
 
-      props.groups.members.push(memberInfo);
+      // props.groups.members.push(memberInfo);
 
-      const groupStuff = {
-        members: props.groups.members,
-      };
+      // const groupStuff = {
+      //   members: props.groups.members,
+      // };
 
       try {//http://localhost:5000/activities/join/:id
         axios
           .post(
-            "http://localhost:5000/activities/join/" + props.groups._id,
-            groupStuff
+            url + "/activities/join/" + props.groups._id,
+            memberInfo
+          )
+          .then((res) => console.log(res.data));
+      } catch (err) {
+        console.log(err);
+      }
+
+      //Update the page data again
+      props.onDataChanged(true);
+    }
+  };
+  const leaveBtnHandler = (event) => {
+    let alreadyJoined = props.groups.members.find((x) => x.id === props.userInfo._id);
+
+    if (alreadyJoined) {
+
+      //get user stuff
+      const memberInfo = {
+        id: props.userInfo._id,
+        username: props.userInfo.username,
+        userName: props.userInfo.username
+      };
+
+      try {//http://localhost:5000/activities/leave/:id
+        axios
+          .post(
+            url + "/activities/leave/" + props.groups._id,
+            memberInfo
           )
           .then((res) => console.log(res.data));
       } catch (err) {
@@ -53,7 +85,7 @@ const GroupInfo = (props) => {
   };
 
   //Formatting date into a readable format
-  let date = new Date(parseInt(props.groups.time));
+  let date = new Date(props.groups.time);
   let month = date.toLocaleString("en-US", { month: "long" });
   let day = date.toLocaleString("en-US", { day: "2-digit" });
   let year = date.getFullYear();
@@ -92,11 +124,11 @@ const GroupInfo = (props) => {
           />
         ))}
       </p>
-      {props.groups.createdBy && props.groups.createdBy[0].id === props.userInfo._id && (
+      {props.groups.createdBy && props.groups.createdBy[0].id === props.userInfo._id &&  (
         <Button onClick={() => setShowUpdateModal(true)} className="pr-2">
           Update
         </Button>
-      )}
+      )}{" "}
       {props.groups.createdBy && isLogedIn && props.groups.createdBy[0].id === props.userInfo._id && (
         <Button variant="danger" onClick={() => setShowDeleteModal(true)}>
           Delete
@@ -106,6 +138,11 @@ const GroupInfo = (props) => {
         props.groups.createdBy[0].id !== props.userInfo._id &&
         !props.groups.members.find(({ id }) => id === props.userInfo._id) && (
           <Button onClick={joinBtnHandler}>Join Group</Button>
+        )}{" "}
+        {isLogedIn &&
+        props.groups.createdBy[0].id !== props.userInfo._id &&
+        props.groups.members.find(({ id }) => id === props.userInfo._id) && (
+          <Button onClick={leaveBtnHandler} className="btn-danger">Leave Group</Button>
         )}
     </section>)}
 

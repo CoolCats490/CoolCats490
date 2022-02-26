@@ -1,123 +1,132 @@
-import { useState, useContext, useEffect } from "react";
-//Styling
+// export default GroupUpdate;
+import { useState, useCallback } from "react";
+//Bootstrap Stuff
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Col, Container, Modal, Row } from "react-bootstrap";
-import "./CSS/GroupCreate.css";
-//Axios
-import axios from "axios";
+import axios from 'axios';
 //React Select
-import Select from "react-select";
-import CreatableSelect from "react-select/creatable";
-//token
-import AuthContext from "../../Store/auth-context";
+import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
 //Tag Select Options
 const optionsTags = [
-  { value: "concert", label: "Concert" },
-  { value: "cosplay", label: "Cosplay" },
-  { value: "cooking", label: "Cooking" },
-  { value: "gaming", label: "Gaming" },
-  { value: "surfing", label: "Surfing" },
+  {value: 'concert', label: 'Concert'},
+  {value: 'cosplay', label: 'Cosplay'},
+  {value: 'cooking', label: 'Cooking'},
+  {value: 'gaming', label: 'Gaming'},
+  {value: 'surfing', label: 'Surfing'}
 ];
 
 //Group Type Options
-const optionsGroupType = [
-  { value: 0, label: "In Person" },
-  { value: 1, label: "Online" },
+const optionsGroupType =[
+{value: 0, label: 'In Person'},
+{value: 1, label: 'Online'}
 ];
 
-const GroupCreate = (props) => {
-  //token stuff
-  const authCtx = useContext(AuthContext);
-  const isLogedIn = authCtx.isLoggedIn;
+const GroupUpdate = (props) => {
 
-  const [enteredTitle, setTitle] = useState("");
-  const [enteredMType, setMType] = useState("");
-  const [enteredDate, setDate] = useState("");
-  const [enteredDescription, setDescription] = useState("");
-  const [enteredTag, setTag] = useState([]);
-  const [userInfo, setUserInfo] = useState([]);
-  const [showErrorModal, setShowErrorModal] = useState(false);
+    //Sets the correct backend server address depending
+    //on if in dev or production mode
+    const url = process.env.NODE_ENV === "development" ? 
+    process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+  
+    //Translate incoming time into a format that datepicker can read
+    let d = new Date(props.date)
+    let datestring = d.getFullYear().toString() + '-' + (d.getMonth()+1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+    let ts = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0') + ':' + d.getSeconds().toString().padStart(2, '0');
 
-  //useEffect hook will load groups from data base when component is loaded
-  useEffect(() => {
-    //async call to database
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/users/me", {
-          headers: {
-            "Content-Type": "application/json",
-            token: authCtx.token,
-          },
-        });
-        //store user info in user object
-        setUserInfo(response.data);
-      } catch (err) {
-        console.log(err);
-      }
+    //Formatting incoming tags into a format React-select can read
+    let currentTags = props.tags.map(v => ({
+        label: v,
+        value: v
+      }));
+
+    //Formatting meeting type into a for mat Reac-Select can read
+    let mTypes = {
+      value: parseInt(props.type), 
+      label: parseInt(props.type)?  "Online":"In Person"
     };
-    //Call async function
-    if (isLogedIn) fetchUser();
-  }, [isLogedIn, authCtx.token]);
+
+    //Creating useState for all the fields in the form
+  const [enteredTitle, setTitle] = useState(props.title);
+  const [enteredMType, setMType] = useState(mTypes);
+
+  const [enteredDate, setDate] = useState(datestring + "T" +  ts);
+  const [enteredDescription, setDescription] = useState(props.description);
+  const [enteredTag, setTag] = useState(currentTags);
 
   //Entry Handlers
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
+
   const meetingTypeHandler = (event) => {
     setMType(event);
   };
+
   const dateHandler = (event) => {
     setDate(event.target.value);
   };
+
   const descriptionHandler = (event) => {
     setDescription(event.target.value);
   };
   const tagHandler = (event) => {
-    setTag(event);
-  };
+    setTag( event );
+  }
 
+  
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if (isLogedIn) {
-      //Putting data into a object
-      const groupData = {
-        name: enteredTitle,
-        type: parseInt(enteredMType.value),
-        time: new Date(enteredDate),
-        description: enteredDescription,
-        tagsArray: enteredTag.map((e) => e.value.toLowerCase()),
-        createdBy: {
-          id: userInfo._id,
-          username: userInfo.username,
-        },
-        members: {
-          id: userInfo._id,
-          username: userInfo.username,
-        },
-      };
+    //Clearing fields
+    setTitle("");
+    setMType("");
+    setDate("");
+    setDescription("");
+    setTag("");
 
-      //Clearing fields
-      setTitle("");
-      setMType("");
-      setDate("");
-      setDescription("");
-      setTag("");
-      axios
-        .post("http://localhost:5000/activities/add", groupData)
-        .then((res) => console.log(res.data));
-    } else {
-      setShowErrorModal(true);
+    //Put the old tags and new tags in a array
+    let oldTags = currentTags.map(e => e.value.toLowerCase());
+    let newTags = enteredTag.map(e => e.value.toLowerCase());
+
+    //Putting data into a object
+    let groupData = {
+      name: enteredTitle,
+      type: enteredMType.value,
+      time: enteredDate,
+      description: enteredDescription,
+      tagsArray: enteredTag.map(e => e.value.toLowerCase()),
+      createdBy: props.createdBy,
+      members:props.members,
+      addedTags: newTags.filter(x => !oldTags.includes(x)),
+      removedTags: oldTags.filter(x => !newTags.includes(x))
+    };
+
+
+    try {
+      axios.post( url + '/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+    } catch (err) {
+          console.log(err);
     }
+
+      //Send
+      //props.onGroupUpdated(groupData)
+
+      //Close Modal
+      props.onModalClose(false);
+      props.onDataChanged(true);
   };
 
+  const cancelBtnHandler = useCallback( event =>{
+    props.onModalClose(false)
+  },[props])
+
+
   return (
-    <Container className="text-dark bg-light pb-4 row justify-content-center pt-4 groupWrapper">
-      <h3 className="text-center">Create a new group</h3>
+    <div className="bg-primar">
       <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3 formGroupTitle" controlId="formGroupTitle">
+        <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control
             className=""
@@ -128,36 +137,38 @@ const GroupCreate = (props) => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3 formGroupType" controlId="formGroupType">
+        <Form.Group className="mb-3" controlId="formGroupType">
           <Form.Label>Meeting Type</Form.Label>
+         
           <Select
-            className="text-black"
-            placeholder="Select Group Type"
-            options={optionsGroupType}
-            onChange={meetingTypeHandler}
-            value={enteredMType}
-          />
+          placeholder="Select Group Type"
+          //defaultValue={0}
+          options={optionsGroupType}
+          onChange={meetingTypeHandler}
+          value={enteredMType}
+        />
         </Form.Group>
 
-        {
-          <Form.Group className="mb-3 formGroupTags" controlId="formGroupTags">
-            <Form.Label>Tags</Form.Label>
-            <CreatableSelect
-              className="text-capitalize text-black"
-              placeholder="Select or Create Tags"
-              //Select multiple tags
-              isMulti
-              //Search for tags
-              isSearchable
-              onChange={tagHandler}
-              options={optionsTags}
-              //Set value of tag
-              value={enteredTag}
-            />
-          </Form.Group>
-        }
 
-        <Form.Group className="mb-3 formGroupDate" controlId="formGroupDate">
+        { <Form.Group className="mb-3" controlId="formGroupTags">
+          <Form.Label>Tags</Form.Label>
+          <CreatableSelect
+            className="text-capitalize"
+            placeholder="Select or Create Tags"
+            //Select multiple tags
+            isMulti
+            //Search for tags
+            isSearchable
+            onChange={tagHandler}
+            options={optionsTags}
+            //Set value of tag
+            value={enteredTag}
+            
+            //
+          />
+        </Form.Group> }
+
+        <Form.Group className="mb-3" controlId="formGroupDate">
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="datetime-local"
@@ -167,7 +178,7 @@ const GroupCreate = (props) => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3 text-center" controlId="formGroupDescription">
+        <Form.Group className="mb-3" controlId="formGroupDescription">
           <Form.Label>Group Description</Form.Label>
           <Form.Control
             as="textarea"
@@ -178,33 +189,14 @@ const GroupCreate = (props) => {
           />
         </Form.Group>
 
-        <div className="text-center mt-4">
-          <Button variant="primary" type="submit">
-              Submit
-          </Button>
-        </div>
-
-        
-            
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>{" "}
+        <Button variant="secondary" onClick={cancelBtnHandler}>
+          Cancel
+        </Button>
       </Form>
-
-      <Modal
-        show={showErrorModal}
-        onHide={() => setShowErrorModal(false)}
-        dialogClassName="modal-90w"
-        aria-labelledby="example-custom-modal-styling-title"
-        animation={false}
-      >
-        <Modal.Header>
-          <Modal.Title id="group-create-error-modal">
-            Group Creation Error
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Please create an account before making a group</p>
-        </Modal.Body>
-      </Modal>
-    </Container>
+    </div>
   );
 };
 

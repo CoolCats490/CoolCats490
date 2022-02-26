@@ -10,6 +10,11 @@ import { useHistory } from "react-router";
 
 
 const Login = () => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+  
   const [enteredName, setName] = useState("")
   const [enteredPass, setPass] = useState("")
 
@@ -42,7 +47,7 @@ const Login = () => {
     //axios.post(`http://localhost:5000/user/login/${enteredName}`);
 
 
-    axios.post('http://localhost:5000/users/login', loginData)
+    axios.post( url + '/users/login', loginData)
     .then(res => {
       const expirationTime = new Date( new Date().getTime() + (+res.data.expiresIn) );
       authCtx.login(res.data.token, expirationTime.toISOString())

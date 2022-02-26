@@ -17,6 +17,11 @@ import GroupInfo from "../Components/groups/groupDetails/GroupInfo";
 import GroupMembers from "../Components/groups/groupDetails/GroupMembers";
 
 const GroupDetails = (props) => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   //token stuff
   const authCtx = useContext(AuthContext);
   const isLogedIn = authCtx.isLoggedIn;
@@ -45,7 +50,7 @@ const GroupDetails = (props) => {
     const fetchGroups = async () => {
       try {
         let response = await axios(
-          `http://localhost:5000/activities/${params.groupID}`
+          `${url}/activities/${params.groupID}`
         );
         //store groups in groups object
         setGroups(response.data);
@@ -58,7 +63,7 @@ const GroupDetails = (props) => {
 
     let fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/users/me", {
+        const response = await axios.get( url + "/users/me", {
           headers: {
             "Content-Type": "application/json",
             token: authCtx.token,
@@ -76,7 +81,7 @@ const GroupDetails = (props) => {
     let fetchComments = async ()=>{
       try{
         let response = await axios(
-          `http://localhost:5000/comments/get/${params.groupID}`
+          `${url}/comments/get/${params.groupID}`
         );
         //store comments in comments object
         setComments(response.data);
@@ -95,7 +100,7 @@ const GroupDetails = (props) => {
 
     //set loading to false
     //setLoading(true)
-  }, [params, authCtx.token, isLogedIn ]);//dataChanged
+  }, [params, authCtx.token, isLogedIn, url ]);//dataChanged
 
   //useEffect hook will load groups from data base when component is loaded
   useEffect(() => {

@@ -8,6 +8,11 @@ import 'react-calendar/dist/Calendar.css';
 import axios from "axios";
 
 const GroupCalander = () =>{
+    //Sets the correct backend server address depending
+    //on if in dev or production mode
+    const url = process.env.NODE_ENV === "development" ? 
+    process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
     //const [selectedDate, setSelectedDate] = useState(new Date());
     const [groups, setGroups] = useState([]);
     const [calendarGroups, setCalendarGroups] = useState([]);
@@ -17,7 +22,7 @@ const GroupCalander = () =>{
         //async call to database
         const fetchGroups = async () => {
         try {
-            const response = await axios("http://localhost:5000/activities/");
+            const response = await axios( url + "/activities/");
             //store groups in groups object
             setGroups(response.data);
         } catch (err) {
@@ -29,7 +34,7 @@ const GroupCalander = () =>{
 
         //Set current month's groups
         
-    }, []);
+    }, [url]);
 
     const currentMonthGroups = ()=>{
         let today = new Date();

@@ -14,6 +14,12 @@ import { useHistory } from "react-router-dom";
 import Button from "@restart/ui/esm/Button";
 
 const TagDetails = () => {
+
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   //Use states
   const [tags, setTags] = useState(null);
   //const [userInfo, setUserInfo] = useState([]);
@@ -33,7 +39,7 @@ const TagDetails = () => {
     const fetchTags = async () => {
       try {
         let response = await axios(
-          `http://localhost:5000/tags/${params.tagName}`
+          `${url}/tags/${params.tagName}`
         );
         //store groups in groups object
         setTags(response.data);
@@ -44,27 +50,11 @@ const TagDetails = () => {
       }
     };
 
-    // let fetchUser = async () => {
-    //   try {
-    //     const response = await axios.get("http://localhost:5000/users/me", {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         token: authCtx.token,
-    //       },
-    //     });
-    //     //store user info in user object
-    //     setUserInfo(response.data);
-    //     setLoading(true);
-    //   } catch (err) {
-    //     console.log(err);
-    //     setLoading(false);
-    //   }
-    // };
 
     fetchTags();
 
     //setLoading(false);
-  }, [params.tagName]);
+  }, [params.tagName, url]);
 
   const viewGroupsHandler = param => event => {
     //link to the group page using it's id
@@ -88,12 +78,13 @@ const TagDetails = () => {
               <Card.Header className="text-center">{element.groupName}</Card.Header>
               <Card.Body>
                 <div><strong>Group Type</strong>: {parseInt(element.groupType)? "In Person":"Online"}</div>
-                <div><strong>Group Date</strong>:
-                    
-                    { new Date(parseInt(element.groupTime)).toLocaleDateString()}
+                <div><strong>Group Date</strong>:{" "}
+                    {new Date(element.groupTime).getMonth() + 1}/
+                    {new Date(element.groupTime).getDate()}/
+                    {new Date(element.groupTime).getUTCFullYear()}
                    
                    </div>
-                <div><strong>Group Memebers</strong>:{(
+                <div><strong>Group Members</strong>:{( 
                     <Badge bg="info" key={num}>{element.groupMembers.length}</Badge>
                   )}</div>
               </Card.Body>

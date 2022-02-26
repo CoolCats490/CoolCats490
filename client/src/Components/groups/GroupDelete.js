@@ -5,6 +5,11 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 const GroupDelete = (props) => {
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url = process.env.NODE_ENV === "development" ? 
+  process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
   //allows us to link back to old page in histor
   const history = useHistory();
 
@@ -18,13 +23,8 @@ const GroupDelete = (props) => {
   let groupID = props.id;
 
   const deleteBtnHandler = (event) => {
-      // when used url http://localhost:5000/activities/id_of_the_activity and made a delete request
-    // axios.delete("http://localhost:5000/activities/" + props.id)
-    // .then(res =>console.log(res));
-
-    //Activity.findByIdAndDelete(req.params.id).then(activity => res.json('Exercise Deleted!')).catch(err => res.status(400).json('Error: ' + err));
-
-    axios.delete(`http://localhost:5000/activities/${groupID}`)
+      
+    axios.delete(`${url}/activities/${groupID}`)
         .then(res =>{console.log(res)})
         .catch(error => console.error(error));
 
