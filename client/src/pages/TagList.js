@@ -79,7 +79,7 @@ const TagList = () => {
       tags.sort( (x, y) => (x.tagName > y.tagName) ? 1 : -1);
 
     return(
-        <Container>
+        <Container className="bg-secondary">
             {/* Only list the tags with atleast 1 group */}
             {tags.filter(x => x.groups.length > 0).map( (tag) =>(
                 <TagListItem

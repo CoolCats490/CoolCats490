@@ -63,9 +63,9 @@ const TagListItem = (props) => {
       key={props.id}
     >
       <ListGroup>
-        <ListGroup.Item className="bg-primary">
-          <h6 className="text-light text-center">Tag Name: {props.tagName}</h6>
-          <div className="text-light">
+        <ListGroup.Item className="bg-info">
+          <h6 className="text-dark text-center">Tag Name: {props.tagName}</h6>
+          <div >
             <Row>
               <Col sm={8}>
                 <Badge className="bg-warning text-dark">

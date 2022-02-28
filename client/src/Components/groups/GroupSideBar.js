@@ -21,6 +21,12 @@ const GroupSideBar = () => {
             </Nav.Link>
           </ListGroup.Item>
 
+          <ListGroup.Item eventKey="gCalendar">
+            <Nav.Link as={Link} to="/groups/calendar" className= "link-dark">
+              Calendar
+            </Nav.Link>
+          </ListGroup.Item>
+
           <ListGroup.Item eventKey="gList">
             <Nav.Link as={Link} to="/groups/list" className= "link-dark">
               Group List

@@ -32,7 +32,7 @@ const GroupList = () => {
 
 
   return (
-    <Container fluid="sm">
+    <Container fluid="sm" className="bg-light">
       
       {/* map each group to a group item card */}
       {groups.map((group) => (
