@@ -129,7 +129,7 @@ const GroupCalander = () =>{
                                         <h5>{e.name}</h5>
                                         <p><strong>Description: </strong>{e.description}</p>
                                         <p> <strong>Date: </strong>
-                                            {new Date(e.time).getMonth()}/
+                                            {new Date(e.time).getMonth() + 1}/
                                             {new Date(e.time).getDate()}/
                                             {new Date(e.time).getFullYear()}
                                         </p>
