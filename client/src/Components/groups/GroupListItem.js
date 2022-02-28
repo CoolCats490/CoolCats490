@@ -17,26 +17,26 @@ const GrouptListItem = (props) => {
   };
 
   return (
-    <Container className="pb-2 pt-2 no-underline" key={props.id}>
-      <Link to={{ pathname: `/groups/${props.id}` }}>
+    <Container className="pb-3 pt-3 no-underline" key={props.id}>
+      <Link to={{ pathname: `/groups/${props.id}` }} className="text-decoration-none">
         <Card
-          bg="primary"
+          bg="info"
           onClick={cardLink}
-          className="text-decoration-none text-light"
+          className="text-dark shadow"
           key={props.id}
         >
           <Card.Header className="text-center">
-            Group Title: {props.title}
+            <strong>{props.title}</strong>
           </Card.Header>
           <Card.Body>
             <Card.Text>
-              Group Type: {parseInt(props.type) ? "Online" : "In Person"}
+              <strong>Group Type:</strong> {parseInt(props.type) ? "Online" : "In Person"}
               <br />
-              Date: {month + " " + day + ", " + year + " @ " + time}
+              <strong>Date:</strong> {month + " " + day + ", " + year + " @ " + time}
               <br />
-              Description: {props.description}
+              <strong>Description:</strong> {props.description}
               <br />
-              Tags:{" "}
+              <strong>Tags:</strong>{" "}
               {props.tags.map((e, index) => (
                 <Badge className="bg-warning text-dark me-2" key={index}>
                   {e}
