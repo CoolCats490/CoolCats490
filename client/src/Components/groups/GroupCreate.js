@@ -25,6 +25,10 @@ const optionsGroupType = [
   { value: 0, label: "In Person" },
   { value: 1, label: "Online" },
 ];
+const optionsoccuranceType = [
+{value: 0, label: "One time"},
+{value: 1, label: "Weekly"},
+]
 
 const GroupCreate = (props) => {
   //Sets the correct backend server address depending
@@ -43,6 +47,7 @@ const GroupCreate = (props) => {
   const [enteredTag, setTag] = useState([]);
   const [userInfo, setUserInfo] = useState([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [enteredOccuranace, setOccurance] = useState([]);
 
   //useEffect hook will load groups from data base when component is loaded
   useEffect(() => {
@@ -81,6 +86,9 @@ const GroupCreate = (props) => {
   const tagHandler = (event) => {
     setTag(event);
   };
+  const occuranceHandler = (event) => {
+    setOccurance(event);
+  }
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -109,6 +117,7 @@ const GroupCreate = (props) => {
       setDate("");
       setDescription("");
       setTag("");
+      setOccurance("")
       axios
         .post( url + "/activities/add", groupData)
         .then((res) => console.log(res.data));
@@ -160,14 +169,24 @@ const GroupCreate = (props) => {
             />
           </Form.Group>
         }
-
+       {/* <Form.Group className="mb-3 formMeetingFrequency" controlId="formMeetingFrequency">
+          <Form.Label>Single or Reoccuring Meeting</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="meetingFrequency"
+            options= {optionsoccuranceType}
+            onChange={occuranceHandler}
+            value={enteredOccuranace}
+          />
+        </Form.Group> */}
         <Form.Group className="mb-3 formGroupDate" controlId="formGroupDate">
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="datetime-local"
             name="meetingDate"
-            onChange={dateHandler}
-            value={enteredDate}
+            options = {optionsoccuranceType}
+            onChange={dateHandler,occuranceHandler}
+            value={enteredDate,enteredOccuranace}
           />
         </Form.Group>
 

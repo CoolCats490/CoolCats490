@@ -10,6 +10,8 @@ const activitySchema = new Schema({
             username:{type:String}
         }
     ],
+    occurances: {type:String},
+    permission: {type:String},
     time: {type: String},
     type: {type:String},
     description: {type:String},

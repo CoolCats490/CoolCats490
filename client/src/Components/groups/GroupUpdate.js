@@ -22,7 +22,11 @@ const optionsGroupType =[
 {value: 0, label: 'In Person'},
 {value: 1, label: 'Online'}
 ];
-
+//frequency of meetings
+const optionsOccuranceType = [
+  {value: 0, label: "One time"},
+  {value: 1, label: "Weekly"}
+]
 const GroupUpdate = (props) => {
 
     //Sets the correct backend server address depending
@@ -46,6 +50,10 @@ const GroupUpdate = (props) => {
       value: parseInt(props.type), 
       label: parseInt(props.type)?  "Online":"In Person"
     };
+    let occuranceTypes = {
+      value: parseInt(props.type), 
+      label: parseInt(props.type)?  "Single":"Reoccuring"
+    };
 
     //Creating useState for all the fields in the form
   const [enteredTitle, setTitle] = useState(props.title);
@@ -54,6 +62,7 @@ const GroupUpdate = (props) => {
   const [enteredDate, setDate] = useState(datestring + "T" +  ts);
   const [enteredDescription, setDescription] = useState(props.description);
   const [enteredTag, setTag] = useState(currentTags);
+  const [enteredOccuranace, setOccurance]= useState(occuranceTypes);
 
   //Entry Handlers
   const titleHandler = (event) => {
@@ -75,7 +84,9 @@ const GroupUpdate = (props) => {
     setTag( event );
   }
 
-  
+  const occuranceHandler = (event) => {
+    setOccurance(event)
+  }
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -85,7 +96,7 @@ const GroupUpdate = (props) => {
     setDate("");
     setDescription("");
     setTag("");
-
+    setOccurance("");
     //Put the old tags and new tags in a array
     let oldTags = currentTags.map(e => e.value.toLowerCase());
     let newTags = enteredTag.map(e => e.value.toLowerCase());
@@ -94,6 +105,7 @@ const GroupUpdate = (props) => {
     let groupData = {
       name: enteredTitle,
       type: enteredMType.value,
+      occurances: enteredOccuranace.value,
       time: enteredDate,
       description: enteredDescription,
       tagsArray: enteredTag.map(e => e.value.toLowerCase()),
@@ -173,8 +185,9 @@ const GroupUpdate = (props) => {
           <Form.Control
             type="datetime-local"
             name="meetingDate"
-            onChange={dateHandler}
-            value={enteredDate}
+            options= {optionsOccuranceType}
+            onChange={occuranceHandler,dateHandler}
+            value={enteredOccurance,enteredDate}
           />
         </Form.Group>
 

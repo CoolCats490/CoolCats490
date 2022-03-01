@@ -31,6 +31,8 @@ router.route('/add').post((req, res) => {
     const tagsArray = req.body.tagsArray;
     const createdBy = req.body.createdBy;
     const members = req.body.members;
+    const occurance = req.body.occurances;
+    const permission = req.body.permission;
 
     const newActivity = new Activity({
         name,
@@ -39,7 +41,9 @@ router.route('/add').post((req, res) => {
         description,
         tagsArray,
         createdBy,
-        members
+        members,
+        occurance,
+        permission
     });
 
     newActivity.save().then(()=> res.json('Activity added!')).catch(err => res.status(400).json('Error: ' + err));
@@ -145,7 +149,9 @@ router.route('/update/:id').post((req, res) => {
         description: String(req.body.description),
         tagsArray: req.body.tagsArray,
         createdBy: req.body.createdBy,
-        members: req.body.members
+        members: req.body.members,
+        occurance: req.body.occurances,
+        permission: req.body,permission
     }
 
     Activity.findById(activityID)
@@ -155,6 +161,8 @@ router.route('/update/:id').post((req, res) => {
         activity.type = String(req.body.type);
         activity.description = String(req.body.description);
         activity.tagsArray = req.body.tagsArray;
+        activity.occurance = req.body.occurance;
+        activity.permission = req.body.permission;
 
         activity.save().then(()=> res.json('Activity updated!')).catch(err => res.status(400).json('Error: ' + err));
     }).catch(err => res.status(400).json('Error: ' + err));
