@@ -27,6 +27,10 @@ const optionsOccuranceType = [
   {value: 0, label: "One time"},
   {value: 1, label: "Weekly"}
 ]
+const optionPermissionType = [
+  {value: 0 , label: "Public"},
+  {value: 1, label: "Private"}
+]
 const GroupUpdate = (props) => {
 
     //Sets the correct backend server address depending
@@ -54,15 +58,19 @@ const GroupUpdate = (props) => {
       value: parseInt(props.type), 
       label: parseInt(props.type)?  "Single":"Reoccuring"
     };
+    let permissionTypes = {
+      value: parseInt(props.type), 
+      label: parseInt(props.type)?  "Public":"Private"
+    };
 
     //Creating useState for all the fields in the form
   const [enteredTitle, setTitle] = useState(props.title);
   const [enteredMType, setMType] = useState(mTypes);
-
   const [enteredDate, setDate] = useState(datestring + "T" +  ts);
   const [enteredDescription, setDescription] = useState(props.description);
   const [enteredTag, setTag] = useState(currentTags);
   const [enteredOccuranace, setOccurance]= useState(occuranceTypes);
+  const [enteredPermission, setPermission] = useState(permissionTypes);
 
   //Entry Handlers
   const titleHandler = (event) => {
@@ -83,7 +91,9 @@ const GroupUpdate = (props) => {
   const tagHandler = (event) => {
     setTag( event );
   }
-
+const permissionHandler = (event) =>{
+  setPermission(event);
+}
   const occuranceHandler = (event) => {
     setOccurance(event)
   }
@@ -180,14 +190,33 @@ const GroupUpdate = (props) => {
           />
         </Form.Group> }
 
-        <Form.Group className="mb-3" controlId="formGroupDate">
+        { <Form.Group className="mb-3 formPermission" controlId="formPermission">
+          <Form.Label>Public or Private</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="meetingFrequency"
+            options= {optionPermissionType}
+            onChange={permissionHandler}
+            value={enteredPermission}
+          />
+        </Form.Group> }
+       { <Form.Group className="mb-3 formMeetingFrequency" controlId="formMeetingFrequency">
+          <Form.Label>Single or Reoccuring Meeting</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="meetingFrequency"
+            options= {optionsOccuranceType}
+            onChange={occuranceHandler}
+            value={enteredOccuranace}
+          />
+        </Form.Group> }
+        <Form.Group className="mb-3 formGroupDate" controlId="formGroupDate">
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="datetime-local"
             name="meetingDate"
-            options= {optionsOccuranceType}
-            onChange={occuranceHandler,dateHandler}
-            value={enteredOccurance,enteredDate}
+            onChange={dateHandler}
+            value={enteredDate}
           />
         </Form.Group>
 

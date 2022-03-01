@@ -25,11 +25,14 @@ const optionsGroupType = [
   { value: 0, label: "In Person" },
   { value: 1, label: "Online" },
 ];
-const optionsoccuranceType = [
+const optionsOccuranceType = [
 {value: 0, label: "One time"},
 {value: 1, label: "Weekly"},
 ]
-
+const optionPermissionType = [
+  {value: 0 , label: "Public"},
+  {value: 1, label: "Private"}
+]
 const GroupCreate = (props) => {
   //Sets the correct backend server address depending
   //on if in dev or production mode
@@ -47,7 +50,8 @@ const GroupCreate = (props) => {
   const [enteredTag, setTag] = useState([]);
   const [userInfo, setUserInfo] = useState([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [enteredOccuranace, setOccurance] = useState([]);
+  const [enteredOccuranace, setOccurance] = useState("");
+  const [enteredPermission, setPermission] = useState("");
 
   //useEffect hook will load groups from data base when component is loaded
   useEffect(() => {
@@ -89,7 +93,9 @@ const GroupCreate = (props) => {
   const occuranceHandler = (event) => {
     setOccurance(event);
   }
-
+const permissionHandler = (event) => {
+  setPermission(event);
+}
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -100,6 +106,7 @@ const GroupCreate = (props) => {
         type: parseInt(enteredMType.value),
         time: new Date(enteredDate),
         description: enteredDescription,
+        permission: enteredPermission.value,
         tagsArray: enteredTag.map((e) => e.value.toLowerCase()),
         createdBy: {
           id: userInfo._id,
@@ -118,6 +125,7 @@ const GroupCreate = (props) => {
       setDescription("");
       setTag("");
       setOccurance("")
+      setPermission("");
       axios
         .post( url + "/activities/add", groupData)
         .then((res) => console.log(res.data));
@@ -169,24 +177,33 @@ const GroupCreate = (props) => {
             />
           </Form.Group>
         }
-       {/* <Form.Group className="mb-3 formMeetingFrequency" controlId="formMeetingFrequency">
+        { <Form.Group className="mb-3 formPermission" controlId="formPermission">
+          <Form.Label>Public or Private</Form.Label>
+          <Form.Control
+            type="datetime-local"
+            name="meetingFrequency"
+            options= {optionPermissionType}
+            onChange={permissionHandler}
+            value={enteredPermission}
+          />
+        </Form.Group> }
+       { <Form.Group className="mb-3 formMeetingFrequency" controlId="formMeetingFrequency">
           <Form.Label>Single or Reoccuring Meeting</Form.Label>
           <Form.Control
             type="datetime-local"
             name="meetingFrequency"
-            options= {optionsoccuranceType}
+            options= {optionsOccuranceType}
             onChange={occuranceHandler}
             value={enteredOccuranace}
           />
-        </Form.Group> */}
+        </Form.Group> }
         <Form.Group className="mb-3 formGroupDate" controlId="formGroupDate">
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="datetime-local"
             name="meetingDate"
-            options = {optionsoccuranceType}
-            onChange={dateHandler,occuranceHandler}
-            value={enteredDate,enteredOccuranace}
+            onChange={dateHandler}
+            value={enteredDate}
           />
         </Form.Group>
 
