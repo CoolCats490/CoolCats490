@@ -44,7 +44,7 @@ router.route('/followTag').post((req, res) => {
             }
         }
     );
-
+    
     //find tag by name and then insert new object with user info
     User.updateOne({_id:req.body.userId},
         {$addToSet:{"interests":incomingTag}},
