@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import AuthContext from "../../../Store/auth-context";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import React from "react";
 //Import other custom components
 import GroupUpdate from "../GroupUpdate";
@@ -34,12 +34,6 @@ const GroupInfo = (props) => {
         username: props.userInfo.username,
         userName: props.userInfo.username
       };
-
-      // props.groups.members.push(memberInfo);
-
-      // const groupStuff = {
-      //   members: props.groups.members,
-      // };
 
       try {//http://localhost:5000/activities/join/:id
         axios
@@ -84,6 +78,10 @@ const GroupInfo = (props) => {
     }
   };
 
+  if(!props.groups.createdBy|| !props.userInfo){
+    return <Spinner animation="border" variant="warning" />
+  }
+
   //Formatting date into a readable format
   let date = new Date(props.groups.time);
   let month = date.toLocaleString("en-US", { month: "long" });
@@ -93,7 +91,7 @@ const GroupInfo = (props) => {
 
   return (
       <React.Fragment>
-    {props.groups !== null &&(<section>
+    {props.groups &&(<section>
       <h2>
         <strong>Group Title:</strong> {props.groups.name}
       </h2>
@@ -128,7 +126,7 @@ const GroupInfo = (props) => {
         <Button onClick={() => setShowUpdateModal(true)} className="pr-2">
           Update
         </Button>
-      )}{" "}
+      )}
       {props.groups.createdBy && isLogedIn && props.groups.createdBy[0].id === props.userInfo._id && (
         <Button variant="danger" onClick={() => setShowDeleteModal(true)}>
           Delete
@@ -145,6 +143,7 @@ const GroupInfo = (props) => {
           <Button onClick={leaveBtnHandler} className="btn-danger">Leave Group</Button>
         )}
     </section>)}
+
 
     {/*Update Modal/Popup window settings start here                 */}
     <Modal
