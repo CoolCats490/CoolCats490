@@ -6,7 +6,7 @@ import AuthContext from "../Store/auth-context";
 //react imports
 import { useState, useEffect, useCallback } from "react";
 //Styling
-import { Col, Row, Image, Container } from "react-bootstrap";
+import { Col, Row, Image, Container, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 //pic
 import defaultPic from "./Media/group-defualt.jpg";
@@ -108,11 +108,9 @@ const GroupDetails = (props) => {
     setDataChanged(false);
   }, [loadData, dataChanged]);
 
-  //if data is not loaded will retrun a blank page saying loading
-  // if (isLoading === true) {
-  //   return <Container>Data is Loading</Container>;
-  // }
-
+  if(!groups){
+    return <Spinner animation="border" variant="warning" />
+  }
 
   return (
     <>
@@ -126,7 +124,7 @@ const GroupDetails = (props) => {
             />
           </Col>
           <Col>
-            {doneLoading && <GroupInfo
+            {groups && <GroupInfo
               groups={groups}
               userInfo={userInfo}
               onDataChanged={setDataChanged}
