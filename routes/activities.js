@@ -1,6 +1,7 @@
 // first we need to create a router
 const router = require('express').Router();
 
+const res = require('express/lib/response');
 // we need user variable to use the user model
 let Activity = require('../models/activities.model');
 
@@ -9,6 +10,8 @@ let Comment = require('../models/comments.model');
 
 //We need a tag variable to use the tag model
 const Tag = require("../models/tags.model");
+
+//needs a vairable to use the reccurance model
 
 //now we need to specify that if we recieve a '/get' request from the server,
 // then what are we gonna do with the database
@@ -68,6 +71,10 @@ router.route('/latest').get((req,res) => {
     Activity.find().sort({ _id: -1 }).limit(5).then(activity => res.json(activity)).catch(err => res.status(400).json('Error: ' + err));
 });
 
+//returns the reccuring groups
+router.route('/recurringGroups').get((req,res) => {
+    Activity.find().sort({occurances: -1}).then(activity => res.json(activity)).catch(err=> res.starus(400).json('Error: '+err));
+});
 // when used url http://localhost:5000/activities/new and made get request
 // this will return the top 5 activities based on members
 router.route('/top').get((req,res) => {
@@ -103,8 +110,8 @@ router.route('/:id').delete((req, res) => {
 // when used url http://localhost:5000/activities/createdBy and made get request
 // this will return the activities created by the user
 router.route('/createdBy').post((req, res) => {
+    
     let incomingUser = req.body.userId;
-    let incomingUserName = req.body.userName
 
     Activity.find({"createdBy.id":incomingUser}, function(err, groups){
         if(err){
