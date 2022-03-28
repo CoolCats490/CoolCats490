@@ -15,6 +15,7 @@ const Login = React.lazy(() => import("./pages/Login"));
 const Welcome = React.lazy(() => import("./pages/Welcome"));
 const UserProfile = React.lazy(() => import("./pages/UserProfile"));
 const MultiForm = React.lazy(() => import("./Components/MultiForm/MultiForm"));
+const UserSettings = React.lazy(() => import("./pages/UserSettings"));
 
 const App = () => {
   const authCtx = useContext(AuthContext);
@@ -51,14 +52,19 @@ const App = () => {
               </Route>
             )}
 
-            {authCtx.isLoggedIn && (
-              <Route path="/profile">
+              <Route path="/user/:userId">
                 <UserProfile />
               </Route>
+
+            {authCtx.isLoggedIn && (
+              <Route path="/settings">
+                <UserSettings/>
+              </Route>
             )}
+
             <Route path="*">
               <Redirect to="/" />
-            </Route>
+            </Route>ß
           </Switch>
         </Suspense>
       </div>

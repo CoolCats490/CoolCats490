@@ -3,25 +3,19 @@ import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Badge from "react-bootstrap/Badge";
 //Router
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const GrouptListItem = (props) => {
   const month = props.date.toLocaleString("en-US", { month: "long" });
   const day = props.date.toLocaleString("en-US", { day: "2-digit" });
   const year = props.date.getFullYear();
   const time = props.date.toLocaleTimeString("en-US");
-
-  const history = useHistory();
-  const cardLink = () => {
-    history.push("/groups/list");
-  };
-
+  
   return (
     <Container className="pb-3 pt-3 no-underline" key={props.id}>
       <Link to={{ pathname: `/groups/${props.id}` }} className="text-decoration-none">
         <Card
           bg="info"
-          onClick={cardLink}
           className="text-dark shadow"
           key={props.id}
         >

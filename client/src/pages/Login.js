@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Login.css";
-//Axios
+//Database
 import axios from "axios";
 import AuthContext from "../Store/auth-context";
 import { useHistory } from "react-router";
@@ -24,7 +24,10 @@ const Login = () => {
   const authCtx = useContext(AuthContext);
   const isLogedIn = authCtx.isLoggedIn;
 
+  //Using useHistory to direct to a new page after login
   let history = useHistory();
+
+  let expirationTime = null;
 
   const userNamerHandler = (event) => {
     setName(event.target.value);
@@ -43,16 +46,15 @@ const Login = () => {
       password: enteredPass,
     };
 
-    //clear fields
-    setName("");
-    setPass("");
-
     axios
       .post(url + "/users/login", loginData)
       .then((res) => {
-        const expirationTime = new Date(
+        //Login token expiration time
+        expirationTime = new Date(
           new Date().getTime() + +res.data.expiresIn
         );
+        
+        //Store login token locally
         authCtx.login(res.data.token, expirationTime.toISOString());
       })
       .catch((error) => {
@@ -81,6 +83,12 @@ const Login = () => {
           <Container className="w-25 pt-5 pb-5 px-5 bg-white text-dark rounded border-primary">
 
             <Form onSubmit={submitHandler}>
+
+            {
+                loginFail && 
+                (<Container className="bg-warning text-center mt-4">Incorrect Login Credentials</Container>)
+            }
+
               <Form.Group className="mb-3" controlId="formLoginName">
                 <Form.Label>Username</Form.Label>
                 <Form.Control
@@ -106,10 +114,6 @@ const Login = () => {
                   Submit
                 </Button>
               </div>
-              {
-                loginFail && 
-                (<Container className="bg-warning text-center mt-4">Incorrect Login Credentials</Container>)
-              }
             </Form>
           </Container>
         </Col>

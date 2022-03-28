@@ -10,7 +10,13 @@ const userSchema =  new Schema({
     email: {type: String, required: true, unique: true},
     firstname: {type: String, required: true},
     lastname: {type:String, required:true},
-    createdAt:{type:Date, default:Date.now()}
+    createdAt:{type:Date, default:Date.now()},
+    profileBio:{type:String},
+    profilePic:{type:String},
+    hideProfile:{type:Boolean},
+    displayCreatedGroups:{type:Boolean},
+    displayJoinedGroups:{type:Boolean}
+
 });
 
 module.exports = mongoose.model('User', userSchema);
