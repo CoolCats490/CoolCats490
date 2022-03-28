@@ -163,7 +163,7 @@ const UserProfile = () => {
       </Row>
 
       <Row className="gutters-sm">
-        { userInfo.displayCreatedGroups && (<Col className="sm-6 mb-3 text-dark">
+        { !userInfo.displayCreatedGroups && (<Col className="sm-6 mb-3 text-dark">
           <Card className="h-100">
             <Card.Body className="">
               <h6 className="d-flex align-items-center mb-3">
@@ -181,7 +181,7 @@ const UserProfile = () => {
             </Card.Body>
           </Card>
         </Col>)}
-        {userInfo.displayJoinedGroups && (<Col className="sm-6 mb-3 text-dark">
+        {!userInfo.displayJoinedGroups && (<Col className="sm-6 mb-3 text-dark">
           <Card className="h-100">
             <Card.Body>
               <h6 className="d-flex align-items-center mb-3">
