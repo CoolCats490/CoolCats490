@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from "react";
 //User token
 import AuthContext from "../Store/auth-context";
 //Styling
-import { Button, Card, Col, Container, ListGroup, ListGroupItem, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, ListGroup, ListGroupItem, Row, Spinner } from "react-bootstrap";
 import "./UserProfile.css"
 //Database
 import axios from "axios";
@@ -12,12 +12,17 @@ import TagsBadges from "../Components/groups/groupDetails/TagsBadges";
 import { useHistory } from "react-router-dom";
 //picture
 import defaultPic from "./Media/user-default.png";
+//Routing
+import { useParams } from "react-router-dom";
 
 const UserProfile = () => {
   //Sets the correct backend server address depending
   //on if in dev or production mode
   const url = process.env.NODE_ENV === "development" ? 
   process.env.REACT_APP_URL_DEVELOPMENT : process.env.REACT_APP_URL_PRODUCTION;
+
+  //get the id from the current url using useParams
+  const params = useParams();
 
   //token stuff
   const authCtx = useContext(AuthContext);
@@ -35,19 +40,16 @@ const UserProfile = () => {
     let fetchUser = async () => {
       try {
         //get user data
-        axios.get( url + "/users/me", {
-          headers: {
-            "Content-Type": "application/json",
-            token: authCtx.token,
-          },
+        axios.get( url + `/users/${params.userId}`
+
           //then send user id to find groups created by
-        }).then((response) =>{
+        ).then((response) =>{
           setUserInfo(response.data);
 
           //create object with user info
           let userData = {
             userId: response.data._id,
-            userName: response.data.userName,
+            userName: response.data.username,
           };
 
           axios.post( url + "/activities/createdBy",userData)
@@ -71,7 +73,7 @@ const UserProfile = () => {
     
     fetchUser();
 
-  }, [authCtx.token, url]);
+  }, [authCtx.token, url, params.userId]);
 
   
 
@@ -80,22 +82,27 @@ const UserProfile = () => {
     history.push("/groups/"+ param)
   };
 
+  if(!userInfo){
+      return <Spinner animation="border" variant="warning" />
+    }
+
 
   return (
-    <Container className="mt-4 bg-light rounded">
+    <>
+      {!userInfo.hideProfile &&(<Container className="mt-4 bg-light rounded">
       <Row className="gutters-sm pt-4">
         <Col className="md-4 mb-3">
           <Card>
             <Card.Body>
               <div className="d-flex flex-column align-items-center text-center">
                 <img
-                  src={defaultPic}
+                  src={userInfo.profilePic || defaultPic}
                   alt="Admin"
                   className="rounded"
                   width="150"
                 />
                 <div className="mt-3">
-                  <h4>John Doe</h4>
+                  
                   {userInfo && (
                     <p className="text-secondary mb-1">{userInfo.username}</p>
                   )}
@@ -110,21 +117,12 @@ const UserProfile = () => {
             <Card.Body>
               <Row>
                 <Col className="sm-3">
-                  <h6 className="mb-0">Full Name</h6>
+                  <h6 className="mb-0">Name</h6>
                 </Col>
                 {userInfo && (
                   <Col className="sm-9 text-secondary text-capitalize">
                     {userInfo.firstname} {userInfo.lastname}
                   </Col>
-                )}
-              </Row>
-              <hr />
-              <Row>
-                <Col className="sm-3">
-                  <h6 className="mb-0">Email</h6>
-                </Col>
-                {userInfo && (
-                  <Col className="sm-9 text-secondary">{userInfo.email}</Col>
                 )}
               </Row>
               <hr />
@@ -150,13 +148,22 @@ const UserProfile = () => {
                     ))}
                 </Col>
               </Row>
+              <hr />
+              <Row>
+                <Col className="sm-3">
+                  <h6 className="mb-0">Bio</h6>
+                  <Container>
+                    {userInfo.profileBio}
+                  </Container>
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
       <Row className="gutters-sm">
-        <Col className="sm-6 mb-3 text-dark">
+        { userInfo.displayCreatedGroups && (<Col className="sm-6 mb-3 text-dark">
           <Card className="h-100">
             <Card.Body className="">
               <h6 className="d-flex align-items-center mb-3">
@@ -173,8 +180,8 @@ const UserProfile = () => {
               </ListGroup>
             </Card.Body>
           </Card>
-        </Col>
-        <Col className="sm-6 mb-3 text-dark">
+        </Col>)}
+        {userInfo.displayJoinedGroups && (<Col className="sm-6 mb-3 text-dark">
           <Card className="h-100">
             <Card.Body>
               <h6 className="d-flex align-items-center mb-3">
@@ -190,9 +197,14 @@ const UserProfile = () => {
               </ListGroup>
             </Card.Body>
           </Card>
-        </Col>
+        </Col>)}
       </Row>
-    </Container>
+    </Container>)}
+
+    {userInfo.hideProfile &&(<Container className="pt-5">
+      <h4 className="mt-5 text-center bg-warning text-dark">This Profile is Private</h4>
+    </Container>)}
+    </>
   );
 };
 

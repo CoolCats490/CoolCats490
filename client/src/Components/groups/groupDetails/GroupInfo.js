@@ -8,6 +8,7 @@ import GroupDelete from "../GroupDelete";
 //Database stuff
 import axios from "axios";
 import TagsBadges from "./TagsBadges";
+import { Link } from "react-router-dom";
 
 const GroupInfo = (props) => {
   //Sets the correct backend server address depending
@@ -98,7 +99,10 @@ const GroupInfo = (props) => {
       {props.groups.createdBy != null && (
         <p>
           <strong>Group Started by:</strong>{" "}
-          {props.groups.createdBy[0].username}
+          <Link 
+          to={`/user/${props.groups.createdBy[0].id}`}
+          className="text-warning"
+          >{props.groups.createdBy[0].username}</Link>
         </p>
       )}
       <p>

@@ -284,18 +284,18 @@ const newActivityTags = (activityID, activityData, addedTags) =>{
           }
       )
     });
-  }
+}
 
-  const deleteActivityTag = (activityID) =>{
-      Tag.updateMany(
-          {groupId: activityID},
-          {$pull:{"groups":{groupId: activityID}} },
-          function(err, tags){
-            if(err)
-              res.status(400).json('Error: ' + err);
-          }
-      )
-  }
+const deleteActivityTag = (activityID) =>{
+    Tag.updateMany(
+        {groupId: activityID},
+        {$pull:{"groups":{groupId: activityID}} },
+        function(err){
+        if(err)
+            res.status(400).json('Error: ' + err);
+        }
+    )
+}
 
 const removeActivityTag = (removedTags, activityID) => {
     //Go through each tag
