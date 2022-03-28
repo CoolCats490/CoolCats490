@@ -33,8 +33,6 @@ const ProfileSwitch = ({incomingState,setIncomingState,incomingURL, updateField}
         }
     },[incomingState, incomingURL,updateField, url ])
 
-    console.log("updateField")
-
     return(
         <>
             <Form>

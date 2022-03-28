@@ -55,7 +55,7 @@ const ProfileSettings = ({userInfo}) =>{
                 updateField = {{_id:userInfo._id, hideProfile :hideProfile}}
             />
             <hr/>
-            Display created Groups
+            Hide Created Groups
             <ProfileSwitch
                 incomingState = {displayCreatedGroups}
                 setIncomingState = {setDisplayCreatedGroups}
@@ -63,7 +63,7 @@ const ProfileSettings = ({userInfo}) =>{
                 updateField = {{_id:userInfo._id, displayCreatedGroups :displayCreatedGroups}}
             />
             <hr/>
-            Display joined Groups
+            Hide Joined Groups
             <ProfileSwitch
                 incomingState = {displayJoinedGroups}
                 setIncomingState = {setDisplayJoinedGroups}
