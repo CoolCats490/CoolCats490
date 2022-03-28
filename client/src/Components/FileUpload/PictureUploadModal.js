@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
-import uploadFileToBlob, { isStorageConfigured } from "./azureBlob";
+import uploadFileToBlob  from "./azureBlob";
 import {CheckCircle} from "react-bootstrap-icons"
 import axios from "axios";
 

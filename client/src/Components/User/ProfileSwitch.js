@@ -1,4 +1,4 @@
-import React, {useEffect,useState,useRef} from "react";
+import React, {useEffect,useRef} from "react";
 import {Form} from "react-bootstrap";
 import axios from "axios";
 
@@ -31,9 +31,9 @@ const ProfileSwitch = ({incomingState,setIncomingState,incomingURL, updateField}
             .then(res =>{console.log(res.data)})
             .catch(err =>{console.log(err)}) 
         }
-    },[incomingState])
+    },[incomingState, incomingURL,updateField, url ])
 
-    //console.log(updateField)
+    console.log("updateField")
 
     return(
         <>
