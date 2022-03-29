@@ -272,7 +272,7 @@ router.route('/findGroups').post((req, res) => {
 
         })
     })
-    res.json(returnedGroupInfo);//.catch(err => res.status(400).json('Error: ' + err));
+    res.json(returnedGroupInfo);
 });
 
 
