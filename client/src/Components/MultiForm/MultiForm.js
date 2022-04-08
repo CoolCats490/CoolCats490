@@ -21,7 +21,7 @@ const MultiForm = () => {
   const [firstPageData, setFirstPageData] = useState("");
 
   return (
-    <Container>
+    <Container className='mt-5'>
       <MultiStepForm activeStep={active}>
         <Step label='Account Creation'>
           <RegisterPage1 

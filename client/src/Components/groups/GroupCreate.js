@@ -120,6 +120,7 @@ const GroupCreate = (props) => {
   return (
     <Container className="text-dark bg-light pb-4 row justify-content-center pt-4 groupWrapper">
       <h3 className="text-center">Create a new group</h3>
+      <hr/>
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3 formGroupTitle" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>

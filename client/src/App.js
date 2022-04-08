@@ -64,7 +64,7 @@ const App = () => {
 
             <Route path="*">
               <Redirect to="/" />
-            </Route>ß
+            </Route>
           </Switch>
         </Suspense>
       </div>

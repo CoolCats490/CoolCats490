@@ -55,6 +55,7 @@ export const AuthContextProvider = (props) => {
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
+    console.log("Logged out.")
   },[]);
 
   const loginHandler = (token, expirationTime) => {
