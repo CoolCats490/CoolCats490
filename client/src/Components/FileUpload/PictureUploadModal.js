@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
-import uploadFileToBlob  from "./azureBlob";
 import {CheckCircle} from "react-bootstrap-icons"
 import axios from "axios";
 
@@ -12,6 +11,7 @@ const PictureUploadModal = ({ _id,showUploadModal, setShowUploadModal }) => {
 
   const fileHandler = (event) => {
     setUserFile(event.target.files[0]);
+    
   };
 
   //Sets the correct backend server address depending
@@ -25,26 +25,48 @@ const PictureUploadModal = ({ _id,showUploadModal, setShowUploadModal }) => {
     //show uploading in the UI
     setUploadingFile(true);
 
-    //Upload to azure container
-    const blobUploaded = await uploadFileToBlob(userFile);
+    //Remove file from state
+    setUserFile(null);
+
+    let formData = new FormData();
+    formData.append("_id", _id);
+    formData.append("userFile", userFile);
+    
+
+
+    const data = {_id:_id, userFile:userFile}
+    console.log(data)
+
+    //////////////////////////////////
+    // axios.post(url + "/users/profilePic", 
+    //   //{_id:_id, userFile:userFile}
+    //   formData
+    // )
+    // .then(res =>{console.log(res.data)})
+    // .catch(err =>{console.log(err)}) 
+
+    try{
+      const res = await axios({
+        method: "post",
+        url: url + "/users/profilePic",
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      console.log(res.data)
+    }
+    catch(err){
+      console.log(err.response)
+    }
 
     //Show uploading done in UI
     setUploadingFile(false);
 
-    //Remove file from state
-    setUserFile(null);
-    //////////////////////////////////
-    axios.post(url + "/users/profilePic", 
-      {_id:_id,profilePic:blobUploaded}
-    )
-    .then(res =>{console.log(res.data)})
-    .catch(err =>{console.log(err)}) 
 
     ///////////////////////
 
     setUploadFinished(true)
 
-    console.log(blobUploaded);
+    //console.log(blobUploaded);
   };
 
   const handleClose = () => {
