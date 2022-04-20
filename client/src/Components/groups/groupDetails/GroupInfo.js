@@ -126,20 +126,20 @@ const GroupInfo = (props) => {
           />
         ))}
       </p>
-      {props.groups.createdBy && props.groups.createdBy[0].id === props.userInfo._id &&  (
-        <Button onClick={() => setShowUpdateModal(true)} className="pr-2">
+      { (props.groups.createdBy[0].id === props.userInfo._id || props.userInfo.isAdmin) &&  (
+        <Button onClick={() => setShowUpdateModal(true)} className="mx-1">
           Update
         </Button>
       )}
-      {props.groups.createdBy && isLogedIn && props.groups.createdBy[0].id === props.userInfo._id && (
-        <Button variant="danger" onClick={() => setShowDeleteModal(true)}>
+      { isLogedIn && (props.groups.createdBy[0].id === props.userInfo._id || props.userInfo.isAdmin) && (
+        <Button variant="danger" onClick={() => setShowDeleteModal(true)} className="mx-1">
           Delete
         </Button>
       )}
-      {props.groups.createdBy && isLogedIn &&
+      {isLogedIn &&
         props.groups.createdBy[0].id !== props.userInfo._id &&
         !props.groups.members.find(({ id }) => id === props.userInfo._id) && (
-          <Button onClick={joinBtnHandler}>Join Group</Button>
+          <Button onClick={joinBtnHandler} className="mx-1">Join Group</Button>
         )}{" "}
         {isLogedIn &&
         props.groups.createdBy[0].id !== props.userInfo._id &&

@@ -15,7 +15,8 @@ const userSchema =  new Schema({
     profilePic:{type:String},
     hideProfile:{type:Boolean},
     displayCreatedGroups:{type:Boolean},
-    displayJoinedGroups:{type:Boolean}
+    displayJoinedGroups:{type:Boolean},
+    isAdmin:{type:Boolean}
 
 });
 

@@ -27,7 +27,7 @@ const App = () => {
       <div className={styles.wrapper}>
         <Suspense fallback={<Spinner animation="border" variant="info" />}>
           <Switch>
-            <Redirect from="/groups" to="/groups/create" exact />
+            <Redirect from="/group" to="/groups/list" exact />
 
             {/* route to the welcome page and call welcome component */}
             <Route path="/" exact>

@@ -93,8 +93,8 @@ router.route('/top').get((req,res) => {
                 "groups": 1,
                 "length": { "$size": "$groups" }
             }},
-            { "$sort": { "length": -1 } },
-            { "$limit": 5 }
+            { "$sort": { "length": -1 } }
+            // ,{ "$limit": 10 }
         ]
     ).then(activity => res.json(activity)).catch(err => res.status(400).json('Error: ' + err));
 

@@ -118,9 +118,11 @@ const GroupDetails = (props) => {
         <Row className="pt-4">
           <Col>
             <Image
-              style={{ maxHeight: "300px", maxWidth: "500px" }}
-              src={defaultPic}
-              rounded
+              // style={{ maxHeight: "300px", maxWidth: "500px" }}
+              src={groups.groupPic||defaultPic}
+              alt="group image"  
+              rounded 
+              className="img-fluid img-max"
             />
           </Col>
           <Col>

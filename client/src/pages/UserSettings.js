@@ -6,6 +6,7 @@ import AuthContext from "../Store/auth-context";
 import ProfileSettings from "../Components/User/ProfileSettings";
 //
 import AccountSettings from "../Components/User/AccountSettings";
+import AddAdmin from "../Components/Admin/AddAdmin";
 
 const UserSettings = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -55,6 +56,9 @@ const UserSettings = () => {
         <Tab eventKey="user" title="Account Settings">
           <AccountSettings userInfo={userInfo} />
         </Tab>
+        {userInfo.isAdmin &&(<Tab eventKey="admin" title="Admin Settings">
+          <AddAdmin/>
+        </Tab>)}
       </Tabs>
     </Container>
   );

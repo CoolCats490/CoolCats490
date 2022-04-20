@@ -57,7 +57,7 @@ const MainHeader = () => {
           <Nav.Link as={Link} to="/welcome">
             Home
           </Nav.Link>
-          <Nav.Link as={Link} to="/groups">
+          <Nav.Link as={Link} to="/group">
             Groups
           </Nav.Link>
         </Nav>
