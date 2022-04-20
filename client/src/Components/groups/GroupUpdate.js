@@ -95,23 +95,6 @@ const GroupUpdate = (props) => {
     let oldTags = currentTags.map(e => e.value.toLowerCase());
     let newTags = enteredTag.map(e => e.value.toLowerCase());
 
-    
-
-    
-
-    //Putting data into a object
-    let groupData = {
-      name: enteredTitle,
-      type: enteredMType.value,
-      time: enteredDate,
-      description: enteredDescription,
-      tagsArray: enteredTag.map(e => e.value.toLowerCase()),
-      createdBy: props.createdBy,
-      members:props.members,
-      addedTags: newTags.filter(x => !oldTags.includes(x)),
-      removedTags: oldTags.filter(x => !newTags.includes(x))
-    };
-
     let formData = new FormData();
     formData.append("name", enteredTitle);
     formData.append("type", enteredMType.value);
