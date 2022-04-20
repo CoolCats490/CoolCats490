@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 //Styling
 import {
   Button,
-  Container,
   FormCheck,
   FormControl,
   InputGroup,
   ListGroup,
 } from "react-bootstrap";
 import { Calendar2Event, Grid, Tag } from "react-bootstrap-icons";
-//db connection
-import axios from "axios";
 import { Link } from "react-router-dom";
 
 const GroupSideOptions = ({
