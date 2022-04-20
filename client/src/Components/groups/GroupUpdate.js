@@ -54,6 +54,7 @@ const GroupUpdate = (props) => {
   const [enteredDate, setDate] = useState(datestring + "T" +  ts);
   const [enteredDescription, setDescription] = useState(props.description);
   const [enteredTag, setTag] = useState(currentTags);
+  const [userFile, setUserFile] = useState(null);
 
   //Entry Handlers
   const titleHandler = (event) => {
@@ -75,6 +76,10 @@ const GroupUpdate = (props) => {
     setTag( event );
   }
 
+  const fileHandler = (event) =>{
+    setUserFile(event.target.files[0])
+  }
+
   
   const submitHandler = (event) => {
     event.preventDefault();
@@ -90,6 +95,10 @@ const GroupUpdate = (props) => {
     let oldTags = currentTags.map(e => e.value.toLowerCase());
     let newTags = enteredTag.map(e => e.value.toLowerCase());
 
+    
+
+    
+
     //Putting data into a object
     let groupData = {
       name: enteredTitle,
@@ -103,9 +112,28 @@ const GroupUpdate = (props) => {
       removedTags: oldTags.filter(x => !newTags.includes(x))
     };
 
+    let formData = new FormData();
+    formData.append("name", enteredTitle);
+    formData.append("type", enteredMType.value);
+    formData.append("time", enteredDate);
+    formData.append("description", enteredDescription);
+    formData.append("tagsArray", JSON.stringify(enteredTag.map(e => e.value.toLowerCase())));
+    formData.append("createdBy", JSON.stringify(props.createdBy));
+    formData.append("members", JSON.stringify(props.members));
+    formData.append("addedTags", JSON.stringify(newTags.filter(x => !oldTags.includes(x))));
+    formData.append("removedTags", JSON.stringify(oldTags.filter(x => !newTags.includes(x))));
+    formData.append("userFile", userFile);
+
 
     try {
-      axios.post( url + '/activities/update/'+props.id, groupData).then(res=> console.log(res.data));
+      axios({
+        method: "post",
+        url: url + '/activities/update/'+props.id,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+        })
+      //axios.post( url + '/activities/update/'+props.id, groupData)
+      .then(res=> console.log(res.data));
     } catch (err) {
           console.log(err);
     }
@@ -167,6 +195,15 @@ const GroupUpdate = (props) => {
             //
           />
         </Form.Group> }
+
+        <Form.Group className="mb-3" controlId="formGroupTags">
+          <Form.Label>Group Picture</Form.Label>
+          <Form.Control
+            type="file"
+            onChange={fileHandler}
+            accept=".jpg,.jpeg,.png"
+          />
+        </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGroupDate">
           <Form.Label>Date</Form.Label>

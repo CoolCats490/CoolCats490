@@ -57,6 +57,23 @@ router.route("/checkEmail").post((req, res)=>{
   )
 })
 
+//Check if email exists
+router.post("/addAdmin", (req, res)=>{
+  //Check if a user has the same email
+  User.updateOne(
+    {username: req.body.username},
+    {isAdmin: true},
+    function (err) {
+      if (err) {
+        res.status(400).send("Error Adding Addmin");
+        console.log(err);
+      }else{
+        res.status(200).send("Admin Added.") 
+      }
+    }
+  )
+})
+
 // This route is used to send a post request 'http//:localhost/users/add' which is used to add a user
 // then finally save it to the database as json file and print the message "User added!"
 router.route("/add").post(async (req, res) => {
@@ -67,6 +84,7 @@ router.route("/add").post(async (req, res) => {
     const age = req.body.age;
     const interests = req.body.interests;
     const email = String(req.body.email);
+    const isAdmin = false;
 
     //Check if username exists
     User.findOne(
@@ -94,6 +112,7 @@ router.route("/add").post(async (req, res) => {
       email,
       firstname,
       lastname,
+      isAdmin
     });
 
     //send intrests to be checked/inserted into the database
@@ -189,6 +208,7 @@ router.route("/me").get(auth, async (req, res) => {
       displayJoinedGroups: user.displayJoinedGroups,
       profilePic: user.profilePic,
       profileBio: user.profileBio,
+      isAdmin: user.isAdmin
     });
   } catch (error) {
     res.send({ message: "Error Fetching User" });
@@ -267,7 +287,6 @@ router.route("/displayJoinedGroups").post((req, res) => {
 
 router.post( "/profilePic", uploadStrategy, async (req, res) => {
 
-  console.log(req.body)
   let azureURL = null;
   const blobName = `Squad-Seek-Profile-Pic-(${req.body._id})-(${uuidv4()}).jpg`;
   const options = { blobHTTPHeaders: { blobContentType: "image/jpg" } };
@@ -283,7 +302,6 @@ router.post( "/profilePic", uploadStrategy, async (req, res) => {
             //set to the url of azure pic
             azureURL = `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${containerName}/${blobName}`;
 
-            console.log(azureURL)
             //Update the user's profile pic to the azure link
             User.findByIdAndUpdate(
               { _id: req.body._id },
@@ -294,7 +312,6 @@ router.post( "/profilePic", uploadStrategy, async (req, res) => {
                   res.send(err);
                 } else {
                   res.status(200).json({ message: "Picture Uploaded" });
-                  console.log(data)
                 }
               }
             );

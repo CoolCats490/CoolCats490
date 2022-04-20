@@ -1,3 +1,8 @@
+////////////////IMPORTS////////////////
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv')
+}
+
 // first we need to create a router
 const router = require('express').Router();
 
@@ -9,6 +14,19 @@ let Comment = require('../models/comments.model');
 
 //We need a tag variable to use the tag model
 const Tag = require("../models/tags.model");
+
+//Azure imports
+const { BlockBlobClient } = require("@azure/storage-blob");
+const containerName = `squadseekpics`;
+
+//Multer/into-stream for handling form files
+const getStream = require('into-stream');
+const multer  = require('multer');
+const inMemoryStorage = multer.memoryStorage();
+const uploadStrategy = multer({ storage: inMemoryStorage }).single('userFile');
+const { v4:uuidv4 } = require('uuid');
+
+////////////////IMPORTS End Here////////////////
 
 //now we need to specify that if we recieve a '/get' request from the server,
 // then what are we gonna do with the database
@@ -133,20 +151,24 @@ router.route('/joinedGroups').post((req, res) => {
 
 // when used url http://localhost:5000/activities/update/id_of_the_activity
 // this will update the specific activity linked with that ID
-router.route('/update/:id').post((req, res) => {
+router.post('/update/:id', uploadStrategy, async (req, res) => {
+
     let activityID = req.params.id;
-    let addedTags = req.body.addedTags;
-    let removedTags = req.body.removedTags;
+    let addedTags = JSON.parse(req.body.addedTags);
+    let removedTags = JSON.parse(req.body.removedTags);
 
     let activityData = {
         name: String(req.body.name),
         time: req.body.time,
         type: String(req.body.type),
         description: String(req.body.description),
-        tagsArray: req.body.tagsArray,
-        createdBy: req.body.createdBy,
-        members: req.body.members
+        tagsArray: JSON.parse(req.body.tagsArray),
+        createdBy: JSON.parse(req.body.createdBy),
+        members: JSON.parse(req.body.members)
     }
+
+    //Calls a function that uploads the group pic to azure container
+    const azurePic = await groupPicUpload(req.file.buffer, req.params.id);
 
     Activity.findById(activityID)
     .then(activity => {
@@ -154,7 +176,8 @@ router.route('/update/:id').post((req, res) => {
         activity.time = req.body.time;
         activity.type = String(req.body.type);
         activity.description = String(req.body.description);
-        activity.tagsArray = req.body.tagsArray;
+        activity.tagsArray = JSON.parse(req.body.tagsArray);
+        activity.groupPic = azurePic;
 
         activity.save().then(()=> res.json('Activity updated!')).catch(err => res.status(400).json('Error: ' + err));
     }).catch(err => res.status(400).json('Error: ' + err));
@@ -260,6 +283,22 @@ router.route('/findGroups').post((req, res) => {
     res.json(returnedGroupInfo);//.catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/searchGroups').post((req, res) => {
+
+    Activity.find({
+        name: {$regex: new RegExp(req.body.query),$options: 'i'}
+    },
+
+        function(err, data) {
+            if(err){
+                res.status(400).json({message:"Error finding groups"})
+            }else{
+                res.status(200).send(data);
+            }
+        }
+    )
+})
+
 
 const newActivityTags = (activityID, activityData, addedTags) =>{
 
@@ -311,6 +350,26 @@ const removeActivityTag = (removedTags, activityID) => {
             }
         )
     })
+}
+
+const groupPicUpload = async (file, groupId)=>{
+    let azureURL = null;
+    const blobName = `Squad-Seek-Group-Pic-(${groupId})-(${uuidv4()}).jpg`;
+    const options = { blobHTTPHeaders: { blobContentType: "image/jpg" } };
+    const blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,containerName,blobName);
+
+    const stream = getStream(file);
+    const streamLength = file.length;
+
+    blobService.uploadStream(stream, streamLength,5,options )
+    .catch((err)=>{
+        if(err) {
+            console.log(err);
+        }
+    })
+    azureURL = `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${containerName}/${blobName}`;
+
+    return azureURL;
 }
 
 // and we export the module via router

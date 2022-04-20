@@ -1,0 +1,88 @@
+
+.wrapper {
+    /* width: calc(100% - 250px); */
+    
+    transition: all 0.3s;
+    position: absolute;
+    top: 56px;
+    /* right: 200px; */
+
+    padding: 20px;
+    /* min-height: calc(100vh - 3px); */
+    display: flex;
+    flex-grow: 1;
+}
+
+
+.searchBar{
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 10px;
+
+    margin-top: 10px;
+    /* margin-left: 20px; */
+
+    margin-right: 22px;
+    /* padding-right: 0px; */
+
+    max-width: 22000px;
+}
+
+body{
+    min-height: 100vh;
+    /* background-color: #212529; */
+    /* background-color: #212529;*/
+}
+
+.sideBar{
+    max-width: 260px;
+    margin-left: 2px;
+    /* min-width: 200px; */
+}
+
+.groupItems{
+    /* width: calc(100% - 250px); */
+    /* left: 230px; */
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 22px;
+    /* display: flex; */
+    /* flex-grow: 1; */
+    /* max-height: 500px; */
+}
+.searchField{
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-left: 10px;
+}
+
+.searchBTN{
+    padding-top: 10px;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+    max-width: 200px;
+
+   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#499bea+0,207ce5+100;Blue+3d+%237 */
+    background: #499bea; /* Old browsers */
+    background: -moz-linear-gradient(left,  #499bea 0%, #207ce5 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  #499bea 0%,#207ce5 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  #499bea 0%,#207ce5 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499bea', endColorstr='#207ce5',GradientType=1 ); /* IE6-9 */
+
+}
+
+.createBTN{
+    padding-top: 10px;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+
+   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b4ddb4+0,83c783+17,52b152+33,008a00+67,005700+83,002400+100;Green+3D+%231 */
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#006e2e+0,006e2e+100;Green+Flat+%233 */
+background: #006e2e; /* Old browsers */
+background: -moz-linear-gradient(left,  #006e2e 0%, #006e2e 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left,  #006e2e 0%,#006e2e 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right,  #006e2e 0%,#006e2e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#006e2e', endColorstr='#006e2e',GradientType=1 ); /* IE6-9 */
+
+}

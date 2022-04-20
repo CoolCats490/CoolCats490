@@ -1,9 +1,17 @@
 //React hooks
 import { useEffect, useState, useContext } from "react";
 //Styling
-import { Button, Card, Col, Container, ListGroup, ListGroupItem, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  ListGroup,
+  ListGroupItem,
+  Row,
+} from "react-bootstrap";
 import "./Welcome.css";
-import { ArrowRight, PeopleFill, Tags } from 'react-bootstrap-icons';
+import { ArrowRight, PeopleFill, Tags } from "react-bootstrap-icons";
 //links
 import { Link } from "react-router-dom";
 //database
@@ -12,52 +20,58 @@ import axios from "axios";
 import AuthContext from "../Store/auth-context";
 
 const Welcome = () => {
+  
+  //The number of top tags to diplay
+  const tagLimit = 5;
 
-    //Sets the correct backend server address depending
-    //on if in dev or production mode
-    const url = process.env.NODE_ENV === "development" ? process.env.REACT_APP_URL_DEVELOPMENT : "";
+  //Sets the correct backend server address depending
+  //on if in dev or production mode
+  const url =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_URL_DEVELOPMENT
+      : "";
 
-    //useState to store top/new groups and tags
-    const [topGroups, setTopGroups] = useState(null)
-    const [latestGroups, setLatestGroups] = useState(null)
-    const [topTags, setTopTags] = useState(null)
+  //useState to store top/new groups and tags
+  const [topGroups, setTopGroups] = useState(null);
+  const [latestGroups, setLatestGroups] = useState(null);
+  const [topTags, setTopTags] = useState(null);
 
-    //token stuff
-    const authCtx = useContext(AuthContext);
-    const isLogedIn = authCtx.isLoggedIn;
+  //token stuff
+  const authCtx = useContext(AuthContext);
+  const isLogedIn = authCtx.isLoggedIn;
 
-    //useEffect hook will load groups from data base when component is loaded
+  //useEffect hook will load groups from data base when component is loaded
   useEffect(() => {
     //async call to database
     const fetchTopGroups = async () => {
       try {
-        const response = await axios( url + "/activities/top");
+        const response = await axios(url + "/activities/top");
         //store groups in groups object
-        setTopGroups(response.data)
+        setTopGroups(response.data);
       } catch (err) {
         console.log(err);
       }
     };
 
     const fetchLatestGroups = async () => {
-        try {
-          const response = await axios( url + "/activities/latest" );
-          //store groups in groups object
-          setLatestGroups(response.data)
-        } catch (err) {
-          console.log(err);
-        }
-      };
+      try {
+        const response = await axios(url + "/activities/latest");
+        //store groups in groups object
+        setLatestGroups(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-      const fetchTopTags = async () => {
-        try {
-          const response = await axios(url + "/tags/top");
-          //store groups in groups object
-          setTopTags(response.data)
-        } catch (err) {
-          console.log(err);
-        }
-      };
+    const fetchTopTags = async () => {
+      try {
+        const response = await axios(url + "/tags/top");
+        //store groups in groups object
+        setTopTags(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
     //Call async function
     fetchTopGroups();
@@ -66,7 +80,7 @@ const Welcome = () => {
   }, [url]);
 
   return (
-    <Container fluid >
+    <Container fluid>
       <header className="bg-dark py-5">
         <Container className="px-5">
           <Row className="gx-5 justify-content-center">
@@ -80,20 +94,20 @@ const Welcome = () => {
                   similar interests for activities that are both offline or
                   online!
                 </p>
-                {!isLogedIn &&(<div className="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                  <Link to="/register">
-                    <Button className="btn btn-primary btn-lg px-4 me-sm-3">
-                      Register
-                    </Button>
-                  </Link>
-                  <Link to="/login">
-                    <Button
-                      className="bg-dark btn-outline-light btn-lg px-4"
-                    >
-                      Login
-                    </Button>
-                  </Link>
-                </div>)}
+                {!isLogedIn && (
+                  <div className="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                    <Link to="/register">
+                      <Button className="btn btn-primary btn-lg px-4 me-sm-3">
+                        Register
+                      </Button>
+                    </Link>
+                    <Link to="/login">
+                      <Button className="bg-dark btn-outline-light btn-lg px-4">
+                        Login
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </div>
             </Col>
           </Row>
@@ -105,13 +119,12 @@ const Welcome = () => {
           <Row className="gx-5">
             <Col className="lg-4 mb-5 mb-lg-0">
               <div className="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-                <PeopleFill/>
+                <PeopleFill />
               </div>
               <h2 className="h4 fw-bolder">Groups</h2>
               <p>
-              Socialize and have fun with new people
-               while doing your favorite activities in person
-               or online.
+                Socialize and have fun with new people while doing your favorite
+                activities in person or online.
               </p>
               <Link className="text-decoration-none" to="/groups/list">
                 View Groups
@@ -120,12 +133,12 @@ const Welcome = () => {
             </Col>
             <Col className="lg-4 mb-5 mb-lg-0">
               <div className="feature bg-primary bg-gradient text-white rounded-3 mb-3">
-                <Tags/>
+                <Tags />
               </div>
               <h2 className="h4 fw-bolder">Tags</h2>
               <p>
-                Find groups with new or old friends based
-                on various tags that interests you. 
+                Find groups with new or old friends based on various tags that
+                interests you.
               </p>
               <Link className="text-decoration-none" to="/groups/tags">
                 View Tags
@@ -145,19 +158,23 @@ const Welcome = () => {
             <Col className="lg-6 col-xl-4">
               <Card className="card mb-5 mb-xl-0">
                 <Card.Body className="p-5">
-                <div className="mb-3">
+                  <div className="mb-3">
                     <h3 className="fw-bold text-center">Top Groups</h3>
                   </div>
                   <ListGroup className="text-center">
-                      {topGroups && topGroups.map(e =>(
-                          <ListGroupItem key={e._id}>
-                             { e.name}
-                          </ListGroupItem>
+                    {topGroups &&
+                      topGroups.map((e) => (
+                        <ListGroupItem key={e._id}>{e.name}</ListGroupItem>
                       ))}
                   </ListGroup>
                   <div className="d-grid">
                     <Button className="">
-                        <Link to="/groups/list" className="text-light text-decoration-none">View Groups</Link>
+                      <Link
+                        to="/groups/list"
+                        className="text-light text-decoration-none"
+                      >
+                        View Groups
+                      </Link>
                     </Button>
                   </div>
                 </Card.Body>
@@ -167,22 +184,24 @@ const Welcome = () => {
             <Col className="lg-6 col-xl-4">
               <Card className="mb-5 mb-xl-0">
                 <Card.Body className="p-5">
-                <div className="mb-3">
+                  <div className="mb-3">
                     <h3 className="fw-bold text-center">Latest Groups</h3>
                   </div>
                   <ListGroup className="text-center">
-                      {latestGroups && latestGroups.map(e =>(
-                          <ListGroupItem key={e._id}>
-                             { e.name}
-                          </ListGroupItem>
+                    {latestGroups &&
+                      latestGroups.map((e) => (
+                        <ListGroupItem key={e._id}>{e.name}</ListGroupItem>
                       ))}
                   </ListGroup>
                   <div className="d-grid">
-                  
-                  <Button className="">
-                        <Link to="/groups/list" className="text-light text-decoration-none">View Groups</Link>
+                    <Button className="">
+                      <Link
+                        to="/groups/list"
+                        className="text-light text-decoration-none"
+                      >
+                        View Groups
+                      </Link>
                     </Button>
-                    
                   </div>
                 </Card.Body>
               </Card>
@@ -191,20 +210,23 @@ const Welcome = () => {
             <Col className="lg-6 col-xl-4 text-dark">
               <Card>
                 <Card.Body className="p-5">
-                  
-                <div className="mb-3">
+                  <div className="mb-3">
                     <h3 className="fw-bold text-center">Top Tags</h3>
                   </div>
                   <ListGroup className="text-center">
-                      {topTags && topTags.map(e =>(
-                          <ListGroupItem key={e._id}>
-                             { e.tagName}
-                          </ListGroupItem>
+                    {topTags &&
+                      topTags.slice(0, tagLimit).map((e) => (
+                        <ListGroupItem key={e._id}>{e.tagName}</ListGroupItem>
                       ))}
                   </ListGroup>
                   <div className="d-grid">
-                     <Button className="">
-                        <Link to="/groups/tags" className="text-light text-decoration-none">View Tags</Link>
+                    <Button className="">
+                      <Link
+                        to="/groups/tags"
+                        className="text-light text-decoration-none"
+                      >
+                        View Tags
+                      </Link>
                     </Button>
                   </div>
                 </Card.Body>

@@ -14,6 +14,7 @@ const activitySchema = new Schema({
     type: {type:String},
     description: {type:String},
     tagsArray: [{type: String}],
+    groupPic:{type:String},
     members: [
         {
             id:{type:String},
