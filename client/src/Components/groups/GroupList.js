@@ -6,7 +6,6 @@ import GrouptListItem from "./GroupListItem";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import GroupSideOptions from "./GroupSideOptions";
 import "./CSS/GroupList.css";
-import { Link } from "react-router-dom";
 
 const GroupList = () => {
   //Sets the correct backend server address depending

@@ -123,12 +123,13 @@ const GroupSideOptions = ({
 
   return (
     <>
-    <Link to="/groups/create">
+    
+      <h5 className="mt-3">
+      <Link to="/groups/create">
           <Button className="mx-1 bg-success border-0 createBTN shadow">
             Start New Group
           </Button>
         </Link>
-      <h5 className="mt-3">
         <Grid /> Group Type
       </h5>
       {selectedType !== 1 && (
