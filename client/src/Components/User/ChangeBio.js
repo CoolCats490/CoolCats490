@@ -25,12 +25,13 @@ const params = useParams();
 useEffect(() => {
   const fetchbio = async () => {
     try {
-      let response = await axios(url + "/users/me", {
-        _id: userInfo._id,
-        current: params.currentbio,
-      });
+      let response = await axios(url + "/users/me");
+      let userdata = {
+        _id:userInfo._id,
+        bio:userInfo.currentbio,
+      }
       //store groups in groups object
-      setCurrentBio(response.data.currentbio);
+      setCurrentBio(userdata.userInfo.currentbio);
       //setLoading(true);
     } catch (err) {
       console.log(err);
