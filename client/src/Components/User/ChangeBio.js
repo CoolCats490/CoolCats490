@@ -1,9 +1,11 @@
-import React, { useHistory, useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import axios from "axios";
+import {useParams} from "react-router-dom";
 
 const ChangeBio = ({ userInfo, showForm }) => {
   const [profileBio, setProfileBio] = useState("");
+  const [currentbio,setCurrentBio] = useState("");
   const [bioUpdated, setBioUpdated] = useState(false);
   const [failedToUpdate, setFailedToUpdate] = useState(false);
   
@@ -19,13 +21,36 @@ const ChangeBio = ({ userInfo, showForm }) => {
     setProfileBio(e.target.value);
   };
 
+const params = useParams();
+useEffect(() => {
+  const fetchbio = async () => {
+    try {
+      let response = await axios(url + "/users/me", {
+        _id: userInfo._id,
+        current: params.currentbio,
+      });
+      //store groups in groups object
+      setCurrentBio(response.data);
+      //setLoading(true);
+    } catch (err) {
+      console.log(err);
+      //setLoading(false);
+    }
+  };
 
+
+  fetchbio();
+
+  //setLoading(false);
+}, [params.tagName, url]);
 
   const closeHandler = () => {
     setFailedToUpdate(false);
     setBioUpdated(false);
     showForm(false);
   };
+
+
 
   const submitHandler = () => {
     axios
@@ -61,7 +86,7 @@ const ChangeBio = ({ userInfo, showForm }) => {
         <Form className="w-75">
           <Form.Control
             as="textarea"
-            placeholder= " "
+            placeholder= {currentbio}
             onChange={bioHandler}
           />
           <Button className="mt-2" onClick={submitHandler}>
