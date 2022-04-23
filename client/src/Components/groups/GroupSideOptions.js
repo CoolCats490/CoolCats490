@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
 //Styling
 import {
   Button,
@@ -10,7 +8,6 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import { Calendar2Event, Grid, Tag } from "react-bootstrap-icons";
-import { Link } from "react-router-dom";
 
 const GroupSideOptions = ({
   topTags,
@@ -123,13 +120,7 @@ const GroupSideOptions = ({
 
   return (
     <>
-    
       <h5 className="mt-3">
-      <Link to="/groups/create">
-          <Button className="mx-1 bg-success border-0 createBTN shadow">
-            Start New Group
-          </Button>
-        </Link>
         <Grid /> Group Type
       </h5>
       {selectedType !== 1 && (
