@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useHistory, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import axios from "axios";
 
@@ -6,6 +6,7 @@ const ChangeBio = ({ userInfo, showForm }) => {
   const [profileBio, setProfileBio] = useState("");
   const [bioUpdated, setBioUpdated] = useState(false);
   const [failedToUpdate, setFailedToUpdate] = useState(false);
+  
 
   //Sets the correct backend server address depending
   //on if in dev or production mode
@@ -17,6 +18,8 @@ const ChangeBio = ({ userInfo, showForm }) => {
   const bioHandler = (e) => {
     setProfileBio(e.target.value);
   };
+
+
 
   const closeHandler = () => {
     setFailedToUpdate(false);
@@ -58,7 +61,7 @@ const ChangeBio = ({ userInfo, showForm }) => {
         <Form className="w-75">
           <Form.Control
             as="textarea"
-            placeholder="Enter Bio Here"
+            placeholder= " "
             onChange={bioHandler}
           />
           <Button className="mt-2" onClick={submitHandler}>
