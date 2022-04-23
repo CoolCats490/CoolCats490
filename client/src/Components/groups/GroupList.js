@@ -94,11 +94,6 @@ const GroupList = () => {
   return (
     <Container className="">
       <Container className="bg-light rounded searchBar mx-2 px-5">
-        <Link to="/groups/create">
-          <Button className="mx-1 bg-success border-0 createBTN shadow">
-            Start New Group
-          </Button>
-        </Link>
         <input
           type="text"
           placeholder=" Search for a group title"
