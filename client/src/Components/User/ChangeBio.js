@@ -30,7 +30,7 @@ useEffect(() => {
         current: params.currentbio,
       });
       //store groups in groups object
-      setCurrentBio(response.data);
+      setCurrentBio(response.data.currentbio);
       //setLoading(true);
     } catch (err) {
       console.log(err);
