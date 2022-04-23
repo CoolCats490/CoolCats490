@@ -42,7 +42,7 @@ useEffect(() => {
   fetchbio();
 
   //setLoading(false);
-}, [params.tagName, url]);
+}, [params.currentbio, url]);
 
   const closeHandler = () => {
     setFailedToUpdate(false);
