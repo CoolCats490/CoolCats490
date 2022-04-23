@@ -86,7 +86,7 @@ useEffect(() => {
         <Form className="w-75">
           <Form.Control
             as="textarea"
-            placeholder= {currentbio}
+            placeholder= {currentbio.toString()}
             onChange={bioHandler}
           />
           <Button className="mt-2" onClick={submitHandler}>
