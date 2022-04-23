@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext ,useState, useEffect } from "react";
 //
 import axios from "axios";
 import GrouptListItem from "./GroupListItem";
 //Styling
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
 import GroupSideOptions from "./GroupSideOptions";
 import "./CSS/GroupList.css";
 import { Link } from "react-router-dom";
+//
+import AuthContext from "../../Store/auth-context";
 
 const GroupList = () => {
   //Sets the correct backend server address depending
@@ -16,12 +18,18 @@ const GroupList = () => {
       ? process.env.REACT_APP_URL_DEVELOPMENT
       : process.env.REACT_APP_URL_PRODUCTION;
 
+  //token stuff
+  const authCtx = useContext(AuthContext);
+  const isLogedIn = authCtx.isLoggedIn;
+
   //groups object and setter here
   const [groups, setGroups] = useState([]);
   const [topTags, setTopTags] = useState([]);
   const [selectedType, setSelectedType] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   //useEffect hook will load groups from data base when component is loaded
   useEffect(() => {
@@ -52,17 +60,29 @@ const GroupList = () => {
     fetchGroups();
   }, [url]);
 
+  //returns groups based on filter selections
   const filterGroups = groups
+    //filters groups based on type
     .filter((group) => {
       if (selectedType.length !== 0) {
         return group.type === selectedType;
       } else {
         return group;
       }
-    })
+    }) //filters groups on tags
     .filter((group) => {
       if (selectedTags.length !== 0) {
         return group.tagsArray.some((e) => selectedTags.includes(e));
+      } else {
+        return group;
+      }
+    }) //filter groups based on dates selected
+    .filter((group) => {
+      if (startDate && endDate) {
+        return (
+          new Date(startDate).getTime() <= new Date(group.time).getTime() &&
+          new Date(group.time).getTime() <= new Date(endDate).getTime()
+        );
       } else {
         return group;
       }
@@ -88,30 +108,33 @@ const GroupList = () => {
   };
 
   if (groups) {
-    //console.log(groups)
+    //console.log(groups )
   }
+  // console.log(new Date(startDate).getTime());
+  // console.log(new Date(endDate).getTime());
 
   return (
     <Container className="">
-      <Container className="bg-light rounded searchBar mx-2 px-5">
+      <Container className="bg-light rounded searchBar mx-2 px-5 row mt-3">
         <input
           type="text"
           placeholder=" Search for a group title"
-          className="w-75 rounded searchField"
+          className="rounded  col"
           onChange={queryHandler}
           onKeyDown={keyDownHandler}
         />
         <Button
-          className="mx-1 searchBTN border-0 shadow"
+          className="mx-1 searchBTN border-0 shadow col-1"
           onClick={searchHandler}
         >
           Search
         </Button>
-        <Link to="/groups/create">
-          <Button className="mx-1 bg-success border-0 createBTN shadow">
-            Start New Group
+
+        {isLogedIn &&(
+          <Button className="mx-1 bg-success border-0  shadow createBTN col-2 ">
+          <Link to="/groups/create" className="text-light text-decoration-none"> Create New Group</Link>
           </Button>
-        </Link>
+       )}
       </Container>
 
       <Row className="rowContainer">
@@ -124,6 +147,8 @@ const GroupList = () => {
               setSelectedType={setSelectedType}
               selectedTags={selectedTags}
               setSelectedTags={setSelectedTags}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
             />
           </section>
         </Col>
@@ -132,7 +157,7 @@ const GroupList = () => {
           {groups.length === 0 && (
             <h4 className="text-center mt-5">No groups Found</h4>
           )}
-          <Container className="bg-light mt-3 rounded groupItems px-4">
+          <Container className="bg-light mt-3 rounded groupItems px-4 mb-3 ">
             {/* map each group to a group item card */}
             {filterGroups.map((group) => (
               <GrouptListItem

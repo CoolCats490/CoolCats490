@@ -13,21 +13,6 @@
     flex-grow: 1;
 }
 
-
-.searchBar{
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 10px;
-
-    margin-top: 10px;
-    /* margin-left: 20px; */
-
-    margin-right: 22px;
-    /* padding-right: 0px; */
-
-    max-width: 22000px;
-}
-
 body{
     min-height: 100vh;
     /* background-color: #212529; */
@@ -51,17 +36,36 @@ body{
     /* flex-grow: 1; */
     /* max-height: 500px; */
 }
+
+.searchBar{
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 10px;
+
+    margin-top: 30px;
+    /* margin-left: 20px; */
+
+    margin-right: 22px;
+    /* padding-right: 0px; */
+
+    /* max-width: 100%; */
+}
+
 .searchField{
-    padding-top: 8px;
-    padding-bottom: 8px;
-    margin-left: 10px;
+    /* padding-top: 8px;
+    padding-bottom: 8px; */
+    max-width: 1110px;
+    min-width: 67%;
+}
+
+.form-group .form-control {
+    margin: 0;
 }
 
 .searchBTN{
-    padding-top: 10px;
-    padding-bottom: 8px;
-    margin-bottom: 4px;
+
     max-width: 200px;
+    width: 100px;
 
    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#499bea+0,207ce5+100;Blue+3d+%237 */
     background: #499bea; /* Old browsers */
@@ -73,9 +77,6 @@ body{
 }
 
 .createBTN{
-    padding-top: 10px;
-    padding-bottom: 8px;
-    margin-bottom: 4px;
 
    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b4ddb4+0,83c783+17,52b152+33,008a00+67,005700+83,002400+100;Green+3D+%231 */
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#006e2e+0,006e2e+100;Green+Flat+%233 */
