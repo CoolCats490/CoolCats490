@@ -6,11 +6,10 @@ import { Badge, Card, Col, Container, Row } from "react-bootstrap";
 //
 //import AuthContext from "../Store/auth-context";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useHistory,useParams } from "react-router-dom";
 //pic
 import defaultPic from "./Media/group-defualt.jpg";
 //
-import { useHistory } from "react-router-dom";
 import Button from "@restart/ui/esm/Button";
 
 const TagDetails = () => {
@@ -33,6 +32,7 @@ const TagDetails = () => {
 
   //Used to link to group page
   const history = useHistory();
+  
 
   //useEffect hook will load groups from data base when component is loaded
   useEffect(() => {

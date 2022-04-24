@@ -8,7 +8,6 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import { Calendar2Event, Grid, Tag } from "react-bootstrap-icons";
-import { Link } from "react-router-dom";
 
 const GroupSideOptions = ({
   topTags,
