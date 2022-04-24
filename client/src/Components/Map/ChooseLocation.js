@@ -16,7 +16,7 @@ const libraries = ["localContext", "places"];
 const ChooseLocation = (props) => {
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyA2rBydvPCX6xYShPG1hvuMafzBYaOqRos",
+        googleMapsApiKey: process.env.REACT_APP_GOOG_API,
         libraries
     })
     
