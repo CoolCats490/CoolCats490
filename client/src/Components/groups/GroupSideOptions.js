@@ -16,12 +16,14 @@ const GroupSideOptions = ({
   setSelectedType,
   selectedTags,
   setSelectedTags,
+  setStartDate,
+  setEndDate
 }) => {
   const [showTags, setShowTags] = useState(false);
   const [tagsAmount, setTagsAmount] = useState(5);
   const [tagQuery, setTagQuery] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setEnteredStartDate] = useState("");
+  const [endDate, setEnteredEndDate] = useState("");
 
   const moreTagsHandler = () => {
     //change the showTags state to true
@@ -109,34 +111,45 @@ const GroupSideOptions = ({
   };
 
   const dateStartHandler = (e) => {
-    setStartDate(new Date(e.target.value));
-    console.log(startDate);
+    setEnteredStartDate(e.target.value);
   };
 
   const dateEndHandler = (e) => {
-    setEndDate(new Date(e.target.value));
-    console.log(endDate);
+    setEnteredEndDate(e.target.value);
   };
+
+  const dateHandler = () =>{
+
+    setStartDate(startDate);
+    setEndDate(endDate);
+  }
+
+  const clearDatesHandler = () =>{
+    setEnteredStartDate("");
+    setEnteredEndDate("");
+  }
 
   return (
     <>
-      <h5 className="mt-3">
+      <h5 className="mt-3 pt-2">
         <Grid /> Group Type
       </h5>
-      {selectedType !== 1 && (
+      {selectedType !== "1" && (
         <FormCheck
           type="checkbox"
           label="In Person"
           onChange={inPersonHandler}
         />
       )}
-      {selectedType !== 0 && (
+      {selectedType !== "0" && (
         <FormCheck type="checkbox" label="Online" onChange={onlineHandler} />
       )}
-      {selectedType === 0 && (
+      {selectedType === "0" && (
+        <Link to="/groups/map">
         <Button className="px-5 pt-2 pb-2 mx-3">
           <span>View Map</span>
         </Button>
+        </Link>
       )}
       <hr />
 
@@ -229,13 +242,26 @@ const GroupSideOptions = ({
       </h5>
       <label>Start:</label>
       <InputGroup>
-        <FormControl type="date" onChange={dateStartHandler} />
+        <FormControl type="date" onChange={dateStartHandler} value={startDate}/>
       </InputGroup>
       <label>End:</label>
       <InputGroup>
-        <FormControl type="date" onChange={dateEndHandler} />
+        <FormControl type="date" onChange={dateEndHandler} value={endDate}/>
       </InputGroup>
+      <Button
+            className="px-0 pt-0 pb-0 bg-info border-0 mt-2 mx-2"
+            onClick={dateHandler}
+          >
+            Filter Dates
+          </Button>
+          {(startDate !== "" || endDate !== "") && (<Button
+            className="px-0 pt-0 pb-0 bg-info border-0 mt-2 mx-2"
+            onClick={clearDatesHandler}
+          >
+            Clear Dates
+          </Button>)}
       <hr />
+      
       <Link to="/groups/calendar">
         <Button className="mb-4 mx-3">View Calendar</Button>
       </Link>

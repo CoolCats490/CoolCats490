@@ -41,27 +41,47 @@ router.route('/').get((req,res) => {
 // then finally save it to the database as json file and print the message "User added!"
 
 
-router.route('/add').post((req, res) => {
-    const name = String(req.body.name);
-    const time = req.body.time;
-    const type = String(req.body.type);
-    const description = String(req.body.description);
-    const tagsArray = req.body.tagsArray;
-    const createdBy = req.body.createdBy;
-    const members = req.body.members;
+router.post('/add', uploadStrategy, async (req, res) => {
+
+    let azurePic = null;
 
     const newActivity = new Activity({
-        name,
-        time,
-        type,
-        description,
-        tagsArray,
-        createdBy,
-        members
+        name:req.body.name,
+        time:req.body.time,
+        type:String(req.body.type),
+        description:String(req.body.description),
+        tagsArray:JSON.parse(req.body.tagsArray),
+        createdBy:JSON.parse(req.body.createdBy),
+        members:JSON.parse(req.body.members),
+        address:req.body.address,
+        location:JSON.parse(req.body.location)
     });
 
-    newActivity.save().then(()=> res.json('Activity added!')).catch(err => res.status(400).json('Error: ' + err));
+    //save the activity to the activities collection
+    newActivity.save()
+    .then((e)=> res.json({message:'Activity added!', activityID:newActivity._id}))
+    .catch(err => res.status(400).json('Error: ' + err));
 
+
+    //Calls a function that uploads the group pic to azure container
+    if(req.file){
+        azurePic = await groupPicUpload(req.file.buffer, newActivity._id);
+
+        //Save pic to activity
+        Activity.updateOne(
+            {_id: newActivity._id},
+            {groupPic: azurePic},
+            function(err,data){
+                if(err){
+                    console.log(err)
+                }
+            }
+        )
+    }
+
+    
+
+    //Add a new entry to the comments collection
     const newComment = new Comment({
         activityID: newActivity._id,
         activityName: newActivity.name
@@ -71,8 +91,8 @@ router.route('/add').post((req, res) => {
     newComment.save().catch(err => res.status(400).json('Error: ' + err));
 
     //send tags to be checked by the database
-    if(tagsArray)
-        newActivityTags(newActivity._id ,newActivity);
+    if(req.body.tagsArray)
+        newActivityTags(newActivity._id ,newActivity, newActivity.tagsArray);
 
 });
 
@@ -156,6 +176,7 @@ router.post('/update/:id', uploadStrategy, async (req, res) => {
     let activityID = req.params.id;
     let addedTags = JSON.parse(req.body.addedTags);
     let removedTags = JSON.parse(req.body.removedTags);
+    let azurePic = null;
 
     let activityData = {
         name: String(req.body.name),
@@ -168,7 +189,9 @@ router.post('/update/:id', uploadStrategy, async (req, res) => {
     }
 
     //Calls a function that uploads the group pic to azure container
-    const azurePic = await groupPicUpload(req.file.buffer, req.params.id);
+    if(req.file){
+        azurePic = await groupPicUpload(req.file.buffer, req.params.id);
+    }
 
     Activity.findById(activityID)
     .then(activity => {
@@ -177,7 +200,12 @@ router.post('/update/:id', uploadStrategy, async (req, res) => {
         activity.type = String(req.body.type);
         activity.description = String(req.body.description);
         activity.tagsArray = JSON.parse(req.body.tagsArray);
-        activity.groupPic = azurePic;
+        activity.address = req.body.address;
+        activity.location = JSON.parse(req.body.location);
+
+        if(req.file){
+            activity.groupPic = azurePic;
+        }
 
         activity.save().then(()=> res.json('Activity updated!')).catch(err => res.status(400).json('Error: ' + err));
     }).catch(err => res.status(400).json('Error: ' + err));

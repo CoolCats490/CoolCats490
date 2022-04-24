@@ -15,6 +15,11 @@ const activitySchema = new Schema({
     description: {type:String},
     tagsArray: [{type: String}],
     groupPic:{type:String},
+    address:{type:String},
+    location:[{
+        lat:{type:String},
+        lng:{type:String}
+    }],
     members: [
         {
             id:{type:String},

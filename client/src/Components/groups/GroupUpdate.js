@@ -4,9 +4,12 @@ import { useState, useCallback } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
+import "./CSS/GroupUpdate.css"
 //React Select
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
+import ChooseLocation from "../Map/ChooseLocation";
+import { Container } from "react-bootstrap";
 
 //Tag Select Options
 const optionsTags = [
@@ -55,6 +58,10 @@ const GroupUpdate = (props) => {
   const [enteredDescription, setDescription] = useState(props.description);
   const [enteredTag, setTag] = useState(currentTags);
   const [userFile, setUserFile] = useState(null);
+  //console.log(props.groupPic)
+  const [addr, setAddr] = useState(props.address || "");
+  const [location, setLocation] = useState(props.location || null);
+  const [showMap, setShowMap] = useState(false)
 
   //Entry Handlers
   const titleHandler = (event) => {
@@ -63,6 +70,11 @@ const GroupUpdate = (props) => {
 
   const meetingTypeHandler = (event) => {
     setMType(event);
+
+    if(enteredMType.value === 1){
+      setAddr("");
+      setLocation(null);
+    }
   };
 
   const dateHandler = (event) => {
@@ -105,6 +117,8 @@ const GroupUpdate = (props) => {
     formData.append("members", JSON.stringify(props.members));
     formData.append("addedTags", JSON.stringify(newTags.filter(x => !oldTags.includes(x))));
     formData.append("removedTags", JSON.stringify(oldTags.filter(x => !newTags.includes(x))));
+    formData.append("address", addr);
+    formData.append("location", JSON.stringify(location))
     formData.append("userFile", userFile);
 
 
@@ -118,7 +132,7 @@ const GroupUpdate = (props) => {
       //axios.post( url + '/activities/update/'+props.id, groupData)
       .then(res=> console.log(res.data));
     } catch (err) {
-          console.log(err);
+          console.log(err.response);
     }
 
       //Send
@@ -133,10 +147,10 @@ const GroupUpdate = (props) => {
     props.onModalClose(false)
   },[props])
 
-
+  console.log(userFile)
   return (
-    <div className="bg-primar">
-      <Form onSubmit={submitHandler}>
+    <Container className="">
+      <Form >
         <Form.Group className="mb-3" controlId="formGroupTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control
@@ -160,6 +174,26 @@ const GroupUpdate = (props) => {
         />
         </Form.Group>
 
+        {enteredMType.value === 0 &&(
+          <Form.Group className="mb-3" controlId="formGroupTitle">
+            <Form.Label>Location</Form.Label>
+            <Form.Control
+              className="mb-2"
+              type="text"
+              placeholder="Address"
+              value={addr}
+              onSelect={()=>setShowMap(true)}
+              disabled
+            />
+            {!showMap &&(<Button onClick={()=>setShowMap(true)} className="mb-2">Show Map</Button>)}
+            {showMap && (<Button onClick={()=>setShowMap(false)} variant="secondary" className="mb-2">Close Map</Button>)}
+            {showMap && 
+            (<ChooseLocation 
+                onSetAddress={setAddr}
+                onSetPosition={setLocation}
+            />)}
+        </Form.Group>)}
+        
 
         { <Form.Group className="mb-3" controlId="formGroupTags">
           <Form.Label>Tags</Form.Label>
@@ -209,14 +243,14 @@ const GroupUpdate = (props) => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" onClick={submitHandler}>
           Submit
         </Button>{" "}
         <Button variant="secondary" onClick={cancelBtnHandler}>
           Cancel
         </Button>
       </Form>
-    </div>
+    </Container>
   );
 };
 
