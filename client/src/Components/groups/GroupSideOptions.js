@@ -146,9 +146,11 @@ const GroupSideOptions = ({
         <FormCheck type="checkbox" label="Online" onChange={onlineHandler} />
       )}
       {selectedType === "0" && (
+        <Link to="/groups/map">
         <Button className="px-5 pt-2 pb-2 mx-3">
           <span>View Map</span>
         </Button>
+        </Link>
       )}
       <hr />
 

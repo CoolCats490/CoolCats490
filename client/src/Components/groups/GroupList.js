@@ -3,7 +3,7 @@ import React, { useContext ,useState, useEffect } from "react";
 import axios from "axios";
 import GrouptListItem from "./GroupListItem";
 //Styling
-import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import GroupSideOptions from "./GroupSideOptions";
 import "./CSS/GroupList.css";
 import { Link } from "react-router-dom";

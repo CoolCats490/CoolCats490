@@ -28,7 +28,7 @@ const GroupDelete = (props) => {
         .then(res =>{console.log(res)})
         .catch(error => console.error(error));
 
-    history.push("/groups");
+    history.push("/groups/list");
   };
 
   return (

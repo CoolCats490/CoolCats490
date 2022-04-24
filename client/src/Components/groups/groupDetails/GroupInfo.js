@@ -112,6 +112,9 @@ const GroupInfo = (props) => {
       <p>
         <strong>Date:</strong> {month + " " + day + ", " + year + " @ " + time}
       </p>
+      {props.groups.address &&(<p>
+        <strong>Location:</strong> {props.groups.address}
+      </p>)}
       <p>
         <strong>Description:</strong> {props.groups.description}
       </p>
@@ -153,11 +156,12 @@ const GroupInfo = (props) => {
     <Modal
         show={showUpdateModal}
         onHide={() => setShowUpdateModal(false)}
-        dialogClassName="modal-90w"
+        dialogClassName="modal-lg"
         aria-labelledby="example-custom-modal-styling-title"
         animation={false}
+        className="mt-5"
       >
-        <Modal.Header>
+        <Modal.Header className="">
           <Modal.Title id="group-update-modal">Update Group</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -168,7 +172,10 @@ const GroupInfo = (props) => {
             description={props.groups.description}
             tags={props.groups.tagsArray}
             id={props.groups._id}
+            address={props.groups.address}
+            location={props.groups.location}
             createdBy={props.groups.createdBy}
+            groupPic={props.groups.groupPic}
             members={props.groups.members}
             onModalClose={setShowUpdateModal}
             onDataChanged={props.onDataChanged}
@@ -183,6 +190,7 @@ const GroupInfo = (props) => {
         dialogClassName="modal-90w"
         aria-labelledby="example-custom-modal-styling-title"
         animation={false}
+        className="mt-5"
       >
         <Modal.Header>
           <Modal.Title id="group-delte-modal">Delete Group</Modal.Title>
