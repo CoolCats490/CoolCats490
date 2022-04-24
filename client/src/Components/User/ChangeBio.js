@@ -1,14 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import axios from "axios";
-import {useParams} from "react-router-dom";
 
 const ChangeBio = ({ userInfo, showForm }) => {
   const [profileBio, setProfileBio] = useState("");
-  const [currentbio,setCurrentBio] = useState("");
   const [bioUpdated, setBioUpdated] = useState(false);
   const [failedToUpdate, setFailedToUpdate] = useState(false);
-  
 
   //Sets the correct backend server address depending
   //on if in dev or production mode
@@ -21,37 +18,11 @@ const ChangeBio = ({ userInfo, showForm }) => {
     setProfileBio(e.target.value);
   };
 
-const params = useParams();
-useEffect(() => {
-  const fetchbio = async () => {
-    try {
-      let response = await axios(url + "/users/me");
-      let userdata = {
-        _id:userInfo._id,
-        bio:userInfo.currentbio,
-      }
-      //store groups in groups object
-      setCurrentBio(userdata.userInfo.currentbio);
-      //setLoading(true);
-    } catch (err) {
-      console.log(err);
-      //setLoading(false);
-    }
-  };
-
-
-  fetchbio();
-
-  //setLoading(false);
-}, [params.currentbio, url]);
-
   const closeHandler = () => {
     setFailedToUpdate(false);
     setBioUpdated(false);
     showForm(false);
   };
-
-
 
   const submitHandler = () => {
     axios
@@ -87,7 +58,7 @@ useEffect(() => {
         <Form className="w-75">
           <Form.Control
             as="textarea"
-            placeholder= {currentbio}
+            placeholder="Enter Bio Here"
             onChange={bioHandler}
           />
           <Button className="mt-2" onClick={submitHandler}>
