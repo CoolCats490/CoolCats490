@@ -12,9 +12,9 @@ const ProfileSettings = ({userInfo}) =>{
     const [hideProfile, setHideProfile] = useState(userInfo.hideProfile || false);
     const [displayCreatedGroups, setDisplayCreatedGroups] = useState( userInfo.displayCreatedGroups ||false);
     const [displayJoinedGroups, setDisplayJoinedGroups] = useState( userInfo.displayJoinedGroups || false);
-    const [showInterests, setShowInterests] = useState(false);
+    const [showInterests, setShowInterests] = useState(true);
     const [showUploadModal, setShowUploadModal] = useState(false);
-    const [showBio, setShowBio] = useState(false);
+    const [showBio, setShowBio] = useState(true);
 
 
     const picBTNHandler = ()=>{
