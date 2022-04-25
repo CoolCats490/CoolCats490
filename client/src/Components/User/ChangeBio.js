@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import axios from "axios";
+import axios from "axios"; 
 
 const ChangeBio = ({ userInfo, showForm }) => {
   const [profileBio, setProfileBio] = useState("");
