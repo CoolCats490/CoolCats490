@@ -33,12 +33,12 @@ const bodyParser = require('body-parser');
 app.use(express.static('./client/build'));
 
 // Serve Static assests if in production
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static("client/build")); // change this if your dir structure is different
-    app.get("*", (req, res) => {
-      res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-    });
-  }
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static("client/build")); // change this if your dir structure is different
+//     app.get("*", (req, res) => {
+//       res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+//     });
+//   }
 
 // Every time user enters /users to the brower, it will show the users list
 app.use('/activities', activityRouter);

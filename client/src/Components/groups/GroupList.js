@@ -115,7 +115,9 @@ const GroupList = () => {
 
   return (
     <Container className="">
+
       <Container className="bg-light rounded searchBar mx-2 px-5 row mt-3">
+
         <input
           type="text"
           placeholder=" Search for a group title"
@@ -130,11 +132,13 @@ const GroupList = () => {
           Search
         </Button>
 
+
         {isLogedIn &&(
           <Button className="mx-1 bg-success border-0  shadow createBTN col-2 ">
           <Link to="/groups/create" className="text-light text-decoration-none"> Create New Group</Link>
           </Button>
        )}
+
       </Container>
 
       <Row className="rowContainer">
