@@ -84,6 +84,7 @@ const GroupCreate = (props) => {
   };
   const dateHandler = (event) => {
     setDate(event.target.value);
+    console.log(event.target.value)
   };
   const descriptionHandler = (event) => {
     setDescription(event.target.value);

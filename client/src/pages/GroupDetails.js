@@ -114,7 +114,7 @@ const GroupDetails = (props) => {
 
   return (
     <>
-      <Container className="text-light bg-secondary pb-4 mt-5">
+      <Container className="text-white bg-light pb-4 mt-5">
         <Row className="pt-4">
           <Col>
             <Image

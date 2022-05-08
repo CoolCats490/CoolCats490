@@ -9,6 +9,7 @@ import GroupDelete from "../GroupDelete";
 import axios from "axios";
 import TagsBadges from "./TagsBadges";
 import { Link } from "react-router-dom";
+import "./GroupInfo.css"
 
 const GroupInfo = (props) => {
   //Sets the correct backend server address depending
@@ -33,7 +34,7 @@ const GroupInfo = (props) => {
       const memberInfo = {
         id: props.userInfo._id,
         username: props.userInfo.username,
-        userName: props.userInfo.username
+        profilePic: props.userInfo.profilePic
       };
 
       try {//http://localhost:5000/activities/join/:id
@@ -92,21 +93,22 @@ const GroupInfo = (props) => {
 
   return (
       <React.Fragment>
-    {props.groups &&(<section>
-      <h2>
-        <strong>Group Title:</strong> {props.groups.name}
+    {props.groups &&(
+      <section className="infoSection text-dark pb-2 px-2 rounded shadow mx-1">
+      <h2 className="text-center">
+        {props.groups.name}
       </h2>
       {props.groups.createdBy != null && (
         <p>
-          <strong>Group Started by:</strong>{" "}
+          <strong>Creator:</strong>{" "}
           <Link 
           to={`/user/${props.groups.createdBy[0].id}`}
-          className="text-warning"
+          className="text-dark"
           >{props.groups.createdBy[0].username}</Link>
         </p>
       )}
       <p>
-        <strong>Group Type:</strong>{" "}
+        <strong>Type:</strong>{" "}
         {parseInt(props.groups.type) ? "Online" : "In Person"}{" "}
       </p>
       <p>
@@ -149,7 +151,8 @@ const GroupInfo = (props) => {
         props.groups.members.find(({ id }) => id === props.userInfo._id) && (
           <Button onClick={leaveBtnHandler} className="btn-danger">Leave Group</Button>
         )}
-    </section>)}
+    </section>
+    )}
 
 
     {/*Update Modal/Popup window settings start here                 */}

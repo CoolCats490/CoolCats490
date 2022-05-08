@@ -8,3 +8,12 @@
   color: white;
   padding-top: 56px;
 }
+
+.Button{
+  background-color: #5555ff;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+  background-color: #5555ff !important;
+}
+

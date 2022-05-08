@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Switch } from "react-router-dom";
 //Pages and Sidebar
 import GroupCreate from "../Components/groups/GroupCreate";
@@ -10,8 +10,10 @@ import TagList from "./TagList";
 import TagDetails from "./TagDetails";
 import GroupCalander from "../Components/Calander/GroupCalander";
 import GroupsMap from "../Components/Map/GroupsMap";
+import AuthContext from "../Store/auth-context";
 
 const Groups = () => {
+  const authCtx = useContext(AuthContext);
   return (
     <div className="bg-dark text-white">
       <Switch>
@@ -23,9 +25,9 @@ const Groups = () => {
           <GroupCalander />
         </Route>
 
-        <Route path="/groups/create">
+        {authCtx.isLoggedIn&&(<Route path="/groups/create">
           <GroupCreate />
-        </Route>
+        </Route>)}
 
         <Route path="/groups/tags/:tagName">
           <TagDetails />

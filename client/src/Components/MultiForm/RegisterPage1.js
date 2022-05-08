@@ -6,6 +6,8 @@ import { InputGroup, Col, Form, Row, Container } from "react-bootstrap";
 //database connection to backend
 import axios from "axios";
 
+
+
 export default function RegisterPage1(props) {
   //Sets the correct backend server address depending
   //on if in dev or production mode
