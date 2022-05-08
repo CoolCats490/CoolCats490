@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 const Button = styled.button`
-  background-color: #24a19c;
+  background-color: #5555ff;
   padding: 8px 20px;
-  border: 1px solid #24a19c;
+  border: 1px solid #5555ff;
   color: #fff;
   margin: 2px 5px;
   cursor: pointer;

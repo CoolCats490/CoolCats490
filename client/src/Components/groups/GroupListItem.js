@@ -5,7 +5,7 @@ import "./CSS/GroupListItem.css";
 //Router
 import { Link } from "react-router-dom";
 import { Col, Row, Image } from "react-bootstrap";
-import defaultPic from "../../pages/Media/group-defualt.jpg";
+import defaultPic from "../../pages/Media/squad1.png";
 
 const GrouptListItem = (props) => {
   const month = props.date.toLocaleString("en-US", { month: "long" });
@@ -54,7 +54,7 @@ const GrouptListItem = (props) => {
           <br />
           <strong>Tags:</strong>{" "}
           {props.tags.map((e, index) => (
-            <Badge className="bg-warning text-dark me-2" key={index}>
+            <Badge className="bg-warning text-dark me-2 " key={index}>
               {e}
             </Badge>
           ))}

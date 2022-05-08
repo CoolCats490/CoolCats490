@@ -58,7 +58,7 @@ const GroupCommentPost = (props) => {
 
   let displayMsg = "";
   if(props.userComments.comments && props.userComments.comments.length !== 0){
-    displayMsg="Comments";
+    displayMsg="Comments:";
   }
   else{
     displayMsg="No Comments";

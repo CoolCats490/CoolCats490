@@ -11,6 +11,11 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
+ .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+  background-color: #5555ff !important;
+  border-color: #5555ff !important;
+}
+
 .feature {
   display: inline-flex;
   align-items: center;
@@ -18,4 +23,29 @@
   height: 4rem;
   width: 4rem;
   font-size: 2rem;
+}
+
+.fistDiv{
+  /* padding-top:25.000%; */
+  position:relative;
+  height: 25%;
+  width: 50%;
+}
+.fistFrame{
+  width: 25%;
+  height: 25%;
+  /* position:absolute; */
+  top:0;
+  left:0;
+  border: 0ch;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.fistSection{
+  background-color: #ededed;
 }

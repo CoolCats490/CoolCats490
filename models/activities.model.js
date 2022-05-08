@@ -23,7 +23,8 @@ const activitySchema = new Schema({
     members: [
         {
             id:{type:String},
-            username:{type:String}
+            username:{type:String},
+            profilePic:{type:String}
         }
     ]
     },
