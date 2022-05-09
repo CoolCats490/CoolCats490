@@ -10,6 +10,7 @@ import axios from "axios";
 import TagsBadges from "./TagsBadges";
 import { Link } from "react-router-dom";
 import "./GroupInfo.css"
+import ActivityMap from "../../Map/ActivityMap";
 
 const GroupInfo = (props) => {
   //Sets the correct backend server address depending
@@ -24,6 +25,7 @@ const GroupInfo = (props) => {
   //use useState to store and set if the update/delete group modals is shown
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showMapModal, setShowMapModal] = useState(false);
 
   const joinBtnHandler = (event) => {
     let alreadyJoined = props.groups.members.find((x) => x.id === props.userInfo._id);
@@ -115,7 +117,8 @@ const GroupInfo = (props) => {
         <strong>Date:</strong> {month + " " + day + ", " + year + " @ " + time}
       </p>
       {props.groups.address &&(<p>
-        <strong>Location:</strong> {props.groups.address}
+        <strong onClick={()=>setShowMapModal(true)} 
+        className="shadow"  ><u>Location:</u></strong> {props.groups.address}
       </p>)}
       <p>
         <strong>Description:</strong> {props.groups.description}
@@ -207,8 +210,28 @@ const GroupInfo = (props) => {
           />
         </Modal.Body>
       </Modal>
+
+      <Modal
+        show={showMapModal}
+        onHide={() => setShowMapModal(false)}
+        dialogClassName="modal-md"
+        //aria-labelledby="example-custom-modal-styling-title"
+        animation={false}
+        className="mt-5 text-center"
+      >
+        <Modal.Header className="text-center">
+          <Modal.Title id="group-map-modal" className="text-center">Group Location</Modal.Title>
+        </Modal.Header>
+        <Modal.Body >
+          <ActivityMap 
+            groups={props.groups}
+          />
+        </Modal.Body>
+      </Modal>
     </React.Fragment>
   );
+  
 };
+
 
 export default GroupInfo;
